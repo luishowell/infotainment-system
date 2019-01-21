@@ -2,6 +2,7 @@
 using namespace std;
 
 #include <stdio.h>
+#include <time.h>
 #include <string.h>
 #include <algorithm>
 
@@ -13,7 +14,7 @@ using namespace std;
 
 int main(int argc, char const *argv[])
 {
-    int serial_port = open("/dev/rfcomm0", O_RDWR);
+    int serial_port = open("/dev/rfcomm0", O_RDWR | O_NOCTTY);
 
     
     if (serial_port < 0) {
@@ -60,9 +61,19 @@ int main(int argc, char const *argv[])
         printf("Error %i from tcsetattr: %s\n", errno, strerror(errno));
     }
 
-    // Write to serial port
-    unsigned char msg[] = { '\n', 'H', 'e', 'l', 'l', 'o'};
-    write(serial_port, msg, sizeof(msg));
+    // // Write to serial port
+    char reset_msg[] = { 'A', 'T', 'Z', '\r'};
+    char echo_msg[] = { 'A', 'T', 'E', '0', '\r'};
+    char line_msg[] = { 'A', 'T', 'L', '0', '\r'};
+    char pid_msg[] = { '0', '1', '0', '0', '\r'};
+
+    write(serial_port, reset_msg, sizeof(reset_msg));
+    sleep(1);
+    write(serial_port, echo_msg, sizeof(echo_msg));
+    sleep(0.2);
+    write(serial_port, line_msg, sizeof(line_msg));
+    sleep(0.2);
+    write(serial_port, pid_msg, sizeof(pid_msg));    
 
     char read_buf [256];
     string rec = "";
@@ -70,11 +81,12 @@ int main(int argc, char const *argv[])
         memset(&read_buf, '\0', sizeof(read_buf));
         int num_bytes = read(serial_port,read_buf, sizeof(read_buf));
         if(num_bytes>0){            
-            rec = rec+read_buf;         
-            cout<<read_buf<<"\n";
+            rec = rec+string(read_buf);         
+            cout<<read_buf<<endl;
             //cout<<"Buffer: "<<read_buf<<", Rec: "<<rec<<"\n";
-            if (string(read_buf).find('>')!=string::npos){                
-                cout<<"Rec: "<<rec<<"\n";
+            if (string(read_buf).find('>')!=string::npos){      
+                replace( rec.begin(), rec.end(), '\n', ' ');          
+                cout<<"Rec: "<<rec<<endl;
                 rec = "";
             }
         }        
