@@ -3,6 +3,7 @@ using namespace std;
 
 #include <stdio.h>
 #include <string.h>
+#include <algorithm>
 
 #include <fcntl.h> // Contains file controls like O_RDWR
 #include <errno.h> // Error integer and strerror() function
@@ -47,8 +48,8 @@ int main(int argc, char const *argv[])
     // tty.c_oflag &= ~OXTABS; // Prevent conversion of tabs to spaces (NOT PRESENT ON LINUX)
     // tty.c_oflag &= ~ONOEOT; // Prevent removal of C-d chars (0x004) in output (NOT PRESENT ON LINUX)
 
-    tty.c_cc[VTIME] = 5;    // Wait for up to 1s (10 deciseconds), returning as soon as any data is received.
-    tty.c_cc[VMIN] = 0;
+    tty.c_cc[VTIME] = 0;    // Wait for up to 1s (10 deciseconds), returning as soon as any data is received.
+    tty.c_cc[VMIN] = 1;
 
     // Set in/out baud rate to be 9600
     cfsetispeed(&tty, B9600);
@@ -64,12 +65,18 @@ int main(int argc, char const *argv[])
     write(serial_port, msg, sizeof(msg));
 
     char read_buf [256];
+    string rec = "";
     while(1){
-        //memset(&read_buf, '\0', sizeof(read_buf));
+        memset(&read_buf, '\0', sizeof(read_buf));
         int num_bytes = read(serial_port,read_buf, sizeof(read_buf));
-        if(num_bytes>0){
-            cout<<read_buf;
-            printf("Read %i bytes. Received message: %s\n", num_bytes, read_buf);
+        if(num_bytes>0){            
+            rec = rec+read_buf;         
+            cout<<read_buf<<"\n";
+            //cout<<"Buffer: "<<read_buf<<", Rec: "<<rec<<"\n";
+            if (string(read_buf).find('>')!=string::npos){                
+                cout<<"Rec: "<<rec<<"\n";
+                rec = "";
+            }
         }        
     }
     
