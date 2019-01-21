@@ -9,14 +9,13 @@
 #include "ErrorCodes.h"
 #include "Media.h"
 
-
-
 class StateManager : public QWidget
 {
     Q_OBJECT
 
 public:
     explicit StateManager(QWidget *parent = 0);
+    Diagnostics *m_diags;
 
 public slots:
     void ChangeRequested(state_t req_state, QWidget* self);
@@ -24,10 +23,11 @@ public slots:
 
 signals:
     void DisplayChange(state_t req_state, QWidget* currentView);
+    void DiagDataTx(diagMsg_t* msg);
 
 private:
     MainMenu *m_mainMenu;
-    Diagnostics *m_diags;
+    
     Parking *m_parking;
     ErrorCodes *m_errorCodes;
     Media *m_media;

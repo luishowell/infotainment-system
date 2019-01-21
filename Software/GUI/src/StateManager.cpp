@@ -23,6 +23,9 @@ StateManager::StateManager(QWidget *parent) : QWidget(parent)
     connect(m_parking, SIGNAL (DisplayChange(state_t, QWidget*)), this, SLOT (ChangeRequested(state_t, QWidget*)));
     connect(m_media, SIGNAL (DisplayChange(state_t, QWidget*)), this, SLOT (ChangeRequested(state_t, QWidget*)));
 
+    /* connect hardware data channels from other threads to specific GUI windows */
+    connect(this, SIGNAL(DiagDataTx(diagMsg_t*)), m_diags, SLOT(DiagDataRx(diagMsg_t*)));
+
     /* show the home menu on startup */
     m_mainMenu->show();
     m_diags->hide();
@@ -35,9 +38,8 @@ StateManager::StateManager(QWidget *parent) : QWidget(parent)
 /* @brief: Receiving callback of diagnostics data from the CAN thread */
 void StateManager::CANPublishDiagRx(diagMsg_t* msg)
 {
-    printf("Speed: %d\n", msg->speed);
-    printf("RPM: %d\n", msg->rpm);
-    printf("Fuel: %d\n", msg->fuel);
+    /* forward to diagnostics window */
+    emit DiagDataTx(msg);
 }
 
 /* @brief: Current GUI view state-machine */
