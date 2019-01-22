@@ -18,13 +18,13 @@ class ultransoic_sensor
 
 
         //function to get the distance of the sensor to an object
-        double get_distance();
+        bool GetDistance(double *distance);
 
     private:
 
         //gpio pin connections
-        int trigger_pin             //pin that connects to the trigger of the sensor
-        int echo_pin                //pin that connects to the echo of the sensor
+        int m_trigger_pin             //pin that connects to the trigger of the sensor
+        int m_echo_pin                //pin that connects to the echo of the sensor
 
         //start and end time variables
         time_t start_time;
@@ -32,7 +32,7 @@ class ultransoic_sensor
 
         //calculated variables
         double time_diff;
-        double distance;
+        double m_distance;
 
 
 };

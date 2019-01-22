@@ -21,7 +21,8 @@ void CANThread::run()
     /* init diagnostics data */
     m_msg.speed = 0;
     m_msg.rpm = 0;
-    m_msg.fuel = 0;
+    m_msg.fuel = 65; //litres
+    m_msg.connectionFault = true;
 
     /* kick off the thread */
     exec();
@@ -36,7 +37,9 @@ void CANThread::PublishDiagData()
     /* dummy data */
     m_msg.speed++;
     m_msg.rpm = m_msg.rpm + 2;
-    m_msg.fuel = m_msg.fuel + 3; 
+    m_msg.fuel--; 
+    m_msg.connectionFault = false;
 
+    /* send data to the GUI's diagnostics viewer */
     emit CANPublishDiagTx(&m_msg);
 }

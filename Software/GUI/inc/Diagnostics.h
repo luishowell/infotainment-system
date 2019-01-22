@@ -17,6 +17,8 @@ public:
     
 public slots:
     void StateChangeMainMenu();
+    void DiagDataRx(diagMsg_t* msg);
+
 
 signals:
     void DisplayChange(state_t req_state, QWidget* currentView);
@@ -24,8 +26,10 @@ signals:
 private:
     QPushButton *m_homeButton;
     QSlider *m_speedSlider;
+    QSlider *m_fuelGauge;
     QDial *m_speedDial;
     void CreateLayout();
+    bool canConnectionFlag;
 };
 
 #endif // DIAGNOSTICS_H

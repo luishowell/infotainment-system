@@ -21,8 +21,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_Diagnostics_t {
-    QByteArrayData data[8];
-    char stringdata0[86];
+    QByteArrayData data[11];
+    char stringdata0[112];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -38,12 +38,16 @@ QT_MOC_LITERAL(3, 27, 7), // "state_t"
 QT_MOC_LITERAL(4, 35, 9), // "req_state"
 QT_MOC_LITERAL(5, 45, 8), // "QWidget*"
 QT_MOC_LITERAL(6, 54, 11), // "currentView"
-QT_MOC_LITERAL(7, 66, 19) // "StateChangeMainMenu"
+QT_MOC_LITERAL(7, 66, 19), // "StateChangeMainMenu"
+QT_MOC_LITERAL(8, 86, 10), // "DiagDataRx"
+QT_MOC_LITERAL(9, 97, 10), // "diagMsg_t*"
+QT_MOC_LITERAL(10, 108, 3) // "msg"
 
     },
     "Diagnostics\0DisplayChange\0\0state_t\0"
     "req_state\0QWidget*\0currentView\0"
-    "StateChangeMainMenu"
+    "StateChangeMainMenu\0DiagDataRx\0"
+    "diagMsg_t*\0msg"
 };
 #undef QT_MOC_LITERAL
 
@@ -53,7 +57,7 @@ static const uint qt_meta_data_Diagnostics[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-       2,   14, // methods
+       3,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -61,16 +65,18 @@ static const uint qt_meta_data_Diagnostics[] = {
        1,       // signalCount
 
  // signals: name, argc, parameters, tag, flags
-       1,    2,   24,    2, 0x06 /* Public */,
+       1,    2,   29,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-       7,    0,   29,    2, 0x0a /* Public */,
+       7,    0,   34,    2, 0x0a /* Public */,
+       8,    1,   35,    2, 0x0a /* Public */,
 
  // signals: parameters
     QMetaType::Void, 0x80000000 | 3, 0x80000000 | 5,    4,    6,
 
  // slots: parameters
     QMetaType::Void,
+    QMetaType::Void, 0x80000000 | 9,   10,
 
        0        // eod
 };
@@ -83,6 +89,7 @@ void Diagnostics::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id,
         switch (_id) {
         case 0: _t->DisplayChange((*reinterpret_cast< state_t(*)>(_a[1])),(*reinterpret_cast< QWidget*(*)>(_a[2]))); break;
         case 1: _t->StateChangeMainMenu(); break;
+        case 2: _t->DiagDataRx((*reinterpret_cast< diagMsg_t*(*)>(_a[1]))); break;
         default: ;
         }
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
@@ -133,13 +140,13 @@ int Diagnostics::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 2)
+        if (_id < 3)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 2;
+        _id -= 3;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 2)
+        if (_id < 3)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 2;
+        _id -= 3;
     }
     return _id;
 }
