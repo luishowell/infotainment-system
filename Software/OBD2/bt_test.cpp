@@ -12,6 +12,11 @@
 using namespace std;
 
 
+int hex2int(string hex_string){
+    return stoi(hex_string, nullptr, 16);
+}
+
+
 string send_cmd(string cmd, int serial_port, bool parse = false){
     cmd = cmd + "\r";
     write(serial_port, cmd.c_str(), cmd.length());
@@ -49,6 +54,9 @@ string send_cmd(string cmd, int serial_port, bool parse = false){
         else if (rec.find("ELM327")!=string::npos){
             output = rec.substr(rec.find("ELM327"), 10);
         }
+        else if (rec.find("BUSINIT:ERROR")!=string::npos){
+            output = "BUSINIT:ERROR";
+        }
         else if (rec.find("?")!=string::npos){
             output = "?";
         }
@@ -59,7 +67,7 @@ string send_cmd(string cmd, int serial_port, bool parse = false){
             output = "NO_DATA";
         }
         else{
-            output = "PARSE_ERROR";
+            output = "PARSE_ERROR: "+rec;
         }
 
         return output;
@@ -103,18 +111,43 @@ int setup_obd(string comm_port){
 
     tcflush(serial_port, TCIOFLUSH);
 
-    cout<<send_cmd("ATZ", serial_port)<<endl;   //reset
-    cout<<send_cmd("ATE0", serial_port)<<endl;  //echo off
-    cout<<send_cmd("ATL0", serial_port)<<endl;  //linefeed off
-    cout<<send_cmd("ATSP5", serial_port)<<endl; //OBD2 Protocol set to KWP fast (Fiat Panda), use ATSP0 for auto
+    cout<<send_cmd("ATZ", serial_port, true)<<endl;   //reset
+    cout<<send_cmd("ATE0", serial_port, true)<<endl;  //echo off
+    cout<<send_cmd("ATL0", serial_port, true)<<endl;  //linefeed off
+    cout<<send_cmd("ATSP5", serial_port, true)<<endl; //OBD2 Protocol set to KWP fast (Fiat Panda), use ATSP0 for auto
 
+    if (send_cmd("ATFI", serial_port, true)=="BUSINIT:ERROR"){  //initalise KWP fast
+        cout<<"KWP Fast Bus Initialisation Error"<<endl;
+
+        bool fixed = false;
+        for (int i=0; i<4; i++){
+            cout<<"Trying again"<<endl;
+            send_cmd("ATZ", serial_port, false);   //reset
+            send_cmd("ATE0", serial_port, false);  //echo off
+            send_cmd("ATL0", serial_port, false);  //linefeed off
+            send_cmd("ATSP5", serial_port,false);
+
+            if (send_cmd("ATFI", serial_port, true)=="OK"){
+                cout<<"Bus initalised"<<endl;
+                fixed == true;
+                break;
+            }
+        }
+
+        if (fixed==false){
+            cout<<"Could not initalise bus"<<endl;
+            return -1;
+        }        
+    }
+    
+    sleep(0.5);
     return serial_port;
 }
 
 
 int main(int argc, char const *argv[]){
 
-    int serial_port = setup_obd("dev/rfcomm0");
+    int serial_port = setup_obd("/dev/rfcomm0");
 
     if (serial_port == -1){
         cout<< "Connection Error!"<<endl;
@@ -124,10 +157,18 @@ int main(int argc, char const *argv[]){
         cout<<"Connection Successful"<<endl;
     }
 
-    cout<<send_cmd("0100", serial_port, true)<<endl;
-    cout<<send_cmd("0101", serial_port, true)<<endl;
-    cout<<send_cmd("010C", serial_port, true)<<endl;
-    cout<<send_cmd("010D", serial_port, true)<<endl;
+    cout<<send_cmd("0100", serial_port, true)<<endl;    //supported pids
+    cout<<send_cmd("0101", serial_port, true)<<endl;    //number of DTC
+    //cout<<send_cmd("010C", serial_port, true)<<endl;    //RPM
+    //cout<<send_cmd("010D", serial_port, true)<<endl;    //vehicle speed
+
+    string rpm_hex = send_cmd("010C", serial_port, true);
+    int A = hex2int(rpm_hex.substr(4,2));
+    int B = hex2int(rpm_hex.substr(6,2));
+    cout<<"RPM: "<< (256*A+B)/4<<endl;
+    
+    string speed_hex = send_cmd("010D", serial_port, true);
+    cout<<"Speed: "<<hex2int(speed_hex.substr(4))<<"Kph"<<endl;    
     
     //close(serial_port);
 
