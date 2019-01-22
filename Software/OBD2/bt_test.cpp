@@ -12,7 +12,7 @@
 using namespace std;
 
 
-string send_cmd(string cmd, int serial_port){
+string send_cmd(string cmd, int serial_port, bool parse = false){
     cmd = cmd + "\r";
     write(serial_port, cmd.c_str(), cmd.length());
 
@@ -20,37 +20,67 @@ string send_cmd(string cmd, int serial_port){
     string rec = "";
     while(1){
         int num_bytes = read(serial_port,read_buf, 1);
-        if(num_bytes>0){            
-
-            rec.append(read_buf);
-  
+        if(num_bytes>0){              
             if (read_buf[0]=='>'){                             
                 break;        
             }
+            else{
+                rec.append(read_buf);
+            }
         }        
     }
-    rec.erase(remove(rec.begin(), rec.end(), '\n'), rec.end());
-    rec.erase(remove(rec.begin(), rec.end(), ' '), rec.end());
-    return rec;
+    rec.erase(remove(rec.begin(), rec.end(), '\n'), rec.end()); //remove new line characters
+    rec.erase(remove(rec.begin(), rec.end(), ' '), rec.end());  //remove spaces
+
+    if (parse==false){
+        return rec;
+    }
+    else if (parse==true){
+        string output;
+
+        string expected_prefix = "4"+cmd.substr(1, 3);
+        int prefix_search = rec.find(expected_prefix);
+        if (prefix_search!=string::npos){
+            output = rec.substr(prefix_search);
+        }
+        else if (rec.find("OK")!=string::npos){
+            output = "OK";
+        }
+        else if (rec.find("ELM327")!=string::npos){
+            output = rec.substr(rec.find("ELM327"), 10);
+        }
+        else if (rec.find("?")!=string::npos){
+            output = "?";
+        }
+        else if (rec.find("UNABLETOCONNECT")!=string::npos){
+            output = "UNABLE_TO_CONNECT";
+        }
+        else if (rec.find("NODATA")!=string::npos){
+            output = "NO_DATA";
+        }
+        else{
+            output = "PARSE_ERROR";
+        }
+
+        return output;
+    }
 }
 
 
-int main(int argc, char const *argv[])
-{
-    int serial_port = open("/dev/rfcomm0", O_RDWR | O_NOCTTY);
-
+int setup_obd(string comm_port){
+    int serial_port = open(comm_port.c_str(), O_RDWR | O_NOCTTY);
     
     if (serial_port < 0) {
         printf("Error %i from open: %s\n", errno, strerror(errno));
+        return -1;
     }
 
-    // Create new termios struc, we call it 'tty' for convention
     struct termios tty;
     memset(&tty, 0, sizeof tty);
 
-    // Read in existing settings, and handle any error
     if(tcgetattr(serial_port, &tty) != 0) {
         printf("Error %i from tcgetattr: %s\n", errno, strerror(errno));
+        return -1;
     }
 
     fcntl(serial_port, F_SETFL, 0);
@@ -59,78 +89,49 @@ int main(int argc, char const *argv[])
     tty.c_lflag &= !(ICANON | ECHO | ECHOE | ISIG);
     tty.c_oflag &= !(OPOST); 
 
-    // tty.c_cflag &= ~PARENB; // Clear parity bit, disabling parity (most common)
-    // tty.c_cflag &= ~CSTOPB; // Clear stop field, only one stop bit used in communication (most common)
-    // tty.c_cflag |= CS8; // 8 bits per byte (most common)
-    // tty.c_cflag &= ~CRTSCTS; // Disable RTS/CTS hardware flow control (most common)
-    // tty.c_cflag |= CREAD | CLOCAL; // Turn on READ & ignore ctrl lines (CLOCAL = 1)
-
-    // tty.c_lflag &= ~ICANON;
-    // tty.c_lflag &= ~ECHO; // Disable echo
-    // tty.c_lflag &= ~ECHOE; // Disable erasure
-    // tty.c_lflag &= ~ECHONL; // Disable new-line echo
-    // tty.c_lflag &= ~ISIG; // Disable interpretation of INTR, QUIT and SUSP
-    // tty.c_iflag &= ~(IXON | IXOFF | IXANY); // Turn off s/w flow ctrl
-    // tty.c_iflag &= ~(IGNBRK|BRKINT|PARMRK|ISTRIP|INLCR|IGNCR|ICRNL); // Disable any special handling of received bytes
-
-    // tty.c_oflag &= ~OPOST; // Prevent special interpretation of output bytes (e.g. newline chars)
-    // tty.c_oflag &= ~ONLCR; // Prevent conversion of newline to carriage return/line feed
-    // // tty.c_oflag &= ~OXTABS; // Prevent conversion of tabs to spaces (NOT PRESENT ON LINUX)
-    // // tty.c_oflag &= ~ONOEOT; // Prevent removal of C-d chars (0x004) in output (NOT PRESENT ON LINUX)
-
-    tty.c_cc[VTIME] = 20;    // Wait for up to 1s (10 deciseconds), returning as soon as any data is received.
+    tty.c_cc[VTIME] = 20;   
     tty.c_cc[VMIN] = 0;
 
-    // Set in/out baud rate
+    //baud rate
     cfsetispeed(&tty, B38400);
     cfsetospeed(&tty, B38400);
-
-    // Save tty settings, also checking for error
+    
     if (tcsetattr(serial_port, TCSANOW, &tty) != 0) {
         printf("Error %i from tcsetattr: %s\n", errno, strerror(errno));
+        return -1;
     }
 
     tcflush(serial_port, TCIOFLUSH);
 
-    // // // Write to serial port
-    // char reset_msg[] = { 'A', 'T', 'Z', '\r'};
-    // char echo_msg[] = { 'A', 'T', 'E', '0', '\r'};
-    // char line_msg[] = { 'A', 'T', 'L', '0', '\r'};
-    // char pid_msg[] = { '0', '1', '0', '0', '\r'};
+    cout<<send_cmd("ATZ", serial_port)<<endl;   //reset
+    cout<<send_cmd("ATE0", serial_port)<<endl;  //echo off
+    cout<<send_cmd("ATL0", serial_port)<<endl;  //linefeed off
+    cout<<send_cmd("ATSP5", serial_port)<<endl; //OBD2 Protocol set to KWP fast (Fiat Panda), use ATSP0 for auto
 
-    // write(serial_port, reset_msg, sizeof(reset_msg));
-    // sleep(1);
-    // write(serial_port, echo_msg, sizeof(echo_msg));
-    // sleep(0.2);
-    // write(serial_port, line_msg, sizeof(line_msg));
-    // sleep(0.2);
-    // write(serial_port, pid_msg, sizeof(pid_msg));    
+    return serial_port;
+}
 
-    // char read_buf [256];
-    // string rec = "";
-    // while(1){
-    //     memset(&read_buf, '\0', sizeof(read_buf));
-    //     int num_bytes = read(serial_port,read_buf, sizeof(read_buf));
-    //     if(num_bytes>0){            
-    //         rec = rec+string(read_buf);         
-    //         cout<<read_buf<<endl;
-    //         //cout<<"Buffer: "<<read_buf<<", Rec: "<<rec<<"\n";
-    //         if (string(read_buf).find('>')!=string::npos){      
-    //             replace( rec.begin(), rec.end(), '\n', ' ');          
-    //             cout<<"Rec: "<<rec<<endl;
-    //             rec = "";
-    //         }
-    //     }        
-    // }
 
-    cout<<send_cmd("ATZ", serial_port)<<endl;
-    cout<<send_cmd("ATE0", serial_port)<<endl;
-    cout<<send_cmd("ATL0", serial_port)<<endl;
-    cout<<send_cmd("0100", serial_port)<<endl;
+int main(int argc, char const *argv[]){
+
+    int serial_port = setup_obd("dev/rfcomm0");
+
+    if (serial_port == -1){
+        cout<< "Connection Error!"<<endl;
+        return 0;
+    }
+    else{
+        cout<<"Connection Successful"<<endl;
+    }
+
+    cout<<send_cmd("0100", serial_port, true)<<endl;
+    cout<<send_cmd("0101", serial_port, true)<<endl;
+    cout<<send_cmd("010C", serial_port, true)<<endl;
+    cout<<send_cmd("010D", serial_port, true)<<endl;
     
     //close(serial_port);
 
-    cout<<"done\n";
+    cout<<"Complete"<<endl;
     return 0;
 }
 
