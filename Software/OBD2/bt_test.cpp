@@ -1,6 +1,4 @@
 #include <iostream>
-using namespace std;
-
 #include <stdio.h>
 #include <time.h>
 #include <string.h>
@@ -10,6 +8,31 @@ using namespace std;
 #include <errno.h> // Error integer and strerror() function
 #include <termios.h> // Contains POSIX terminal control definitions
 #include <unistd.h> // write(), read(), close()
+
+using namespace std;
+
+
+string send_cmd(string cmd, int serial_port){
+    cmd = cmd + "\r";
+    write(serial_port, cmd.c_str(), cmd.length());
+
+    char read_buf [1];
+    string rec = "";
+    while(1){
+        int num_bytes = read(serial_port,read_buf, 1);
+        if(num_bytes>0){            
+
+            rec.append(read_buf);
+  
+            if (read_buf[0]=='>'){                             
+                break;        
+            }
+        }        
+    }
+    rec.erase(remove(rec.begin(), rec.end(), '\n'), rec.end());
+    rec.erase(remove(rec.begin(), rec.end(), ' '), rec.end());
+    return rec;
+}
 
 
 int main(int argc, char const *argv[])
@@ -30,69 +53,82 @@ int main(int argc, char const *argv[])
         printf("Error %i from tcgetattr: %s\n", errno, strerror(errno));
     }
 
-    tty.c_cflag &= ~PARENB; // Clear parity bit, disabling parity (most common)
-    tty.c_cflag &= ~CSTOPB; // Clear stop field, only one stop bit used in communication (most common)
-    tty.c_cflag |= CS8; // 8 bits per byte (most common)
-    tty.c_cflag &= ~CRTSCTS; // Disable RTS/CTS hardware flow control (most common)
-    tty.c_cflag |= CREAD | CLOCAL; // Turn on READ & ignore ctrl lines (CLOCAL = 1)
+    fcntl(serial_port, F_SETFL, 0);
 
-    tty.c_lflag &= ~ICANON;
-    tty.c_lflag &= ~ECHO; // Disable echo
-    tty.c_lflag &= ~ECHOE; // Disable erasure
-    tty.c_lflag &= ~ECHONL; // Disable new-line echo
-    tty.c_lflag &= ~ISIG; // Disable interpretation of INTR, QUIT and SUSP
-    tty.c_iflag &= ~(IXON | IXOFF | IXANY); // Turn off s/w flow ctrl
-    tty.c_iflag &= ~(IGNBRK|BRKINT|PARMRK|ISTRIP|INLCR|IGNCR|ICRNL); // Disable any special handling of received bytes
+    tty.c_cflag |= (CLOCAL | CREAD);
+    tty.c_lflag &= !(ICANON | ECHO | ECHOE | ISIG);
+    tty.c_oflag &= !(OPOST); 
 
-    tty.c_oflag &= ~OPOST; // Prevent special interpretation of output bytes (e.g. newline chars)
-    tty.c_oflag &= ~ONLCR; // Prevent conversion of newline to carriage return/line feed
-    // tty.c_oflag &= ~OXTABS; // Prevent conversion of tabs to spaces (NOT PRESENT ON LINUX)
-    // tty.c_oflag &= ~ONOEOT; // Prevent removal of C-d chars (0x004) in output (NOT PRESENT ON LINUX)
+    // tty.c_cflag &= ~PARENB; // Clear parity bit, disabling parity (most common)
+    // tty.c_cflag &= ~CSTOPB; // Clear stop field, only one stop bit used in communication (most common)
+    // tty.c_cflag |= CS8; // 8 bits per byte (most common)
+    // tty.c_cflag &= ~CRTSCTS; // Disable RTS/CTS hardware flow control (most common)
+    // tty.c_cflag |= CREAD | CLOCAL; // Turn on READ & ignore ctrl lines (CLOCAL = 1)
 
-    tty.c_cc[VTIME] = 0;    // Wait for up to 1s (10 deciseconds), returning as soon as any data is received.
-    tty.c_cc[VMIN] = 1;
+    // tty.c_lflag &= ~ICANON;
+    // tty.c_lflag &= ~ECHO; // Disable echo
+    // tty.c_lflag &= ~ECHOE; // Disable erasure
+    // tty.c_lflag &= ~ECHONL; // Disable new-line echo
+    // tty.c_lflag &= ~ISIG; // Disable interpretation of INTR, QUIT and SUSP
+    // tty.c_iflag &= ~(IXON | IXOFF | IXANY); // Turn off s/w flow ctrl
+    // tty.c_iflag &= ~(IGNBRK|BRKINT|PARMRK|ISTRIP|INLCR|IGNCR|ICRNL); // Disable any special handling of received bytes
 
-    // Set in/out baud rate to be 9600
-    cfsetispeed(&tty, B9600);
-    cfsetospeed(&tty, B9600);
+    // tty.c_oflag &= ~OPOST; // Prevent special interpretation of output bytes (e.g. newline chars)
+    // tty.c_oflag &= ~ONLCR; // Prevent conversion of newline to carriage return/line feed
+    // // tty.c_oflag &= ~OXTABS; // Prevent conversion of tabs to spaces (NOT PRESENT ON LINUX)
+    // // tty.c_oflag &= ~ONOEOT; // Prevent removal of C-d chars (0x004) in output (NOT PRESENT ON LINUX)
+
+    tty.c_cc[VTIME] = 20;    // Wait for up to 1s (10 deciseconds), returning as soon as any data is received.
+    tty.c_cc[VMIN] = 0;
+
+    // Set in/out baud rate
+    cfsetispeed(&tty, B38400);
+    cfsetospeed(&tty, B38400);
 
     // Save tty settings, also checking for error
     if (tcsetattr(serial_port, TCSANOW, &tty) != 0) {
         printf("Error %i from tcsetattr: %s\n", errno, strerror(errno));
     }
 
-    // // Write to serial port
-    char reset_msg[] = { 'A', 'T', 'Z', '\r'};
-    char echo_msg[] = { 'A', 'T', 'E', '0', '\r'};
-    char line_msg[] = { 'A', 'T', 'L', '0', '\r'};
-    char pid_msg[] = { '0', '1', '0', '0', '\r'};
+    tcflush(serial_port, TCIOFLUSH);
 
-    write(serial_port, reset_msg, sizeof(reset_msg));
-    sleep(1);
-    write(serial_port, echo_msg, sizeof(echo_msg));
-    sleep(0.2);
-    write(serial_port, line_msg, sizeof(line_msg));
-    sleep(0.2);
-    write(serial_port, pid_msg, sizeof(pid_msg));    
+    // // // Write to serial port
+    // char reset_msg[] = { 'A', 'T', 'Z', '\r'};
+    // char echo_msg[] = { 'A', 'T', 'E', '0', '\r'};
+    // char line_msg[] = { 'A', 'T', 'L', '0', '\r'};
+    // char pid_msg[] = { '0', '1', '0', '0', '\r'};
 
-    char read_buf [256];
-    string rec = "";
-    while(1){
-        memset(&read_buf, '\0', sizeof(read_buf));
-        int num_bytes = read(serial_port,read_buf, sizeof(read_buf));
-        if(num_bytes>0){            
-            rec = rec+string(read_buf);         
-            cout<<read_buf<<endl;
-            //cout<<"Buffer: "<<read_buf<<", Rec: "<<rec<<"\n";
-            if (string(read_buf).find('>')!=string::npos){      
-                replace( rec.begin(), rec.end(), '\n', ' ');          
-                cout<<"Rec: "<<rec<<endl;
-                rec = "";
-            }
-        }        
-    }
+    // write(serial_port, reset_msg, sizeof(reset_msg));
+    // sleep(1);
+    // write(serial_port, echo_msg, sizeof(echo_msg));
+    // sleep(0.2);
+    // write(serial_port, line_msg, sizeof(line_msg));
+    // sleep(0.2);
+    // write(serial_port, pid_msg, sizeof(pid_msg));    
+
+    // char read_buf [256];
+    // string rec = "";
+    // while(1){
+    //     memset(&read_buf, '\0', sizeof(read_buf));
+    //     int num_bytes = read(serial_port,read_buf, sizeof(read_buf));
+    //     if(num_bytes>0){            
+    //         rec = rec+string(read_buf);         
+    //         cout<<read_buf<<endl;
+    //         //cout<<"Buffer: "<<read_buf<<", Rec: "<<rec<<"\n";
+    //         if (string(read_buf).find('>')!=string::npos){      
+    //             replace( rec.begin(), rec.end(), '\n', ' ');          
+    //             cout<<"Rec: "<<rec<<endl;
+    //             rec = "";
+    //         }
+    //     }        
+    // }
+
+    cout<<send_cmd("ATZ", serial_port)<<endl;
+    cout<<send_cmd("ATE0", serial_port)<<endl;
+    cout<<send_cmd("ATL0", serial_port)<<endl;
+    cout<<send_cmd("0100", serial_port)<<endl;
     
-    close(serial_port);
+    //close(serial_port);
 
     cout<<"done\n";
     return 0;
