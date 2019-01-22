@@ -11,12 +11,12 @@ void ultransoic_sensor::init(int trigger_pin, int echo_pin)
  {
 
      //set the trigger pin as an output
-     this->trigger_pin = trigger_pin;
+     this->m_trigger_pin = trigger_pin;
      pinMode(trigger_pin, OUTPUT);
 
      //set the echo pin as an input
      pinMode(echo_pin, INPUT);
-     this->echo_pin = echo_pin;
+     this->m_echo_pin = echo_pin;
 
      //write a 0 to trigger pin
      digitalWrite (trigger_pin, LOW);
@@ -27,27 +27,29 @@ void ultransoic_sensor::init(int trigger_pin, int echo_pin)
 /*
     Function used to measure the distance from the sensor to the object
 */
-double ultransoic_sensor::get_distance()
+bool ultransoic_sensor::GetDistance(double *distance)
  {
 
      //pulse the trigger pin for 10us
-     digitalWrite(trigger_pin, HIGH);
+     digitalWrite(m_trigger_pin, HIGH);
      delayMicroseconds(10);
-     digitalWrite(trigger_pin, LOW);
+     digitalWrite(m_trigger_pin, LOW);
 
      //record start and end time of echo pulse
-     while(digitalRead(echo_pin) == LOW);
+     while(digitalRead(m_echo_pin) == LOW);
      start_time = time(NULL);
 
-     while(digitalRead(echo_pin) == HIGH);
+     while(digitalRead(m_echo_pin) == HIGH);
      end_time = time(NULL);
      
 
+     //TODO: Need to see if the sensor has a timeout if the distance is too far to prevent it getting stuck
+
      //calculate the distance and return
      time_diff = difftime(start_time, end_time);
-     distance = (time_diff * 340)/2;                //d = v*t where v is the speed of sound at 340 m/s, div by two for there and back
+     *distance = (time_diff * 340)/2;                //d = v*t where v is the speed of sound at 340 m/s, div by two for there and back
 
-     return distance; 
+     return true; 
 
 
  }
