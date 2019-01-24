@@ -16,15 +16,18 @@ typedef struct diagMsg {
     int speed;
     int rpm;
     int fuel;
+    int intakeAirTemp;
 } diagMsg_t;
 
 /* @brief: parking sensor signals */
-typedef struct sensorDist_t {
+typedef struct sensorDist {
     bool connectionFault;
     int32_t rearLeft;
     int32_t rearRight;
+    int32_t rearCentre;
     int32_t frontLeft;
     int32_t frontRight;
+    int32_t front Centre;
 } sensorDist_t;
 
 #endif //TYPES_H

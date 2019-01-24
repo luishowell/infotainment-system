@@ -2,7 +2,6 @@
 #include <QtCore>
 #include <stdio.h>
 #include "Timer.h"
-//#include "UltrasonicSensor.h"
 
 SensorThread::SensorThread()
 {  
@@ -42,14 +41,14 @@ void SensorThread::run()
     exec();
 }
 
-/* @brief: Periodic callback method that publishes decoded CAN bus 
-                        messages to the diagnostics viewer in the GUI thread */
-void SensorThread::PublishDiagData()
+/* @brief: Periodic callback method that publishes aggregated sensor data 
+                           to the diagnostics viewer in the GUI thread */
+void SensorThread::PublishSensorData()
 {
     /* 
     //assuming GetDistance() takes a pointer to a double and returns a status flag
-    if (m_frontLeft->GetDistance(&m_msg.frontLeft) && m_frontRight->GetDistance(&m_msg.frontRight) 
-        &&  m_rearLeft.GetDistance(&m_msg.rearLeft)  && m_rearRight.GetDistance(&m_msg.rearRight)    
+    if ((m_frontLeft->GetDistance(&m_msg.frontLeft) && m_frontRight->GetDistance(&m_msg.frontRight) 
+        &&  m_rearLeft.GetDistance(&m_msg.rearLeft)  && m_rearRight.GetDistance(&m_msg.rearRight) )   
         == true)
     {
         //GetDistance() was successful 

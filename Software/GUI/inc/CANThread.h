@@ -21,6 +21,7 @@ signals:
 
 private:
     Timer *m_publishTimer;
+    //obd2 *m_obd;
     diagMsg_t m_msg;
     void run();
 };

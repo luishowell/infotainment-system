@@ -6,6 +6,7 @@
 #include <QObject>
 #include <QSlider>
 #include <QDial>
+#include <QQuickItem>
 
 #include "types.h"
 
@@ -25,10 +26,17 @@ signals:
 
 private:
     QPushButton *m_homeButton;
-    QSlider *m_speedSlider;
-    QSlider *m_fuelGauge;
-    QDial *m_speedDial;
+    QWidget *m_speedometer;
+    QObject *m_speedObject;
+    QWidget *m_fuelGauge;
+    QObject *m_fuelObject;
+    QWidget *m_rpmGauge;
+    QObject *m_rpmObject;
+    
+    QQuickItem *speedo;
+
     void CreateLayout();
+    void CreateComponents();
     bool canConnectionFlag;
 };
 
