@@ -1,6 +1,14 @@
 #include <stdio.h>
 #include <QApplication>
 #include <QtCore>
+#include <QQmlApplicationEngine>
+#include <QQuickView>
+#include <QQuickItem>
+#include <QQuickWidget>
+#include <QQmlEngine>
+#include <QQmlApplicationEngine>
+#include <QQmlComponent>
+
 #include "StateManager.h"
 #include "config.h"
 #include "CANThread.h"
@@ -11,6 +19,12 @@ int main(int argc, char** argv)
     printf("Starting heads-up display...\n");
     QApplication app (argc, argv);
 
+    QQuickView view;
+    view.setSource(QUrl::fromLocalFile("../../../../src/Speedometer.qml"));
+    view.show();
+    QObject *object = view.rootObject();
+    object->setProperty("value", 25);
+    
     /* GUI stuff in state machine class*/
     StateManager stateMachine;
     stateMachine.show();
@@ -22,13 +36,4 @@ int main(int argc, char** argv)
   
     /* kick off GUI event loop */
     return app.exec();
-
-    /*
-    for(;;)
-    {
-
-    }
-   
-    return 0; 
-    */
 }
