@@ -2,6 +2,7 @@
 #define OBD2_H
 
 #include <string>
+#include <vector>
 using namespace std;
 
 class obd2{
@@ -9,6 +10,7 @@ class obd2{
 
         int serial_port;
         bool connected = false;
+        vector<string> supported_pids;
 
         obd2(string comm_port);
 
