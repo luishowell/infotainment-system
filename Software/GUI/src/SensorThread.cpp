@@ -1,7 +1,10 @@
 #include "SensorThread.h"
 #include <QtCore>
-#include <stdio.h>
+#include <iostream>
+//#include <stdio.h>
 #include "Timer.h"
+
+using namespace std;
 
 SensorThread::SensorThread()
 {  
@@ -10,7 +13,7 @@ SensorThread::SensorThread()
 
 void SensorThread::run()
 {
-    printf("Starting sensor thread...\n");
+    cout<<"Starting sensor thread..."<<endl;
 
     /*
     m_frontLeft = new UltrasonicSensor();

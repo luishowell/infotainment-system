@@ -53,6 +53,7 @@ obd2::obd2(string comm_port){
 }
 
 string obd2::send_cmd(string cmd, bool parse){
+  
     cmd = cmd + "\r";
     write(serial_port, cmd.c_str(), cmd.length());
 
@@ -61,12 +62,14 @@ string obd2::send_cmd(string cmd, bool parse){
     while(1){
         int num_bytes = read(serial_port,read_buf, 1);
         //cout<<"Num bytes: "<<num_bytes<<endl;
+        //cout<<read_buf[0]<<endl;
         if(num_bytes>0){              
-            if (read_buf[0]=='>'){                             
+            if (read_buf[0]=='>'){                  
                 break;        
             }
             else{
-                rec.append(read_buf);
+                string read_buf_str(1, read_buf[0]);
+                rec = rec+read_buf_str;
             }
         }        
         else if (num_bytes==0){

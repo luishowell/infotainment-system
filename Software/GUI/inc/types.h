@@ -27,7 +27,7 @@ typedef struct sensorDist {
     int32_t rearCentre;
     int32_t frontLeft;
     int32_t frontRight;
-    int32_t front Centre;
+    int32_t frontCentre;
 } sensorDist_t;
 
 #endif //TYPES_H

@@ -1,11 +1,14 @@
 #include <QApplication>
-#include <stdio.h>
+//#include <stdio.h>
+#include <iostream>
 #include "StateManager.h"
 #include "config.h"
 
+using namespace std;
+
 StateManager::StateManager(QWidget *parent) : QWidget(parent)
 {
-    printf("State manager started\n");
+    cout << "State manager started" << endl;
 
     setFixedSize(widgetSize);
 
@@ -48,7 +51,7 @@ void StateManager::ChangeRequested(state_t req_state, QWidget* currentView)
     switch(req_state)
     {
         case MAIN_MENU : { 
-            printf("Main Menu\n");
+            cout << "Main Menu" << endl;
             if (currentView != m_mainMenu)
             {
                 currentView->hide();
@@ -57,7 +60,7 @@ void StateManager::ChangeRequested(state_t req_state, QWidget* currentView)
             break;
         }
         case DIAGNOSTICS : {
-            printf("Diagnostics\n"); 
+            cout <<"Diagnostics" << endl; 
             if (currentView != m_diags)
             {
                currentView->hide();
@@ -66,7 +69,7 @@ void StateManager::ChangeRequested(state_t req_state, QWidget* currentView)
             break;    
         }
         case ERROR_CODES : { 
-            printf("Error Codes\n"); 
+            cout <<"Error Codes"<<endl; 
 
             if (currentView != m_errorCodes)
             {
@@ -76,7 +79,7 @@ void StateManager::ChangeRequested(state_t req_state, QWidget* currentView)
             break;
         }
         case MEDIA : {
-            printf("Media\n"); 
+            cout<<"Media"<<endl; 
             if (currentView != m_media)
             {
                currentView->hide();
@@ -85,7 +88,7 @@ void StateManager::ChangeRequested(state_t req_state, QWidget* currentView)
             break;
         }
         case PARKING : {
-            printf("Parking\n");
+            cout<<"Parking"<<endl;
             if (currentView != m_parking)
             {
                currentView->hide();
@@ -94,7 +97,7 @@ void StateManager::ChangeRequested(state_t req_state, QWidget* currentView)
             break;
         }
         default : { 
-            printf("Not a valid option\n");
+            cout << "Not a valid option" << endl;
             break;
         }         
     }

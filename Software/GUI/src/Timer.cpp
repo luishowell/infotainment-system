@@ -1,6 +1,6 @@
 #include "Timer.h"
 #include <QtCore>
-#include <stdio.h>
+//#include <stdio.h>
 
 Timer::Timer(int msecs)
 {
@@ -12,5 +12,5 @@ Timer::Timer(int msecs)
 
 void Timer::OnTimerExpired()
 {
-    printf("Timer expired\n");
+    //printf("Timer expired\n");
 }

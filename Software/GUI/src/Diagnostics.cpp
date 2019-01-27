@@ -11,10 +11,12 @@
 #include <QQuickWidget>
 #include <QQmlProperty>
 
-#include <stdio.h>
+//#include <stdio.h>
+#include <iostream>
 #include "Diagnostics.h" 
 #include "config.h"
 
+using namespace std;
 
 Diagnostics::Diagnostics(QWidget *parent) : QWidget(parent) 
  {   
@@ -34,7 +36,7 @@ void Diagnostics::CreateComponents()
    QQuickView *speedoQML = new QQuickView();
    m_speedometer = QWidget::createWindowContainer(speedoQML, this);  
    m_speedometer->setFixedSize(175, 175);
-   speedoQML->setSource(QUrl::fromLocalFile("../../../../src/Speedometer.qml"));
+   speedoQML->setSource(QUrl::fromLocalFile("/home/luis/Dropbox/infotainment-system/Software/GUI/src/Speedometer.qml"));
    speedoQML->setResizeMode(QQuickView::SizeRootObjectToView);
    m_speedObject = speedoQML->rootObject();
 
@@ -42,7 +44,7 @@ void Diagnostics::CreateComponents()
    QQuickView *rpmQML = new QQuickView();
    m_rpmGauge = QWidget::createWindowContainer(rpmQML, this);  
    m_rpmGauge->setFixedSize(175, 175);
-   rpmQML->setSource(QUrl::fromLocalFile("../../../../src/RpmGauge.qml"));
+   rpmQML->setSource(QUrl::fromLocalFile("/home/luis/Dropbox/infotainment-system/Software/GUI/src/RpmGauge.qml"));
    rpmQML->setResizeMode(QQuickView::SizeRootObjectToView);
    m_rpmObject = rpmQML->rootObject();
 
@@ -50,7 +52,7 @@ void Diagnostics::CreateComponents()
    QQuickView *fuelQML = new QQuickView();
    m_fuelGauge = QWidget::createWindowContainer(fuelQML, this);  
    m_fuelGauge->setFixedSize(100, 175);
-   fuelQML->setSource(QUrl::fromLocalFile("../../../../src/FuelGauge.qml"));
+   fuelQML->setSource(QUrl::fromLocalFile("/home/luis/Dropbox/infotainment-system/Software/GUI/src/FuelGauge.qml"));
    fuelQML->setResizeMode(QQuickView::SizeRootObjectToView);
    m_fuelObject = fuelQML->rootObject();
 }
@@ -111,7 +113,7 @@ void Diagnostics::DiagDataRx(diagMsg_t* msg)
 {
    if (msg->connectionFault == true)
    {
-      printf("WARNING: no connection to CAN bus\n");
+      cout<<"WARNING: no connection to CAN bus"<<endl;
 
       if(canConnectionFlag == true)
       {
@@ -126,14 +128,14 @@ void Diagnostics::DiagDataRx(diagMsg_t* msg)
    {
       if(canConnectionFlag == false)
       {
-         printf("CAN bus connection established\n");
+         cout<<"CAN bus connection established"<<endl;
          canConnectionFlag = true;
       }
-      printf("/******DIAG******/\n");
-      printf("Speed: %d\n", msg->speed);
-      printf("RPM: %d\n", msg->rpm);
-      printf("Fuel: %d\n", msg->fuel);
-      printf("/****************/\n");
+      cout<<"/******DIAG******/"<<endl;
+      cout<<"Speed:"<< msg->speed << endl;
+      cout<<"RPM:"<< msg->rpm<<endl;
+      cout<<"Fuel:"<< msg->fuel<<endl;
+      cout<<"/****************/"<<endl;
 
       //m_speedDial->setValue(msg->speed);
       //m_speedSlider->setValue(msg->rpm);

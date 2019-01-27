@@ -1,4 +1,5 @@
-#include <stdio.h>
+//#include <stdio.h>
+#include <iostream>
 #include <QApplication>
 #include <QtCore>
 #include <QQmlApplicationEngine>
@@ -16,11 +17,11 @@
 
 int main(int argc, char** argv)
 {
-    printf("Starting heads-up display...\n");
+    cout<<"Starting heads-up display..."<<endl;
     QApplication app (argc, argv);
 
     QQuickView view;
-    view.setSource(QUrl::fromLocalFile("../../../../src/Speedometer.qml"));
+    view.setSource(QUrl::fromLocalFile("/home/luis/Dropbox/infotainment-system/Software/GUI/src/Speedometer.qml"));
     view.show();
     QObject *object = view.rootObject();
     object->setProperty("value", 25);

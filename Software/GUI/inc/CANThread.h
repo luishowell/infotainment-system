@@ -2,8 +2,10 @@
 #define CANTHREAD_H
 
 #include <QThread>
+#include <string>
 #include "Timer.h"
 #include "types.h"
+#include "obd2.hpp"
 
 class CANThread : public QThread
 {
@@ -21,7 +23,8 @@ signals:
 
 private:
     Timer *m_publishTimer;
-    //obd2 *m_obd;
+    obd2 *m_obd;
+    
     diagMsg_t m_msg;
     void run();
 };

@@ -1,9 +1,12 @@
 #include "CANThread.h"
 #include <QtCore>
-#include <stdio.h>
+//#include <stdio.h>
 #include "Timer.h"
+#include <iostream>
 #include "config.h"
-#include "obd2.hpp"
+#include <string>
+
+using namespace std;
 
 CANThread::CANThread()
 {
@@ -12,12 +15,14 @@ CANThread::CANThread()
 
 void CANThread::run()
 {
-    printf("Starting CAN thread...\n");
+    cout<<"Starting CAN thread..."<<endl;
 
     /* setup periodic data publishing callback */
     QTimer timer;
     connect(&timer, SIGNAL(timeout()), this, SLOT(PublishDiagData()), Qt::DirectConnection);
-    timer.start(DIAG_RATE); //msecs
+    //timer.start(DIAG_RATE); //msecs
+    timer.start(1000); //msecs
+
 
     /* init diagnostics data */
     m_msg.speed = 0;
@@ -26,7 +31,10 @@ void CANThread::run()
     m_msg.connectionFault = true;
 
     /* OBD2 converter class */
-    m_obd = new obd2();
+    
+    m_obd = new obd2("/dev/rfcomm0");
+
+    
 
     /* kick off the thread */
     exec();
@@ -36,14 +44,24 @@ void CANThread::run()
                         messages to the diagnostics viewer in the GUI thread */
 void CANThread::PublishDiagData()
 {
-    printf("Publishing diag...\n");
+    cout<<"Publishing diag..."<<endl;
 
     
-    m_msg.connectionFault = !m_obd2->connected;
-    m_msg.speed = m_obd2->decoded_cmd("010D");
-    m_msg.rpm = m_obd2->decoded_cmd("010C");
-    m_msg.intakeAirTemp = m_obd2->decoded_cmd("010F");
-    m_msg.fuel = m_obd2->decoded_cmd("012F");
+    //m_msg.connectionFault = !m_obd2->connected;
+   
+    if (m_obd->connected){
+        //cout<<"RPM Request: "<<m_obd->send_cmd(command)<<endl;
+
+        m_msg.connectionFault = false;    
+        m_msg.speed = m_obd->decoded_cmd("010D");
+        m_msg.rpm = m_obd->decoded_cmd("010C");
+        m_msg.intakeAirTemp = m_obd->decoded_cmd("010F");
+        m_msg.fuel = 50;
+    
+    }
+    else{
+        cout<<"Not Conected"<<endl;
+    }
     
 
     /* dummy data */
@@ -75,8 +93,8 @@ void CANThread::PublishDiagData()
         m_msg.fuel = 65;
     }
     m_msg.connectionFault = false;  
-
-    */ 
+*/
+    
     
     /* send data to the GUI's diagnostics viewer */
     emit CANPublishDiagTx(&m_msg);
