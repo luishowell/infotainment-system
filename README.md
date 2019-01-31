@@ -2,11 +2,14 @@
 
 This project aims to create a drop-in infotainment system which can be used in any vehicle with an OBD2 port.
 
+![GUI](https://i.imgur.com/vgiZvmy.png)
+
 ## Planned Features
 - Graphical user interface designed for use with a touchscreen 
  - Live display of vehicle information e.g RPM, speed, temperatures
  - Display of current vehicle faults
  - Reversing camera and parking sensors
+ - G force meter
  - Media player
 
 ## Hardware
@@ -16,4 +19,5 @@ This project aims to create a drop-in infotainment system which can be used in a
  - Torque Pro Elm 327 OBD 2 Bluetooth Adapter
  - Raspberry Pi Camera Module V2
  - HC-SR04 Ultrasonic Distance Sensor
+ - Accelerometer
  
