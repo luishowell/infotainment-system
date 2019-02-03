@@ -24,6 +24,10 @@ Diagnostics::Diagnostics(QWidget *parent) : QWidget(parent)
    CreateComponents();
    CreateLayout();    
    connect(m_homeButton, SIGNAL (clicked()), this, SLOT (StateChangeMainMenu())); 
+   connect(this, SIGNAL (NewChannelRequest(diagParams_t, obd2Channel_t)), parent, SLOT (OnNewChannelRequest(diagParams_t, obd2Channel_t))); 
+
+   ConnectButtons();
+   
 
    /* CAN bus initially assumed disconnected until the CAN thread specifies no connection fault */
    canConnectionFlag = false;
@@ -36,7 +40,11 @@ void Diagnostics::CreateComponents()
    QQuickView *speedoQML = new QQuickView();
    m_speedometer = QWidget::createWindowContainer(speedoQML, this);  
    m_speedometer->setFixedSize(175, 175);
+#ifdef GUI_TEST
+   speedoQML->setSource(QUrl::fromLocalFile("./GUI/src/Speedometer.qml"));
+#else
    speedoQML->setSource(QUrl::fromLocalFile("/home/luis/Dropbox/infotainment-system/Software/GUI/src/Speedometer.qml"));
+#endif
    speedoQML->setResizeMode(QQuickView::SizeRootObjectToView);
    m_speedObject = speedoQML->rootObject();
 
@@ -44,17 +52,52 @@ void Diagnostics::CreateComponents()
    QQuickView *rpmQML = new QQuickView();
    m_rpmGauge = QWidget::createWindowContainer(rpmQML, this);  
    m_rpmGauge->setFixedSize(175, 175);
+#ifdef GUI_TEST
+   rpmQML->setSource(QUrl::fromLocalFile("./GUI/src/RpmGauge.qml"));
+#else
    rpmQML->setSource(QUrl::fromLocalFile("/home/luis/Dropbox/infotainment-system/Software/GUI/src/RpmGauge.qml"));
+#endif
    rpmQML->setResizeMode(QQuickView::SizeRootObjectToView);
    m_rpmObject = rpmQML->rootObject();
 
-   /* set up fuel gauge */
-   QQuickView *fuelQML = new QQuickView();
-   m_fuelGauge = QWidget::createWindowContainer(fuelQML, this);  
-   m_fuelGauge->setFixedSize(100, 175);
-   fuelQML->setSource(QUrl::fromLocalFile("/home/luis/Dropbox/infotainment-system/Software/GUI/src/FuelGauge.qml"));
-   fuelQML->setResizeMode(QQuickView::SizeRootObjectToView);
-   m_fuelObject = fuelQML->rootObject();
+   /* set up intake air temperature gauge */
+   QQuickView *airTempQML = new QQuickView();
+   m_airTempGauge = QWidget::createWindowContainer(airTempQML, this);  
+   m_airTempGauge->setFixedSize(100, 175);
+#ifdef GUI_TEST
+   airTempQML->setSource(QUrl::fromLocalFile("./GUI/src/AirTempGauge.qml"));
+#else
+   airTempQML->setSource(QUrl::fromLocalFile("/home/luis/Dropbox/infotainment-system/Software/GUI/src/AirTempGauge.qml"));
+#endif
+   airTempQML->setResizeMode(QQuickView::SizeRootObjectToView);
+   m_airTempObject = airTempQML->rootObject();
+
+   /* set up throttle gauge */
+   QQuickView *throttleQML = new QQuickView();
+   m_throttleGauge = QWidget::createWindowContainer(throttleQML, this);  
+   m_throttleGauge->setFixedSize(100, 175);
+#ifdef GUI_TEST
+   throttleQML->setSource(QUrl::fromLocalFile("./GUI/src/ThrottleGauge.qml"));
+#else
+   throttleQML->setSource(QUrl::fromLocalFile("/home/luis/Dropbox/infotainment-system/Software/GUI/src/ThrottleGauge.qml"));
+#endif
+   throttleQML->setResizeMode(QQuickView::SizeRootObjectToView);
+   m_throttleObject = throttleQML->rootObject();
+
+   /* set up selection buttons */
+   m_rpmButton = new QPushButton("RPM");
+   m_speedButton = new QPushButton("Speed");
+   m_intakeAirTempButton = new QPushButton("Intake Air \nTemperature");
+   m_throttleButton = new QPushButton("Throttle \nPosition");
+
+   const QSize btnSize = QSize(120, 100);
+   m_rpmButton->setFixedSize(btnSize);
+   m_speedButton->setFixedSize(btnSize);
+   m_intakeAirTempButton->setFixedSize(btnSize);
+   m_throttleButton->setFixedSize(btnSize);
+
+   m_logButton = new QPushButton("Log Journey");
+   m_logButton->setFixedSize(400, 50);
 }
 
 void Diagnostics::CreateLayout()
@@ -72,35 +115,72 @@ void Diagnostics::CreateLayout()
    m_homeButton = new QPushButton("Home");
    m_homeButton->setFixedSize(WIDGET_SIZE_X-30, 50);
    
-
-
    /* create individual layouts for gauges */
-   QGroupBox* speedBox = new QGroupBox("Speed", titleBox);
+   speedBox = new QGroupBox("Speed", titleBox);
    speedBox->setAlignment(Qt::AlignHCenter);
    QVBoxLayout *speedLayout = new QVBoxLayout(speedBox);
    speedLayout->addWidget(m_speedometer);
 
-   QGroupBox* rpmBox = new QGroupBox("RPM", titleBox);
+   rpmBox = new QGroupBox("RPM", titleBox);
    rpmBox->setAlignment(Qt::AlignHCenter);
    QVBoxLayout *rpmLayout = new QVBoxLayout(rpmBox);
    rpmLayout->addWidget(m_rpmGauge);
 
-   QGroupBox* fuelBox = new QGroupBox("Fuel", titleBox);
-   fuelBox->setAlignment(Qt::AlignHCenter);
-   QVBoxLayout *fuelLayout = new QVBoxLayout(fuelBox);
-   fuelLayout->addWidget(m_fuelGauge);
-   
+   airTempBox = new QGroupBox("Intake Air Temperature", titleBox);
+   airTempBox->setAlignment(Qt::AlignHCenter);
+   QHBoxLayout *airTempLayout = new QHBoxLayout(airTempBox);
+   airTempLayout->addWidget(m_airTempGauge);
 
+   throttleBox = new QGroupBox("Throttle Position", titleBox);
+   throttleBox->setAlignment(Qt::AlignHCenter);
+   QHBoxLayout *throttleLayout = new QHBoxLayout(throttleBox);
+   throttleLayout->addWidget(m_throttleGauge);
    
+   /* parameter selection box */
+   selectBox = new QGroupBox("Parameters", titleBox);
+   selectBox->setAlignment(Qt::AlignHCenter);
+   selectBox->setFixedSize(250, 250);
+   QHBoxLayout *selectLayout = new QHBoxLayout(selectBox);
+   QVBoxLayout *selectLeft = new QVBoxLayout(selectBox);
+   QVBoxLayout *selectRight = new QVBoxLayout(selectBox);
+   selectLeft->addWidget(m_rpmButton);
+   selectRight->addWidget(m_speedButton);
+   selectLeft->addWidget(m_intakeAirTempButton);
+   selectRight->addWidget(m_throttleButton);
+   selectLeft->setAlignment(Qt::AlignLeft);
+   selectRight->setAlignment(Qt::AlignHCenter);
+   selectLayout->addLayout(selectLeft);
+   selectLayout->addLayout(selectRight);
 
-   fuelBox->setFixedSize(130,220);
+   airTempBox->setFixedSize(200,225);
+   throttleBox->setFixedSize(200,225);
    speedBox->setFixedSize(200,225);
    rpmBox->setFixedSize(200,225);
    titleBox->setFixedSize(WIDGET_SIZE_X-30, WIDGET_SIZE_Y-100);
 
-   boxLayout->addWidget(speedBox, 1, 1);
-   boxLayout->addWidget(rpmBox, 1, 2);
-   boxLayout->addWidget(fuelBox, 1, 3);
+   /* default shown gauges */
+   boxLayout->addWidget(selectBox, 1, 3);
+   boxLayout->addWidget(speedBox, 1, 2);
+   boxLayout->addWidget(rpmBox, 1, 1);
+   boxLayout->addWidget(throttleBox, 1, 2);
+   boxLayout->addWidget(m_logButton, 2, 1);
+
+/*
+   currentRightGauge = speedBox;
+   m_currentRightObj = m_speedObject;
+   currentLeftGauge = rpmBox;
+   m_currentLeftObj = m_rpmObject;
+*/
+
+   currentRightChannel.box = speedBox;
+   currentRightChannel.obj = m_speedObject;
+   currentLeftChannel.box = rpmBox;
+   currentLeftChannel.obj = m_rpmObject;
+
+   /* default hidden gauges */
+   boxLayout->addWidget(airTempBox, 1, 1);
+   airTempBox->hide();
+   throttleBox->hide();
 
    vLayout->addWidget(titleBox);
    vLayout->addWidget(m_homeButton, Qt::AlignBottom);
@@ -117,10 +197,8 @@ void Diagnostics::DiagDataRx(diagMsg_t* msg)
 
       if(canConnectionFlag == true)
       {
-         //m_speedDial->setValue(0);
-         //m_speedSlider->setValue(0);
-         //m_fuelGauge->setValue(0);
-
+         m_speedObject->setProperty("value", 0);
+         m_rpmObject->setProperty("value", 0);
          canConnectionFlag = false; 
       }    
    }
@@ -131,22 +209,90 @@ void Diagnostics::DiagDataRx(diagMsg_t* msg)
          cout<<"CAN bus connection established"<<endl;
          canConnectionFlag = true;
       }
-      cout<<"/******DIAG******/"<<endl;
-      cout<<"Speed:"<< msg->speed << endl;
-      cout<<"RPM:"<< msg->rpm<<endl;
-      cout<<"Fuel:"<< msg->fuel<<endl;
-      cout<<"/****************/"<<endl;
-
-      //m_speedDial->setValue(msg->speed);
-      //m_speedSlider->setValue(msg->rpm);
-      //speedObject->setProperty("value", msg->speed);
-      //QQmlProperty(speedo, "value").write(msg->speed);
-
-      m_speedObject->setProperty("value", msg->speed);
-      m_rpmObject->setProperty("value", msg->rpm);
-      m_fuelObject->setProperty("value", msg->fuel);
+       
+      //cout<<"/******DIAG******/"<<endl;
+      //cout<<"Speed:"<< msg->speed << endl;
+      //cout<<"RPM:"<< msg->rpm<<endl;
+      //cout<<"/****************/"<<endl;
+   
+      currentLeftChannel.obj->setProperty("value", msg->channelA);
+      currentRightChannel.obj->setProperty("value", msg->channelB);
    }
    
+}
+
+void Diagnostics::ConnectButtons()
+{
+   //connect(this, SIGNAL (DiagDataChange(diagData_t)), this, SLOT (ChangeDiagDisplay(diagData_t)));
+   connect(m_rpmButton, SIGNAL (clicked()), this, SLOT (ShowRpmGauge()));
+   connect(m_speedButton, SIGNAL (clicked()), this, SLOT (ShowSpeedGauge()));
+   connect(m_intakeAirTempButton, SIGNAL (clicked()), this, SLOT (ShowAirTempGauge()));
+   connect(m_throttleButton, SIGNAL (clicked()), this, SLOT (ShowThrottleGauge()));
+   connect(m_logButton, SIGNAL (clicked()), this, SLOT (JourneyLogRequest()));
+
+}
+
+/* public slots */
+
+void Diagnostics::ShowAirTempGauge()
+{
+   if (currentLeftGauge != airTempBox)
+   {
+      currentLeftChannel.box->hide();
+      airTempBox->show();
+      currentLeftChannel.box = airTempBox;
+
+      /* request intake air temperate to be obtained from the OBD2 thread */
+      emit NewChannelRequest(AIR_TEMP, CHANNEL_A);
+   }
+}
+
+void Diagnostics::ShowSpeedGauge()
+{
+   if (currentRightGauge != speedBox)
+   {
+      currentRightChannel.box->hide();
+      speedBox->show();
+      currentRightChannel.box = speedBox;
+
+      /* request speed data to be obtained from the OBD2 thread */
+      emit NewChannelRequest(SPEED, CHANNEL_B);
+   }
+}
+
+void Diagnostics::ShowRpmGauge()
+{
+   if (currentLeftGauge != rpmBox)
+   {
+      currentLeftChannel.box->hide();
+      rpmBox->show();
+      currentLeftChannel.box = rpmBox;
+
+      /* request RPM data to be obtained from the OBD2 thread */
+      emit NewChannelRequest(RPM, CHANNEL_A);
+   }     
+}
+
+void Diagnostics::ShowThrottleGauge()
+{
+   if (currentRightGauge != throttleBox)
+   {
+      currentRightChannel.box->hide();
+      throttleBox->show();
+      currentRightChannel.box = throttleBox;
+
+      /* request throttle data to be obtained from the OBD2 thread */
+      emit NewChannelRequest(THROTTLE, CHANNEL_B);
+   }  
+}
+
+void Diagnostics::JourneyLogRequest()
+{
+   cout<<"LOG REQUESTED"<<endl;
+
+   /* TODO: implement log request signal*/
+   /* send log request to state machine */
+   emit StartLogging();
 }
 
 void Diagnostics::StateChangeMainMenu()

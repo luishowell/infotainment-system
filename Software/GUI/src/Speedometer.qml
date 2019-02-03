@@ -23,7 +23,7 @@ CircularGauge {
 
     Behavior on value {
         NumberAnimation {
-            duration: 100
+            duration: 400
         }
     }
     
