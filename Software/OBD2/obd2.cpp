@@ -354,12 +354,41 @@ int obd2::setup_obd(string comm_port){
 
     tcflush(serial_port, TCIOFLUSH);
 
-    cout<<send_cmd("ATZ")<<endl;   //reset
-    cout<<send_cmd("ATE0")<<endl;  //echo off
-    cout<<send_cmd("ATL0")<<endl;  //linefeed off
-    cout<<send_cmd("ATS0")<<endl;  //spaces off
-    cout<<send_cmd("ATSP5")<<endl; //OBD2 Protocol set to KWP fast (Fiat Panda), use ATSP0 for auto
-    
+    if (send_cmd("ATZ", true)=="OK"){
+        cout<<"Reset OK"<<endl;
+    }
+    else{
+        cout<<"Transmission error"<<endl;
+        return -1;        
+    }
+    if (send_cmd("ATE0", true)=="OK"){
+        cout<<"Echo off OK"<<endl;
+    }
+    else{
+        cout<<"Transmission error"<<endl;
+        return -1;  
+    }
+    if (send_cmd("ATL0", true)=="OK"){
+        cout<<"Linefeed off OK"<<endl;
+    }
+    else{
+        cout<<"Transmission error"<<endl;
+        return -1;  
+    }
+    if (send_cmd("ATS0", true)=="OK"){
+        cout<<"Spaces off OK"<<endl;
+    }
+    else{
+        cout<<"Transmission error"<<endl;
+        return -1;  
+    }
+    if (send_cmd("ATSP5", true)=="OK"){
+        cout<<"OBD2 Protocol set OK"<<endl;
+    }
+    else{
+        cout<<"Transmission error"<<endl;
+        return -1;  
+    }
 
     if (send_cmd("0100", true)=="BUSINIT:ERROR"){  //initalise KWP fast
         cout<<"KWP Fast Bus Initialisation Error"<<endl;
