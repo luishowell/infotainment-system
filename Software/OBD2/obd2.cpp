@@ -94,7 +94,7 @@ string obd2::send_cmd(string cmd, bool parse){
             output = "OK";
         }
         else if (rec.find("ELM327")!=string::npos){
-            output = rec.substr(rec.find("ELM327"), 10);
+            output = "OK";
         }
         else if (rec.find("BUSINIT:ERROR")!=string::npos){
             output = "BUSINIT:ERROR";

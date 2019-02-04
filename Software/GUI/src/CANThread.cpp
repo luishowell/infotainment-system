@@ -27,10 +27,10 @@ void CANThread::run()
     logTimer.start(LOGGING_RATE); //msecs
 
     /* init diagnostics data */
-    m_msg.channelA = 0;
-    m_msg.requestA = "010D"; //speed
     m_msg.channelB = 0;
-    m_msg.requestB = "010C"; //rpm
+    m_msg.requestB = "010D"; //speed
+    m_msg.channelA = 0;
+    m_msg.requestA = "010C"; //rpm
     m_msg.connectionFault = true;
 
 #ifndef GUI_TEST
@@ -69,7 +69,7 @@ void CANThread::PublishDiagData()
 
 void CANThread::PublishLogData()
 {
-    cout<<"publish logging"<<endl;
+    //cout<<"publish logging"<<endl;
 
     /* TODO: implement logging signal */
     emit CANPublishLogTx();
