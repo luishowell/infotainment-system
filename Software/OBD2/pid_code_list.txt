@@ -163,5 +163,3 @@ A4	Transmission Actual Gear
 A5	Diesel Exhaust Fluid Dosing
 A6	Odometer
 C0	PIDs supported [C1 - E0]
-C3	?
-C4	?
