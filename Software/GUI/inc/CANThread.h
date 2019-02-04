@@ -16,6 +16,7 @@ class CANThread : public QThread
 
 public:
     explicit CANThread();
+    ~CANThread();
     
 
 private slots:

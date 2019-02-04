@@ -6,7 +6,7 @@ CircularGauge {
     objectName: id
 
     property int value: 0
-    maximumValue : 100 
+    maximumValue : 7000 
     
 
     //property bool accelerating: false

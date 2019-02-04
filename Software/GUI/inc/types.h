@@ -28,7 +28,7 @@ typedef enum {
     RPM,
     AIR_TEMP, 
     THROTTLE
-}diagParams_t;
+} diagParams_t;
 
 typedef enum {
     CHANNEL_A,
@@ -45,6 +45,13 @@ typedef struct sensorDist {
     int32_t frontRight;
     int32_t frontCentre;
 } sensorDist_t;
+
+/* @brief: parking sensor pins */
+typedef struct sensorPins_t {
+    int sel[3];
+    int echo_pin;
+    int trigger_pin;
+} sensorPins_t;
 
 
 #endif //TYPES_H

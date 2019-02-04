@@ -1,13 +1,13 @@
 #include "ultrasonic_sensor.h"
 
 //constructor
-ultransoic_sensor::ultransoic_sensor(){}
+ultransonic_sensor::ultransoic_sensor(){}
 
 
 /*
     Function used to setup the pins on the pi that connect to the trigger and echo pins on the sensor
 */
-void ultransoic_sensor::init(int trigger_pin, int echo_pin)
+void ultransonic_sensor::init(int trigger_pin, int echo_pin)
  {
 
      //set the trigger pin as an output
@@ -27,7 +27,7 @@ void ultransoic_sensor::init(int trigger_pin, int echo_pin)
 /*
     Function used to measure the distance from the sensor to the object
 */
-bool ultransoic_sensor::GetDistance(double *distance)
+bool ultrasonic_sensor::GetDistance(double *distance)
  {
 
      //pulse the trigger pin for 10us

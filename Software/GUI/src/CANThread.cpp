@@ -12,6 +12,12 @@ CANThread::CANThread()
     
 }
 
+CANThread::~CANThread()
+{
+    
+    delete this;
+}
+
 void CANThread::run()
 {
     cout<<"Starting CAN thread..."<<endl;
