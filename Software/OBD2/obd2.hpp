@@ -19,6 +19,8 @@ class obd2{
         void print_supported_pids();
         float decode_response(string response, int option = 1);
         float decoded_cmd(string cmd);
+        vector<string> read_dtc();
+        string dtc_desc(string dtc_code);
     
     private:
 

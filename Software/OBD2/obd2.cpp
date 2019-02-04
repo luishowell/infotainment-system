@@ -53,66 +53,77 @@ obd2::obd2(string comm_port){
 }
 
 string obd2::send_cmd(string cmd, bool parse){
-  
-    cmd = cmd + "\r";
-    write(serial_port, cmd.c_str(), cmd.length());
+    if (serial_port!=-1){
+        cmd = cmd + "\r";
+        write(serial_port, cmd.c_str(), cmd.length());
 
-    char read_buf [1];
-    string rec = "";
-    while(1){
-        int num_bytes = read(serial_port,read_buf, 1);
-        //cout<<"Num bytes: "<<num_bytes<<endl;
-        //cout<<read_buf[0]<<endl;
-        if(num_bytes>0){              
-            if (read_buf[0]=='>'){                  
-                break;        
+        char read_buf [1];
+        string rec = "";
+        while(1){
+            int num_bytes = read(serial_port,read_buf, 1);
+            //cout<<"Num bytes: "<<num_bytes<<endl;
+            //cout<<read_buf[0]<<endl;
+            if(num_bytes>0){              
+                if (read_buf[0]=='>'){                  
+                    break;        
+                }
+                else{
+                    string read_buf_str(1, read_buf[0]);
+                    rec = rec+read_buf_str;
+                }
+            }        
+            else if (num_bytes==0){
+                return "TRANSMISSION_ERROR: "+rec;
+            }
+        }
+        rec.erase(remove(rec.begin(), rec.end(), '\n'), rec.end()); //remove new line characters
+        rec.erase(remove(rec.begin(), rec.end(), ' '), rec.end());  //remove spaces
+
+        if (parse==false){
+            return rec;
+        }
+        else {
+            string output;
+
+            string expected_prefix = "4"+cmd.substr(1, 3);
+            int prefix_search = rec.find(expected_prefix);  
+            if (prefix_search!=string::npos){
+                output = rec.substr(prefix_search);
+            }
+            else if (rec.find("OK")!=string::npos){
+                output = "OK";
+            }
+            else if (rec.find("ELM327")!=string::npos){
+                output = "OK";
+            }
+            else if (rec.find("BUSINIT:ERROR")!=string::npos){
+                output = "BUSINIT:ERROR";
+            }
+            else if (rec.find("?")!=string::npos){
+                output = "?";
+            }
+            else if (rec.find("UNABLETOCONNECT")!=string::npos){
+                output = "UNABLE_TO_CONNECT";
+            }
+            else if (rec.find("NODATA")!=string::npos){
+                output = "NO_DATA";
+            }
+            else if (cmd.substr(0,2)=="03"){      
+                int dtc_prefix_search = rec.find("43");  
+                if (dtc_prefix_search!=string::npos){
+                    output = rec.substr(dtc_prefix_search);
+                }
             }
             else{
-                string read_buf_str(1, read_buf[0]);
-                rec = rec+read_buf_str;
+                output = "PARSE_ERROR: "+rec;
             }
-        }        
-        else if (num_bytes==0){
-            return "TRANSMISSION_ERROR: "+rec;
+
+            return output;
         }
     }
-    rec.erase(remove(rec.begin(), rec.end(), '\n'), rec.end()); //remove new line characters
-    rec.erase(remove(rec.begin(), rec.end(), ' '), rec.end());  //remove spaces
-
-    if (parse==false){
-        return rec;
-    }
-    else {
-        string output;
-
-        string expected_prefix = "4"+cmd.substr(1, 3);
-        int prefix_search = rec.find(expected_prefix);
-        if (prefix_search!=string::npos){
-            output = rec.substr(prefix_search);
-        }
-        else if (rec.find("OK")!=string::npos){
-            output = "OK";
-        }
-        else if (rec.find("ELM327")!=string::npos){
-            output = rec.substr(rec.find("ELM327"), 10);
-        }
-        else if (rec.find("BUSINIT:ERROR")!=string::npos){
-            output = "BUSINIT:ERROR";
-        }
-        else if (rec.find("?")!=string::npos){
-            output = "?";
-        }
-        else if (rec.find("UNABLETOCONNECT")!=string::npos){
-            output = "UNABLE_TO_CONNECT";
-        }
-        else if (rec.find("NODATA")!=string::npos){
-            output = "NO_DATA";
-        }
-        else{
-            output = "PARSE_ERROR: "+rec;
-        }
-
-        return output;
+    else{
+        cout<<"Not Connected!"<<endl;
+        return "";
     }
 }
 
@@ -300,6 +311,72 @@ float obd2::decode_response(string response, int option){
 
 float obd2::decoded_cmd(string cmd){
     return decode_response(send_cmd(cmd, true));        
+}
+
+
+vector<string> obd2::read_dtc(){
+
+    string received = send_cmd("03", true);
+    vector<string> dtc_codes;
+
+    if (received.substr(0, 2)=="43"){
+
+        string dtc_hex = received.substr(2);    
+
+        int number_dtc_codes = dtc_hex.size()/4;
+
+        
+        string code_prefix;
+
+        for (int i=0; i<number_dtc_codes;i++){
+            string sub_string = dtc_hex.substr(i*4, 4);
+            if (hex2int(sub_string)>0){
+                int first_digit = hex2int(sub_string.substr(0, 1));    
+
+                if (first_digit<=3){
+                    code_prefix = "P"+to_string(first_digit);
+                }
+                else if ((first_digit>=4)&&(first_digit<=7)){
+                    code_prefix = "C"+to_string(first_digit-4);
+                }
+                else if ((first_digit>=8)&&(first_digit<=11)){
+                    code_prefix = "B"+to_string(first_digit-8);
+                }
+                else if ((first_digit>=12)&&(first_digit<=15)){
+                    code_prefix = "U"+to_string(first_digit-12);
+                }
+
+                string dtc = code_prefix+sub_string.substr(1, 3);
+                dtc_codes.push_back(dtc);         
+            }      
+        }
+    }
+    else{
+        cout<<"Not a valid DTC response, returning empty vector"<<endl;
+    }
+
+    return dtc_codes;
+}
+
+
+string obd2::dtc_desc(string dtc_code){
+    string line;
+    string desc = "No DTC description";
+    ifstream dtc_list_txt ("dtc_code_list.txt");
+    if (dtc_list_txt.is_open())
+    {
+        while ( getline (dtc_list_txt,line) ){
+            if (dtc_code == line.substr(0,5)){
+                desc = line.substr(6);
+                if (desc[0]==' '){
+                    desc = desc.substr(1);
+                }
+                break;
+            }       
+        }
+        dtc_list_txt.close();
+    }   
+    return desc;
 }
 
 
