@@ -30,13 +30,13 @@ void OBD2Test::cleanup()
 }
 
 /*----------------------------------------*/
-/*     UNIT TESTS FOR MULTIPLEXOR CLASS   */
+/*     UNIT TESTS FOR OBD2 CLASS          */
 /*----------------------------------------*/
 
 /* constructor test */
 void OBD2Test::obd2Test()
 {
-    m_OBD = new obd2("/dev/rfcomm0");
+    
     QCOMPARE(m_OBD->connected, true);
     delete m_OBD;
 
@@ -46,27 +46,27 @@ void OBD2Test::obd2Test()
     /* m_OBD will be deleted by cleanup function */
 }
 
-void OBD2Test::send_cmdTest()
+void OBD2Test::SendCmd_Test()
 {
   
 }
 
-void OBD2Test::scan_pidsTest()
+void OBD2Test::ScanPids_Test()
 {
   
 }
 
-void OBD2Test::print_supported_pidsTest()
+void OBD2Test::PrintSupportedPids_Test()
 {
    
 }
 
-void OBD2Test::decode_responseTest()
+void OBD2Test::DecodeResponse_Test()
 {
   
 }
 
-void OBD2Test::decoded_cmdTest()
+void OBD2Test::DecodedCmd_Test()
 {
     QVERIFY(m_obd->decoded_cmd("010D") > 0 );
     QVERIFY(m_obd->decoded_cmd("010C") > 0 );
@@ -74,6 +74,17 @@ void OBD2Test::decoded_cmdTest()
     QVERIFY(m_obd->decoded_cmd("0111") > 0 );
     QVERIFY(m_obd->decoded_cmd("5738") ==  -999);
 }
+
+void OBD2Test::ReadDtc_Test()
+{
+
+}
+
+void OBD2Test::DtcDesc_Test()
+{
+
+}
+
 
 QTEST_MAIN(OBD2Test)
 #include "obd2test.moc"
