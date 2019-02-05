@@ -7,6 +7,7 @@ typedef struct sensorPins_t {
     int sel[3];
     int echo_pin;
     int trigger_pin;
+    int en;
 } sensorPins_t;
 
 #endif //SENSORTYPES_H

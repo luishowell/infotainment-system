@@ -6,15 +6,15 @@ sensor_board::sensor_board(){}
 
 
 //initialisation function
-sensor_board::init(sensorPins_t pins)
+void sensor_board::init(sensorPins_t pins)
 {
     //initialise the sensor
     sensor = new ultrasonic_sensor();
-    sensor.init(pins.trigger_pin, pins.echo_pin);
+    sensor->init(pins.trigger_pin, pins.echo_pin);
 
     //initialise the mux
     mux = new multiplexor();
-    mux.init(pins.sel[0], pins.sel[1], pins.sel[2]);
+    mux->init(pins.sel[0], pins.sel[1], pins.sel[2]);
 
 }
 
@@ -27,6 +27,6 @@ bool sensor_board::GetDistance(unsigned int sensor_num, double *distance)
     delayMicroseconds(10); //wait for mux to be set properly
 
     //get the distance and return success
-    return sensor->GetDistance(&distance);
+    return sensor->GetDistance(distance);
 
 }

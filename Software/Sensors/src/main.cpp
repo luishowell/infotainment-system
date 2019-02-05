@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <iostream>
-#include "types.h"
+#include "sensorTypes.h"
 #include "sensor_board.h"
 #include "ultrasonic_sensor.h"
 #include "multiplexor.h"

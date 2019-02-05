@@ -6,12 +6,12 @@
 #include <time.h>
 
 
-class ultransoic_sensor
+class ultrasonic_sensor
 {
     public:
 
         //constructor
-        ultransoic_sensor();
+        ultrasonic_sensor();
 
         //function to initialise the sensor
         void init(int trigger_pin, int echo_pin);
@@ -23,8 +23,8 @@ class ultransoic_sensor
     private:
 
         //gpio pin connections
-        int m_trigger_pin             //pin that connects to the trigger of the sensor
-        int m_echo_pin                //pin that connects to the echo of the sensor
+        int m_trigger_pin;             //pin that connects to the trigger of the sensor
+        int m_echo_pin;                //pin that connects to the echo of the sensor
 
         //start and end time variables
         time_t start_time;
