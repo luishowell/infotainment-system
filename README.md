@@ -18,6 +18,14 @@ This project aims to create a drop-in infotainment system which can be used in a
  - Official Raspberry Pi 7" Touchscreen Display
  - Torque Pro Elm 327 OBD 2 Bluetooth Adapter
  - Raspberry Pi Camera Module V2
- - HC-SR04 Ultrasonic Distance Sensor
+ - HC-SR04 Ultrasonic Distance Sensors
  - Accelerometer
- 
+
+## Required Packages
+Packages can be installed on an Ubuntu/Debian system with `sudo apt install <package_name>`.
+
+- `qt5-default`
+- `qtdeclarative5-dev`
+- `qml-module-qtquick-dialogs`
+- `qml-module-qtquick-control`
+- `qml-module-qtquick-extras`
