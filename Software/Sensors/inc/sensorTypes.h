@@ -1,5 +1,5 @@
-#ifndef TYPES_H
-#define TYPES_H
+#ifndef SENSORTYPES_H
+#define SENSORTYPES_H
 
 
 /* @brief: parking sensor pins */
@@ -9,4 +9,4 @@ typedef struct sensorPins_t {
     int trigger_pin;
 } sensorPins_t;
 
-#endif //TYPES_H
+#endif //SENSORTYPES_H

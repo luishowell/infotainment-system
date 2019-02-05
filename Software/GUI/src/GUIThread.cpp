@@ -1,9 +1,10 @@
 #include "GUIThread.h"
 #include <QtCore>
-#include <stdio.h>
+#include <iostream>
+//#include <stdio.h>
 #include "StateManager.h"
 
-
+using namespace std;
 
 GUIThread::GUIThread()
 {
@@ -13,7 +14,7 @@ GUIThread::GUIThread()
 
 void GUIThread::run()
 {
-    printf("Starting GUI thread...\n");
+    cout<<"Starting GUI thread..."<<endl;
     //StateManager stateMachine;
     //stateMachine.show();
     exec();

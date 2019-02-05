@@ -1,4 +1,4 @@
-#include <stdio.h>
+//#include <stdio.h>
 #include <QApplication>
 #include <QGridLayout>
 #include <QGroupBox>

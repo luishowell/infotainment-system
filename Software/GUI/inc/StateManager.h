@@ -20,10 +20,12 @@ public:
 public slots:
     void ChangeRequested(state_t req_state, QWidget* self);
     void CANPublishDiagRx(diagMsg_t* msg);
+    void OnNewChannelRequest(diagParams_t dataRequested, obd2Channel_t channel);
 
 signals:
     void DisplayChange(state_t req_state, QWidget* currentView);
     void DiagDataTx(diagMsg_t* msg);
+    void NewChannelRequest(diagParams_t dataRequested, obd2Channel_t channel);
 
 private:
     MainMenu *m_mainMenu;

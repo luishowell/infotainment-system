@@ -4,6 +4,8 @@
 #include <QThread>
 #include "Timer.h"
 #include "types.h"
+//#include "UltrasonicSensor.h"
+
 
 class SensorThread : public QThread
 {
