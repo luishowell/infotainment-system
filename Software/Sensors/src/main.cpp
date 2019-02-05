@@ -16,14 +16,11 @@ int main(int argc, char** argv)
 
    cout << "Sensor Test Starting" << endl;
 
-   //create the sensor for just now as don't have mux
-   //trigger on wiringPi 8, echo on 9
-   //ultrasonic_sensor sens1;
-   //sens1.init(8, 9);
+   //create the sensor board class
    sensorPins_t pins;
 	pins.en = 3;
-	pins.echo_pin = 2;
-	pins.trigger_pin = 0;
+	pins.echoPin = 2;
+	pins.triggerPin = 0;
 	pins.sel[0] = 12;
 	pins.sel[1] = 13;
 	pins.sel[2] = 14;

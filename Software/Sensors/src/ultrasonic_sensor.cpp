@@ -29,7 +29,7 @@ void ultrasonic_sensor::init(int trigger_pin, int echo_pin)
 */
 bool ultrasonic_sensor::GetDistance(double *distance)
  {
-	//cout << "Pulse start" << endl;
+    
      //pulse the trigger pin for 10us
      digitalWrite(m_trigger_pin, HIGH);
      delayMicroseconds(10);
@@ -44,10 +44,10 @@ bool ultrasonic_sensor::GetDistance(double *distance)
      time_t time_taken;
      time_t while_end;
 
-     //record start and end time of echo pulse
+     //look for the rising edge of the echo pulse or timeout
      while((digitalRead(m_echo_pin) == LOW) && (time_left > 0))
      {
-	while_end = micros();
+	    while_end = micros();
         time_taken = while_end - while_start;
         time_left = timeout_len - time_taken;
      }
@@ -61,26 +61,22 @@ bool ultrasonic_sensor::GetDistance(double *distance)
         start_time = micros();
      }
 
-     //timeout of 10 ms on both rising and falling edge of echo pin
-     time_left = timeout_len;
 
-     //time at which the while loop starts
+
+     //reset timeout values
+     time_left = timeout_len;
      while_start = micros();
 
-
+     //look for the falling edge of the echo pulse or timeout
      while((digitalRead(m_echo_pin) == HIGH) && (time_left > 0))
      {
-
         while_end = micros();
         time_taken = while_end - while_start;
         time_left = timeout_len - time_taken;
      }
+     //record end time
      end_time = micros();
      
-
-
-
-     //TODO: Need to see if the sensor has a timeout if the distance is too far to prevent it getting stuck
 
      //calculate the distance and return
      time_diff = difftime(end_time, start_time);
