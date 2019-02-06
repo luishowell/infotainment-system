@@ -380,12 +380,18 @@ string obd2::dtc_desc(string dtc_code){
 }
 
 
-int obd2::hex2int(string hex_string){
-    return stoi(hex_string, nullptr, 16);
+unsigned long obd2::hex2int(string hex_string){
+    try{
+        return stoul(hex_string, nullptr, 16);
+    }
+    catch(const invalid_argument ia){
+        cout<<"Invalid hex string"<<endl;
+        return 0;
+    }
 }
 
 
-string obd2::int2hex(int int_value){
+string obd2::int2hex(long int_value){ 
     stringstream hex_value;
     hex_value<< setfill('0') << setw(2)<< uppercase<< hex<<int_value;
     return hex_value.str();    
