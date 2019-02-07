@@ -3,6 +3,7 @@
 
 #include <QThread>
 #include <string>
+#include "config.h"
 #include "Timer.h"
 #include "types.h"
 

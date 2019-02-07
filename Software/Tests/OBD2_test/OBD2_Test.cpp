@@ -1,8 +1,27 @@
+#include <QtTest/QtTest>
 #include <iostream>
 #include <string>
-#include "OBD2Test.h"
+#include "obd2.hpp"
 
 using namespace std;
+
+class OBD2Test: public QObject
+{
+    Q_OBJECT
+private slots:
+    void Obd2_Test();
+    void SendCmdTest();
+    void ScanPids_Test();
+    void PrintSupportedPids_Test();
+    void DecodeResponse_Test();
+    void DecodedCmd_Test();
+    void ReadDtc_Test();
+    void DtcDesc_Test();
+    void Hex2int_Test();
+    void Int2hex_Test();
+private:
+    obd2* m_obd;
+};
 
 /*----------------------------------------*/
 /*              TEST SETUP                */
@@ -10,12 +29,10 @@ using namespace std;
 
 void OBD2Test::initTestCase()
 {
-    cout<<"STARTING OBD2 UNIT TESTS"<<endl;
 }
 
 void OBD2Test::cleanupTestCase()
 {
-    cout<<"FINISHED OBD2 UNIT TESTS"<<endl;
 }
 
 /* called before each test case */
@@ -127,6 +144,18 @@ void OBD2Test::Int2hex_Test()
     QVERIFY(m_obd->int2hex(3697)=="E71");
 }
 
+/* run tests */
+//QTEST_MAIN(OBD2Test);
+QT_BEGIN_NAMESPACE
+QTEST_ADD_GPU_BLACKLIST_SUPPORT_DEFS
+QT_END_NAMESPACE
+int main(int argc, char **argv)
+{
+    QCoreApplication app(argc, argv);
+    app.setAttribute(Qt::AA_Use96Dpi, true);
 
-QTEST_MAIN(OBD2Test)
+    OBD2Test tc;
+    QTEST_SET_MAIN_SOURCE_PATH
+    return QTest::qExec(&tc, argc, argv);
+}
 #include "obd2test.moc"

@@ -1,8 +1,8 @@
+#include "config.h"
 #include "CANThread.h"
 #include <QtCore>
 #include "Timer.h"
 #include <iostream>
-#include "config.h"
 #include <string>
 
 using namespace std;
