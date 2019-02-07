@@ -13,6 +13,8 @@ private slots:
     void DecodedCmd_Test();
     void ReadDtc_Test();
     void DtcDesc_Test();
+    void Hex2int_Test();
+    void Int2hex_Test();
 private:
     obd2* m_obd;
 };

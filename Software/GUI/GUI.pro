@@ -6,7 +6,7 @@ QT              += widgets qml quick quickwidgets testlib
 #includes
 HEADERS         = inc/*.h
 INCLUDEPATH     += inc/
-INCLUDEPATH     += ../OBD2/
+#INCLUDEPATH     += ../OBD2/
 INCLUDEPATH     += ../MainApp/inc
 
 #libraries
