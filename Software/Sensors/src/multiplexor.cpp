@@ -1,4 +1,4 @@
-#include "multiplexor"
+#include "multiplexor.h"
 
 //constructor
 multiplexor::multiplexor(){}

@@ -5,8 +5,9 @@
 /* @brief: parking sensor pins */
 typedef struct sensorPins_t {
     int sel[3];
-    int echo_pin;
-    int trigger_pin;
+    int echoPin;
+    int triggerPin;
+    int en;
 } sensorPins_t;
 
 #endif //SENSORTYPES_H

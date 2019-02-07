@@ -5,7 +5,7 @@
 #include <wiringPi.h>
 #include "ultrasonic_sensor.h"
 #include "multiplexor.h"
-#include "types.h"
+#include "sensorTypes.h"
 
 class sensor_board 
 {

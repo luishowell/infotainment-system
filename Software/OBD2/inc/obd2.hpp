@@ -21,11 +21,11 @@ class obd2{
         float decoded_cmd(string cmd);
         vector<string> read_dtc();
         string dtc_desc(string dtc_code);
+        unsigned long hex2int(string hex_string);
+        string int2hex(long int_value);
     
     private:
 
-        int hex2int(string hex_string);
-        string int2hex(int int_value);
         int setup_obd(string comm_port);   
 
 };
