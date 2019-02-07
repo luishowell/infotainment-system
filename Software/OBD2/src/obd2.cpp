@@ -197,37 +197,37 @@ float obd2::decode_response(string response, int option){
         string data = response.substr(4);
         string pid = response.substr(2, 2);        
 
-        if ((pid=="04"||pid=="11"||pid=="2C"||pid=="2E"||pid=="2F"||pid=="45"||pid=="52"||pid=="5A"||pid=="5B")&&(data.size==1*2)){ 
+        if ((pid=="04"||pid=="11"||pid=="2C"||pid=="2E"||pid=="2F"||pid=="45"||pid=="52"||pid=="5A"||pid=="5B")&&(data.size()==1*2)){ 
             output = hex2int(data)/2.55;        
         }
-        else if ((pid=="1F"||pid=="21"||pid=="31"||pid=="4D"||pid=="4E"||pid=="63")&&(data.size==2*2)){   
+        else if ((pid=="1F"||pid=="21"||pid=="31"||pid=="4D"||pid=="4E"||pid=="63")&&(data.size()==2*2)){   
             int A = hex2int(data.substr(0,2));
             int B = hex2int(data.substr(2,2));
             output = (256*A)+B;
         }
-        else if ((pid=="05"||pid=="0F"||pid=="46"||pid=="5C")&&(data.size==1*2)){    
+        else if ((pid=="05"||pid=="0F"||pid=="46"||pid=="5C")&&(data.size()==1*2)){    
             output = hex2int(data)-40;
         }
-        else if ((pid=="0B"||pid=="0D"||pid=="30"||pid=="33")&&(data.size==1*2)){    
+        else if ((pid=="0B"||pid=="0D"||pid=="30"||pid=="33")&&(data.size()==1*2)){    
             output = hex2int(data);
         }
-        else if ((pid=="06"||pid=="07"||pid=="08"||pid=="09")&&(data.size==1*2)){
+        else if ((pid=="06"||pid=="07"||pid=="08"||pid=="09")&&(data.size()==1*2)){
             output = (hex2int(data)/1.28)-100.0;
         }
-        else if ((pid=="0A")&&(data.size==1*2)){  
+        else if ((pid=="0A")&&(data.size()==1*2)){  
             output = hex2int(data)*3.0;
         }
-        else if ((pid=="0C")&&(data.size==2*2)){   
+        else if ((pid=="0C")&&(data.size()==2*2)){   
             int A = hex2int(data.substr(0,2));
             int B = hex2int(data.substr(2,2));
             output = ((256*A)+B)/4.0;
         }
-        else if ((pid=="5E")&&(data.size==2*2)){   
+        else if ((pid=="5E")&&(data.size()==2*2)){   
             int A = hex2int(data.substr(0,2));
             int B = hex2int(data.substr(2,2));
             output = ((256*A)+B)/20.0;
         }
-        else if ((hex2int(pid)>=20&&hex2int(pid)<=27)&&(data.size==2*2)){
+        else if ((hex2int(pid)>=20&&hex2int(pid)<=27)&&(data.size()==2*2)){
             if (option==1){
                 output = hex2int(data.substr(0, 2))/200.0;
             }
@@ -241,7 +241,7 @@ float obd2::decode_response(string response, int option){
                 }
             }
         }
-        else if ((hex2int(pid)>=36&&hex2int(pid)<=43)&&(data.size==4*2)){
+        else if ((hex2int(pid)>=36&&hex2int(pid)<=43)&&(data.size()==4*2)){
             if (option==1){
                 int A = hex2int(data.substr(0,2));
                 int B = hex2int(data.substr(2,2));
@@ -253,7 +253,7 @@ float obd2::decode_response(string response, int option){
                 output = (8.0/65536.0)*((256*C)+D);     
             }
         }
-        else if ((hex2int(pid)>=52&&hex2int(pid)<=59)&&(data.size==4*2)){
+        else if ((hex2int(pid)>=52&&hex2int(pid)<=59)&&(data.size()==4*2)){
             if (option==1){
                 int A = hex2int(data.substr(0,2));
                 int B = hex2int(data.substr(2,2));
@@ -265,33 +265,33 @@ float obd2::decode_response(string response, int option){
                 output = C+(D/256.0)-128.0;
             }
         }
-        else if ((pid=="3C"||pid=="3D"||pid=="3E"||pid=="3F")&&(data.size==2*2)){   
+        else if ((pid=="3C"||pid=="3D"||pid=="3E"||pid=="3F")&&(data.size()==2*2)){   
             int A = hex2int(data.substr(0,2));
             int B = hex2int(data.substr(2,2));
             output = (((256*A)+B)/10.0)-40.0;
         }
-        else if ((pid=="10")&&(data.size==2*2)){   
+        else if ((pid=="10")&&(data.size()==2*2)){   
             int A = hex2int(data.substr(0,2));
             int B = hex2int(data.substr(2,2));
             output = ((256*A)+B)/100.0;
         }
-        else if ((pid=="61"||pid=="62")&&(data.size==1*2)){  
+        else if ((pid=="61"||pid=="62")&&(data.size()==1*2)){  
             output = hex2int(data)-125;
         }
-        else if ((pid=="2D")&&(data.size==1*2)){  
+        else if ((pid=="2D")&&(data.size()==1*2)){  
             output = ((100.0/128.0)*hex2int(data))-100;
         }
-        else if ((pid=="22")&&(data.size==2*2)){  
+        else if ((pid=="22")&&(data.size()==2*2)){  
             int A = hex2int(data.substr(0,2));
             int B = hex2int(data.substr(2,2));
             output = 0.079*((256*A)+B);
         }
-        else if ((pid=="23")&&(data.size==2*2)){  
+        else if ((pid=="23")&&(data.size()==2*2)){  
             int A = hex2int(data.substr(0,2));
             int B = hex2int(data.substr(2,2));
             output = 10*((256*A)+B);
         }
-        else if ((pid=="44")&&(data.size==2*2)){  
+        else if ((pid=="44")&&(data.size()==2*2)){  
             int A = hex2int(data.substr(0,2));
             int B = hex2int(data.substr(2,2));
             output = (2.0/65536.0)*((256*A)+B);  
