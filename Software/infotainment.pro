@@ -5,11 +5,13 @@ CONFIG              += ordered
 SUBDIRS             =   GUI         \
                         #OBD2       \
                         #Sensors    \
-                        #Tests      \
+                        Tests      \
                         MainApp
 
 #GUI.depends        +=  OBD2
 #GUI.depends        +=  Sensors
+#Tests.depends       +=  OBD2  
+#Tests.depends       +=  Sensors
 MainApp.depends     =   GUI
 
 
