@@ -11,6 +11,7 @@
 #include <QQmlComponent>
 #include <QStyleFactory>
 
+#include "config.h"
 #include "StateManager.h"
 #include "config.h"
 #include "CANThread.h"
