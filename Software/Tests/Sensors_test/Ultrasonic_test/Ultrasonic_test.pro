@@ -16,6 +16,6 @@ SOURCES         += ./UltrasonicSensor_test.cpp
 
 #outputs
 TARGET           = UltrasonicTest
-DESTDIR          = bin 
-OBJECTS_DIR      = bin/src 
+DESTDIR          = ../bin 
+OBJECTS_DIR      = ../bin/src 
 MOC_DIR          = moc

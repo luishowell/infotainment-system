@@ -29,12 +29,12 @@ private:
 
 void MultiplexorTest::initTestCase()
 {
-    cerr << "STARTING UNIT TESTS FOR MULTIPLEXOR" << endl;
+    //cerr << "STARTING UNIT TESTS FOR MULTIPLEXOR" << endl;
 }
 
 void MultiplexorTest::cleanupTestCase()
 {
-    cerr << "FINISHED UNIT TESTS FOR MULTIPLEXOR" << endl;
+    //cerr << "FINISHED UNIT TESTS FOR MULTIPLEXOR" << endl;
 }
 
 /* called before each test case */
@@ -56,7 +56,9 @@ void MultiplexorTest::cleanup()
 /* constructor test */
 void MultiplexorTest::Multiplexor_Test()
 {
-
+    int a;
+    a=5;
+    QCOMPARE(a,5);
 }
 
 void MultiplexorTest::Init_Test()
@@ -70,24 +72,6 @@ void MultiplexorTest::SetMux_Test()
 }
 
 /* run tests */
-QT_BEGIN_NAMESPACE
-QTEST_ADD_GPU_BLACKLIST_SUPPORT_DEFS
-QT_END_NAMESPACE
-int main(int argc, char **argv)
-{
-    int ret;
-
-    QCoreApplication app(argc, argv);
-    app.setAttribute(Qt::AA_Use96Dpi, true);
-    
-    MultiplexorTest tc;
-    QTEST_SET_MAIN_SOURCE_PATH
-    ret = QTest::qExec(&tc, argc, argv);
-
-    /* output number of failed tests */
-    cout << ret << endl;
-    return 0;
-
-}
+QTEST_MAIN(MultiplexorTest);
 
 #include "Multiplexor_test.moc"

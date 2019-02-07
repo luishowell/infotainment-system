@@ -32,12 +32,12 @@ private:
 
 void UltrasonicSensorTest::initTestCase()
 {
-    cout << "STARTING UNIT TESTS FOR ULTRASONIC SENSOR" << endl;
+    //cout << "STARTING UNIT TESTS FOR ULTRASONIC SENSOR" << endl;
 }
 
 void UltrasonicSensorTest::cleanupTestCase()
 {
-    cout << "FINISHED UNIT TESTS FOR ULTRASONIC SENSOR" << endl;
+    //cout << "FINISHED UNIT TESTS FOR ULTRASONIC SENSOR" << endl;
 }
 
 /* called before each test case */
@@ -73,24 +73,5 @@ void UltrasonicSensorTest::GetDistance_Test()
 }
 
 /* run tests */
-QT_BEGIN_NAMESPACE
-QTEST_ADD_GPU_BLACKLIST_SUPPORT_DEFS
-QT_END_NAMESPACE
-int main(int argc, char **argv)
-{
-    int ret;
-
-    QCoreApplication app(argc, argv);
-    app.setAttribute(Qt::AA_Use96Dpi, true);
-    
-    UltrasonicSensorTest tc;
-    QTEST_SET_MAIN_SOURCE_PATH
-    ret = QTest::qExec(&tc, argc, argv);
-
-    /* output number of failed tests */
-    cout << ret << endl;
-    return 0;
-
-}
-
+QTEST_MAIN(UltrasonicSensorTest);
 #include "UltrasonicSensor_test.moc"

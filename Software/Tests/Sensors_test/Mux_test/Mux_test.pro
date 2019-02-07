@@ -16,6 +16,6 @@ SOURCES         += ./Multiplexor_test.cpp
 
 #outputs
 TARGET           = MuxTest
-DESTDIR          = bin 
-OBJECTS_DIR      = bin/src 
+DESTDIR          = ../bin 
+OBJECTS_DIR      = ../bin/src 
 MOC_DIR          = moc

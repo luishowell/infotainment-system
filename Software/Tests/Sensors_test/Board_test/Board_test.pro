@@ -16,6 +16,6 @@ SOURCES         += ./SensorBoard_test.cpp
 
 #outputs
 TARGET           = BoardTest
-DESTDIR          = bin 
-OBJECTS_DIR      = bin/src 
+DESTDIR          = ../bin 
+OBJECTS_DIR      = ../bin/src 
 MOC_DIR          = moc

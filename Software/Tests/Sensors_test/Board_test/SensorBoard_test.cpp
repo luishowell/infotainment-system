@@ -30,12 +30,12 @@ private:
 
 void SensorBoardTest::initTestCase()
 {
-    cout << "STARTING UNIT TESTS FOR SENSOR BOARD" << endl;
+    //cout << "STARTING UNIT TESTS FOR SENSOR BOARD" << endl;
 }
 
 void SensorBoardTest::cleanupTestCase()
 {
-    cout << "FINISHED UNIT TESTS FOR SENSOR BOARD" << endl;
+    //cout << "FINISHED UNIT TESTS FOR SENSOR BOARD" << endl;
 }
 
 /* called before each test case */
@@ -56,7 +56,7 @@ void SensorBoardTest::cleanup()
 
 void SensorBoardTest::SensorBoard_Test()
 {
-
+    //QCOMPARE(3, 7);
 }
 
 void SensorBoardTest::init_Test()
@@ -69,24 +69,6 @@ void SensorBoardTest::GetDistance_Test()
     
 }
 
-QT_BEGIN_NAMESPACE
-QTEST_ADD_GPU_BLACKLIST_SUPPORT_DEFS
-QT_END_NAMESPACE
-int main(int argc, char **argv)
-{
-    int ret;
-
-    QCoreApplication app(argc, argv);
-    app.setAttribute(Qt::AA_Use96Dpi, true);
-    
-    SensorBoardTest tc;
-    QTEST_SET_MAIN_SOURCE_PATH
-    ret = QTest::qExec(&tc, argc, argv);
-
-    /* output number of failed tests */
-    cout << ret << endl;
-    return 0;
-
-}
-
+/* run tests */
+QTEST_MAIN(SensorBoardTest);
 #include "SensorBoard_test.moc"
