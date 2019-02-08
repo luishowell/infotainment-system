@@ -1,6 +1,6 @@
 #setup
 TEMPLATE         =   app 
-QT              +=  testlib
+QT              +=  core testlib
 DEFINES += QT_DEPRECATED_WARNINGS
 
 #includes

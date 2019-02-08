@@ -3,12 +3,13 @@ TEMPLATE        = lib
 CONFIG          += static
 
 #includes
-INCLUDEPATH     += ./
+INCLUDEPATH     += ./inc
+HEADERS         += ./inc/*.hpp
 
 #libraries
 
 #inputs
-SOURCES         = ./obd2.cpp
+SOURCES         = ./src/obd2.cpp
 
 #outputs
 TARGET          = OBD2

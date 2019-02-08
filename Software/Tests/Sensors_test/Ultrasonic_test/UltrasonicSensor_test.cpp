@@ -73,5 +73,14 @@ void UltrasonicSensorTest::GetDistance_Test()
 }
 
 /* run tests */
-QTEST_MAIN(UltrasonicSensorTest);
+//QTEST_MAIN(UltrasonicSensorTest);
+int main(int argc, char **argv)
+{
+    QCoreApplication app(argc, argv);
+    app.setAttribute(Qt::AA_Use96Dpi, true);
+
+    UltrasonicSensorTest tc;
+    QTEST_SET_MAIN_SOURCE_PATH
+    return QTest::qExec(&tc, argc, argv);
+}
 #include "UltrasonicSensor_test.moc"

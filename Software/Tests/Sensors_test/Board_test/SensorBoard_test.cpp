@@ -70,5 +70,17 @@ void SensorBoardTest::GetDistance_Test()
 }
 
 /* run tests */
-QTEST_MAIN(SensorBoardTest);
+//QTEST_MAIN(SensorBoardTest);
+QT_BEGIN_NAMESPACE
+QTEST_ADD_GPU_BLACKLIST_SUPPORT_DEFS
+QT_END_NAMESPACE
+int main(int argc, char **argv)
+{
+    QCoreApplication app(argc, argv);
+    app.setAttribute(Qt::AA_Use96Dpi, true);
+
+    SensorBoardTest tc;
+    QTEST_SET_MAIN_SOURCE_PATH
+    return QTest::qExec(&tc, argc, argv);
+}
 #include "SensorBoard_test.moc"

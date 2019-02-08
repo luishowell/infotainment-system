@@ -72,6 +72,17 @@ void MultiplexorTest::SetMux_Test()
 }
 
 /* run tests */
-QTEST_MAIN(MultiplexorTest);
+//QTEST_MAIN(MultiplexorTest);
+QT_BEGIN_NAMESPACE
+QTEST_ADD_GPU_BLACKLIST_SUPPORT_DEFS
+QT_END_NAMESPACE
+int main(int argc, char **argv)
+{
+    QCoreApplication app(argc, argv);
+    app.setAttribute(Qt::AA_Use96Dpi, true);
 
+    MultiplexorTest tc;
+    QTEST_SET_MAIN_SOURCE_PATH
+    return QTest::qExec(&tc, argc, argv);
+}
 #include "Multiplexor_test.moc"
