@@ -27,5 +27,5 @@ Packages can be installed on an Ubuntu/Debian system with `sudo apt install <pac
 - `qt5-default`
 - `qtdeclarative5-dev`
 - `qml-module-qtquick-dialogs`
-- `qml-module-qtquick-control`
+- `qml-module-qtquick-controls`
 - `qml-module-qtquick-extras`
