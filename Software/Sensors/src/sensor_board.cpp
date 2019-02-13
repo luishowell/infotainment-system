@@ -10,7 +10,7 @@ void sensor_board::init(sensorPins_t pins)
 {
     //initialise the sensor
     sensor = new ultrasonic_sensor();
-    sensor->init(pins.trigger_pin, pins.echo_pin);
+    sensor->init(pins.triggerPin, pins.echoPin);
 
     //initialise the mux
     mux = new multiplexor();

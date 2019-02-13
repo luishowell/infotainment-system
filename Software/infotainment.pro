@@ -12,7 +12,9 @@ SUBDIRS             =   GUI         \
 #GUI.depends        +=  Sensors
 Tests.depends       +=  OBD2  
 #Tests.depends       +=  Sensors
-MainApp.depends     =   GUI
+MainApp.depends		+= OBD2
+MainApp.depends     +=   GUI
+
 
 QMAKE_CXX = clang++
 QMAKE_LINK = clang++

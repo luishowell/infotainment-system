@@ -6,6 +6,7 @@ CONFIG          += static
 INCLUDEPATH     += ./inc/
 
 #libraries
+LIBS += -L/usr/local/lib -lwiringPi
 
 #inputs
 SOURCES         += ./src/multiplexor.cpp        \

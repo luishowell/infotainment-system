@@ -20,7 +20,7 @@ CANThread::~CANThread()
 
 void CANThread::run()
 {
-    cout<<"Starting CAN thread..."<<endl;
+    cout<<"Starting CAN thread...uyvuyvuyv"<<endl;
 
     /* setup fast data publishing callback */
     QTimer timer;
@@ -30,7 +30,7 @@ void CANThread::run()
     /* setup logging data publishing callback */
     QTimer logTimer;
     connect(&logTimer, SIGNAL(timeout()), this, SLOT(PublishLogData()), Qt::DirectConnection);
-    logTimer.start(LOGGING_RATE); //msecs
+    //logTimer.start(LOGGING_RATE); //msecs
 
     /* init diagnostics data */
     m_msg.channelB = 0;
@@ -52,7 +52,7 @@ void CANThread::run()
                         messages to the diagnostics viewer in the GUI thread */
 void CANThread::PublishDiagData()
 {
-    //cout<<"Publishing diag..."<<endl;
+    cout<<"Publishing diag..."<<endl;
 #ifdef GUI_TEST
     DummyData();
 #else

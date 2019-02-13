@@ -38,20 +38,15 @@ typedef enum {
 /* @brief: parking sensor signals */
 typedef struct sensorDist {
     bool connectionFault;
-    int32_t rearLeft;
-    int32_t rearRight;
-    int32_t rearCentre;
-    int32_t frontLeft;
-    int32_t frontRight;
-    int32_t frontCentre;
+    double rearLeft;
+    double rearRight;
+    double rearCentre;
+    double frontLeft;
+    double frontRight;
+    double frontCentre;
 } sensorDist_t;
 
-/* @brief: parking sensor pins */
-typedef struct sensorPins_t {
-    int sel[3];
-    int echo_pin;
-    int trigger_pin;
-} sensorPins_t;
+
 
 
 #endif //TYPES_H

@@ -16,6 +16,7 @@
 #include "config.h"
 #include "CANThread.h"
 #include "GUIThread.h"
+#include "SensorThread.h"
 
 using namespace std;
 
@@ -35,7 +36,11 @@ int main(int argc, char** argv)
     QObject::connect(&can, SIGNAL(CANPublishDiagTx(diagMsg_t*)), &stateMachine, SLOT(CANPublishDiagRx(diagMsg_t*)));
     QObject::connect(&stateMachine, SIGNAL(NewChannelRequest(diagParams_t, obd2Channel_t)), &can, SLOT(OnNewChannelRequest(diagParams_t, obd2Channel_t)));
 
+    /* create and start the sensor thread */
+     SensorThread sensorsThr;
+
     can.start();
+    sensorsThr.start();
   
     /* kick off GUI event loop */
     return app.exec();

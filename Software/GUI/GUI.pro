@@ -4,14 +4,22 @@ CONFIG          += static
 QT              += widgets qml quick quickwidgets testlib
 
 #includes
-HEADERS         = inc/*.h
-INCLUDEPATH     += inc/
+HEADERS         += ../OBD2/inc/*.hpp
+HEADERS		+= ../OBD2/inc/*.h
+HEADERS		+= ../GUI/inc/*.h
+HEADERS		+= ../Sensors/inc/*.h
+INCLUDEPATH     += ../OBD2/inc
+INCLUDEPATH	+= ../GUI/inc
 #INCLUDEPATH     += ../OBD2/
 INCLUDEPATH     += ../MainApp/inc
+INCLUDEPATH	+= ../Sensors/inc
 
 #libraries
-#LIBS            = ../OBD2/bin/libOBD2.a
-#DEPENDS
+DEPENDPATH	+= . ../OBD2
+LIBS            += ../OBD2/bin/libOBD2.a
+DEPENDPATH	+= . ../Sensors
+LIBS		+= ../Sensors/bin/libSensors.a
+
 
 #inputs
 SOURCES         = ./src/*.cpp
