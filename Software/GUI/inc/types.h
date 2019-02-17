@@ -1,3 +1,14 @@
+/**
+ * @file types.h
+ * @author Jamie Brown
+ * @brief Contains all custom typedefs and structs used in the project
+ * @version 0.1
+ * @date 2019-02-17
+ * 
+ * @copyright Copyright (c) 2019
+ * 
+ */
+
 #ifndef TYPES_H
 #define TYPES_H
 

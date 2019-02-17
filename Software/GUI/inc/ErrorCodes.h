@@ -1,3 +1,14 @@
+/**
+ * @file ErrorCodes.h
+ * @author Jamie Brown
+ * @brief 
+ * @version 0.1
+ * @date 2019-02-17
+ * 
+ * @copyright Copyright (c) 2019
+ * 
+ */
+
 #ifndef ERRORCODES_h
 #define ERRORCODES_h
 

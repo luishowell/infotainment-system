@@ -1,3 +1,14 @@
+/**
+ * @file Media.h
+ * @author Jamie Brown
+ * @brief 
+ * @version 0.1
+ * @date 2019-02-17
+ * 
+ * @copyright Copyright (c) 2019
+ * 
+ */
+
 #ifndef MEDIA_H
 #define MEDIA_H
 
