@@ -15,6 +15,7 @@
 #include "StateManager.h"
 #include "config.h"
 #include "CANThread.h"
+#include "CANWorker.h"
 #include "GUIThread.h"
 #include "SensorThread.h"
 
@@ -29,19 +30,24 @@ int main(int argc, char** argv)
     
     /* GUI stuff in state machine class*/
     StateManager stateMachine;
-    stateMachine.show();
+    
 
-    /* create and start the CAN thread */
-    CANThread can;
-    QObject::connect(&can, SIGNAL(CANPublishDiagTx(diagMsg_t*)), &stateMachine, SLOT(CANPublishDiagRx(diagMsg_t*)));
-    QObject::connect(&stateMachine, SIGNAL(NewChannelRequest(diagParams_t, obd2Channel_t)), &can, SLOT(OnNewChannelRequest(diagParams_t, obd2Channel_t)));
+    /* create threads */
+    CANThread canT;
+    CANWorker canW;
+    canW.moveToThread(&canT);	
+    QObject::connect(&canT, SIGNAL(started()), &canW, SLOT(GetDiagData()));
+    QObject::connect(&canW, SIGNAL(CANPublishDiagTx(diagMsg_t*)), &stateMachine, SLOT(CANPublishDiagRx(diagMsg_t*)));
+    QObject::connect(&stateMachine, SIGNAL(NewChannelRequest(diagParams_t, obd2Channel_t)), &canW, SLOT(OnNewChannelRequest(diagParams_t, obd2Channel_t)));
 
     /* create and start the sensor thread */
-     SensorThread sensorsThr;
+    //SensorThread sensorsThr;
 
-    can.start();
-    sensorsThr.start();
-  
+    /* start threads */
+    canT.start();
+    //sensorsThr.start();
+    stateMachine.show();
+
     /* kick off GUI event loop */
     return app.exec();
 }

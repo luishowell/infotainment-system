@@ -9,10 +9,12 @@ INCLUDEPATH += ../GUI/inc
 INCLUDEPATH += ../OBD2/inc
 INCLUDEPATH += ../Sensors/inc
 
+HEADERS     += ../GUI/inc/*.h
+
 
 #libraries
-DEPENDPATH  += . ../GUI/
-LIBS        +=  ../GUI/bin/libGUI.a 
+#DEPENDPATH  += . ../GUI/
+#LIBS        +=  ../GUI/bin/libGUI.a 
 LIBS += -L/usr/local/lib -lwiringPi
 
 #inputs

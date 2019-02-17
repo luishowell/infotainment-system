@@ -41,9 +41,9 @@ void Diagnostics::CreateComponents()
    m_speedometer = QWidget::createWindowContainer(speedoQML, this);  
    m_speedometer->setFixedSize(175, 175);
 #ifdef GUI_TEST
-   speedoQML->setSource(QUrl::fromLocalFile("./GUI/src/Speedometer.qml"));
+   speedoQML->setSource(QUrl::fromLocalFile("/home/pi/Desktop/infotainment-system/Software/GUI/src/Speedometer.qml"));
 #else
-   speedoQML->setSource(QUrl::fromLocalFile("/home/luis/Dropbox/infotainment-system/Software/GUI/src/Speedometer.qml"));
+   speedoQML->setSource(QUrl::fromLocalFile("../GUI/src/Speedometer.qml"));
 #endif
    speedoQML->setResizeMode(QQuickView::SizeRootObjectToView);
    m_speedObject = speedoQML->rootObject();
@@ -55,7 +55,7 @@ void Diagnostics::CreateComponents()
 #ifdef GUI_TEST
    rpmQML->setSource(QUrl::fromLocalFile("./GUI/src/RpmGauge.qml"));
 #else
-   rpmQML->setSource(QUrl::fromLocalFile("/home/luis/Dropbox/infotainment-system/Software/GUI/src/RpmGauge.qml"));
+   rpmQML->setSource(QUrl::fromLocalFile("../GUI/src/RpmGauge.qml"));
 #endif
    rpmQML->setResizeMode(QQuickView::SizeRootObjectToView);
    m_rpmObject = rpmQML->rootObject();
@@ -67,7 +67,7 @@ void Diagnostics::CreateComponents()
 #ifdef GUI_TEST
    airTempQML->setSource(QUrl::fromLocalFile("./GUI/src/AirTempGauge.qml"));
 #else
-   airTempQML->setSource(QUrl::fromLocalFile("/home/luis/Dropbox/infotainment-system/Software/GUI/src/AirTempGauge.qml"));
+   airTempQML->setSource(QUrl::fromLocalFile("../GUI/src/AirTempGauge.qml"));
 #endif
    airTempQML->setResizeMode(QQuickView::SizeRootObjectToView);
    m_airTempObject = airTempQML->rootObject();
@@ -79,7 +79,7 @@ void Diagnostics::CreateComponents()
 #ifdef GUI_TEST
    throttleQML->setSource(QUrl::fromLocalFile("./GUI/src/ThrottleGauge.qml"));
 #else
-   throttleQML->setSource(QUrl::fromLocalFile("/home/luis/Dropbox/infotainment-system/Software/GUI/src/ThrottleGauge.qml"));
+   throttleQML->setSource(QUrl::fromLocalFile("../GUI/src/ThrottleGauge.qml"));
 #endif
    throttleQML->setResizeMode(QQuickView::SizeRootObjectToView);
    m_throttleObject = throttleQML->rootObject();
@@ -214,8 +214,16 @@ void Diagnostics::DiagDataRx(diagMsg_t* msg)
       //cout<<"Speed:"<< msg->speed << endl;
       //cout<<"RPM:"<< msg->rpm<<endl;
       //cout<<"/****************/"<<endl;
-   
-      currentLeftChannel.obj->setProperty("value", msg->channelA);
+   int leftVal = 0;
+      if (currentLeftChannel.obj == m_rpmObject)
+	{
+		leftVal = (msg->channelA) / 100;
+	}
+	else
+	{
+		leftVal = msg->channelA;
+	}
+      currentLeftChannel.obj->setProperty("value", leftVal);
       currentRightChannel.obj->setProperty("value", msg->channelB);
    }
    

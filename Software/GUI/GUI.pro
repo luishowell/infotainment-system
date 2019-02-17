@@ -5,7 +5,7 @@ QT              += widgets qml quick quickwidgets testlib
 
 #includes
 HEADERS         += ../OBD2/inc/*.hpp
-HEADERS		+= ../OBD2/inc/*.h
+
 HEADERS		+= ../GUI/inc/*.h
 HEADERS		+= ../Sensors/inc/*.h
 INCLUDEPATH     += ../OBD2/inc

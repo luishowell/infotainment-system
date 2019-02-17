@@ -208,7 +208,7 @@ float obd2::decode_response(string response, int option){
         else if ((pid=="05"||pid=="0F"||pid=="46"||pid=="5C")&&(data.size()==1*2)){    
             output = hex2int(data)-40;
         }
-        else if ((pid=="0B"||pid=="0D"||pid=="30"||pid=="33")&&(data.size()==1*2)){    
+        else if ((pid=="0B"||pid=="0D"||pid=="30"||pid=="33")){    
             output = hex2int(data);
         }
         else if ((pid=="06"||pid=="07"||pid=="08"||pid=="09")&&(data.size()==1*2)){
@@ -217,7 +217,7 @@ float obd2::decode_response(string response, int option){
         else if ((pid=="0A")&&(data.size()==1*2)){  
             output = hex2int(data)*3.0;
         }
-        else if ((pid=="0C")&&(data.size()==2*2)){   
+        else if ((pid=="0C")){   
             int A = hex2int(data.substr(0,2));
             int B = hex2int(data.substr(2,2));
             output = ((256*A)+B)/4.0;

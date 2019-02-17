@@ -6,7 +6,7 @@ CircularGauge {
     objectName: id
 
     property int value: 0
-    maximumValue : 7000 
+    maximumValue : 70 
     
 
     //property bool accelerating: false
@@ -23,7 +23,7 @@ CircularGauge {
 
     Behavior on value {
         NumberAnimation {
-            duration: 50
+            duration: 1
         }
     }
     

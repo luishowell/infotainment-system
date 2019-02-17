@@ -13,7 +13,7 @@
 const QSize widgetSize = QSize(WIDGET_SIZE_X, WIDGET_SIZE_Y);
 
 /* OBD2 config */
-#define DIAG_RATE 500 //ms
+#define DIAG_RATE 420 //ms
 #define LOGGING_RATE 1500 //ms
 #define FUEL_CAPACITY 65 //litres
 
