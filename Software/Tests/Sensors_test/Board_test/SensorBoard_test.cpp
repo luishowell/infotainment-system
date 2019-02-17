@@ -1,7 +1,18 @@
+/**
+ * @file SensorBoard_test.cpp
+ * @author Jamie Brown/Joe Walker
+ * @brief 
+ * @version 0.1
+ * @date 2019-02-17
+ * 
+ * @copyright Copyright (c) 2019
+ * 
+ */
+
 #include <QtTest/QtTest>
 #include <iostream>
-//#include "sensor_board.h"
-//#include "types.h"
+#include "sensor_board.h"
+#include "types.h"
 
 using namespace std;
 
@@ -28,42 +39,68 @@ private:
 /*              TEST SETUP                */
 /*----------------------------------------*/
 
+/**
+ * @brief 
+ * 
+ */
 void SensorBoardTest::initTestCase()
 {
     //cout << "STARTING UNIT TESTS FOR SENSOR BOARD" << endl;
 }
 
+/**
+ * @brief 
+ * 
+ */
 void SensorBoardTest::cleanupTestCase()
 {
     //cout << "FINISHED UNIT TESTS FOR SENSOR BOARD" << endl;
 }
 
-/* called before each test case */
+/**
+ * @brief 
+ * 
+ */
 void SensorBoardTest::init()
 {
-    //m_board = new sensor_board();
+    m_board = new sensor_board();
 }
 
-/* called after each test case */
+/**
+ * @brief 
+ * 
+ */
 void SensorBoardTest::cleanup()
 {
-    //delete m_board;
+    delete m_board;
 }
 
 /*----------------------------------------*/
 /*    UNIT TESTS FOR SENSOR_BOARD CLASS   */
 /*----------------------------------------*/
 
+/**
+ * @brief 
+ * 
+ */
 void SensorBoardTest::SensorBoard_Test()
 {
     //QCOMPARE(3, 7);
 }
 
+/**
+ * @brief 
+ * 
+ */
 void SensorBoardTest::init_Test()
 {
 
 }
 
+/**
+ * @brief 
+ * 
+ */
 void SensorBoardTest::GetDistance_Test()
 {
     

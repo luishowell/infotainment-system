@@ -1,10 +1,25 @@
-//#include <stdio.h>
+/**
+ * @file Media.cpp
+ * @author Jamie Brown
+ * @brief 
+ * @version 0.1
+ * @date 2019-02-17
+ * 
+ * @copyright Copyright (c) 2019
+ * 
+ */
+
 #include <QApplication>
 #include <QGridLayout>
 #include <QGroupBox>
 #include "Media.h" 
 #include "config.h"
 
+/**
+ * @brief Construct a new Media:: Media object
+ * 
+ * @param parent 
+ */
 Media::Media(QWidget *parent) : QWidget(parent) 
  {
      
@@ -16,11 +31,19 @@ Media::Media(QWidget *parent) : QWidget(parent)
     
  }
 
+/**
+ * @brief 
+ * 
+ */
 void Media::StateChangeMainMenu()
 {
    emit DisplayChange(MAIN_MENU, this);
 }
 
+/**
+ * @brief 
+ * 
+ */
 void Media::CreateLayout()
 {
     QVBoxLayout* vLayout = new QVBoxLayout(this);

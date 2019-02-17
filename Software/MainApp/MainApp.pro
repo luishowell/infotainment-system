@@ -22,6 +22,8 @@ SOURCES     += src/main.cpp
 DESTDIR         = bin 
 OBJECTS_DIR     = bin/src 
 
+MOC_DIR         = ./moc
+
 
 
 SOURCES += ../GUI/src/*.cpp

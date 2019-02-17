@@ -1,7 +1,18 @@
+/**
+ * @file Multiplexor_test.cpp
+ * @author Jamie Brown/Joe Walker
+ * @brief 
+ * @version 0.1
+ * @date 2019-02-17
+ * 
+ * @copyright Copyright (c) 2019
+ * 
+ */
+
 #include <QtTest/QtTest>
 #include <iostream>
-//#include "multiplexor.h"
-//#include "types.h"
+#include "multiplexor.h"
+#include "types.h"
 
 using namespace std;
 
@@ -20,30 +31,44 @@ private slots:
     void init();
     void cleanup();
 private:
-    //multiplexor *m_mux;
+    multiplexor *m_mux;
 };
 
 /*----------------------------------------*/
 /*              TEST SETUP                */
 /*----------------------------------------*/
 
+/**
+ * @brief 
+ * 
+ */
 void MultiplexorTest::initTestCase()
 {
-    //cerr << "STARTING UNIT TESTS FOR MULTIPLEXOR" << endl;
+
 }
 
+/**
+ * @brief 
+ * 
+ */
 void MultiplexorTest::cleanupTestCase()
 {
-    //cerr << "FINISHED UNIT TESTS FOR MULTIPLEXOR" << endl;
+
 }
 
-/* called before each test case */
+/**
+ * @brief This method is called before each test case, creates a new multiplexor object
+ * 
+ */
 void MultiplexorTest::init()
 {
 
 }
 
-/* called after each test case */
+/**
+ * @brief This method is called after each test case, deletes the multiplexor object used in the previous test case
+ * 
+ */
 void MultiplexorTest::cleanup()
 {
     
@@ -53,7 +78,10 @@ void MultiplexorTest::cleanup()
 /*     UNIT TESTS FOR MULTIPLEXOR CLASS   */
 /*----------------------------------------*/
 
-/* constructor test */
+/**
+ * @brief Tests the multiplexor constructor
+ * 
+ */
 void MultiplexorTest::Multiplexor_Test()
 {
     int a;
@@ -61,11 +89,19 @@ void MultiplexorTest::Multiplexor_Test()
     QCOMPARE(a,5);
 }
 
+/**
+ * @brief 
+ * 
+ */
 void MultiplexorTest::Init_Test()
 {
 
 }
 
+/**
+ * @brief 
+ * 
+ */
 void MultiplexorTest::SetMux_Test()
 {
 

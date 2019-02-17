@@ -1,9 +1,25 @@
+ /**
+ * @file Parking.cpp
+ * @author Jamie Brown
+ * @brief 
+ * @version 0.1
+ * @date 2019-02-17
+ * 
+ * @copyright Copyright (c) 2019
+ * 
+ */
+ 
  #include <QApplication>
  #include <QGridLayout>
  #include <QGroupBox>
  #include "Parking.h"
  #include "config.h"
 
+/**
+ * @brief Construct a new Parking:: Parking object
+ * 
+ * @param parent 
+ */
 Parking::Parking(QWidget *parent) : QWidget(parent) 
  {
      
@@ -15,11 +31,19 @@ Parking::Parking(QWidget *parent) : QWidget(parent)
     
  }
 
+/**
+ * @brief 
+ * 
+ */
 void Parking::StateChangeMainMenu()
 {
    emit DisplayChange(MAIN_MENU, this);
 }
 
+/**
+ * @brief 
+ * 
+ */
 void Parking::CreateLayout()
 {
    QVBoxLayout* vLayout = new QVBoxLayout(this);

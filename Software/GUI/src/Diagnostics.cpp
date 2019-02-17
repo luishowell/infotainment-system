@@ -1,3 +1,14 @@
+/**
+ * @file Diagnostics.cpp
+ * @author Jamie Brown
+ * @brief 
+ * @version 0.1
+ * @date 2019-02-17
+ * 
+ * @copyright Copyright (c) 2019
+ * 
+ */
+
 #include <QApplication>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
@@ -18,6 +29,11 @@
 
 using namespace std;
 
+/**
+ * @brief Construct a new Diagnostics:: Diagnostics object
+ * 
+ * @param parent 
+ */
 Diagnostics::Diagnostics(QWidget *parent) : QWidget(parent) 
  {   
    setFixedSize(widgetSize);
@@ -33,7 +49,10 @@ Diagnostics::Diagnostics(QWidget *parent) : QWidget(parent)
    canConnectionFlag = false;
  }
 
-
+/**
+ * @brief 
+ * 
+ */
 void Diagnostics::CreateComponents()
 {
    /* set up speedometer */
@@ -100,6 +119,10 @@ void Diagnostics::CreateComponents()
    m_logButton->setFixedSize(400, 50);
 }
 
+/**
+ * @brief 
+ * 
+ */
 void Diagnostics::CreateLayout()
 {
    QVBoxLayout* vLayout = new QVBoxLayout(this);
@@ -189,6 +212,11 @@ void Diagnostics::CreateLayout()
 
 }
 
+/**
+ * @brief 
+ * 
+ * @param msg 
+ */
 void Diagnostics::DiagDataRx(diagMsg_t* msg)
 {
    if (msg->connectionFault == true)
@@ -229,6 +257,10 @@ void Diagnostics::DiagDataRx(diagMsg_t* msg)
    
 }
 
+/**
+ * @brief 
+ * 
+ */
 void Diagnostics::ConnectButtons()
 {
    //connect(this, SIGNAL (DiagDataChange(diagData_t)), this, SLOT (ChangeDiagDisplay(diagData_t)));
@@ -241,7 +273,10 @@ void Diagnostics::ConnectButtons()
 }
 
 /* public slots */
-
+/**
+ * @brief 
+ * 
+ */
 void Diagnostics::ShowAirTempGauge()
 {
    if (currentLeftGauge != airTempBox)
@@ -255,6 +290,10 @@ void Diagnostics::ShowAirTempGauge()
    }
 }
 
+/**
+ * @brief 
+ * 
+ */
 void Diagnostics::ShowSpeedGauge()
 {
    if (currentRightGauge != speedBox)
@@ -268,6 +307,10 @@ void Diagnostics::ShowSpeedGauge()
    }
 }
 
+/**
+ * @brief 
+ * 
+ */
 void Diagnostics::ShowRpmGauge()
 {
    if (currentLeftGauge != rpmBox)
@@ -281,6 +324,10 @@ void Diagnostics::ShowRpmGauge()
    }     
 }
 
+/**
+ * @brief 
+ * 
+ */
 void Diagnostics::ShowThrottleGauge()
 {
    if (currentRightGauge != throttleBox)
@@ -294,6 +341,10 @@ void Diagnostics::ShowThrottleGauge()
    }  
 }
 
+/**
+ * @brief 
+ * 
+ */
 void Diagnostics::JourneyLogRequest()
 {
    cout<<"LOG REQUESTED"<<endl;
@@ -303,6 +354,10 @@ void Diagnostics::JourneyLogRequest()
    emit StartLogging();
 }
 
+/**
+ * @brief 
+ * 
+ */
 void Diagnostics::StateChangeMainMenu()
 {
    emit DisplayChange(MAIN_MENU, this);

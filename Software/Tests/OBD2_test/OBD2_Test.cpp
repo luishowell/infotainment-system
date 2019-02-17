@@ -1,3 +1,14 @@
+/**
+ * @file OBD2_Test.cpp
+ * @author Jamie Brown/Luis Howell
+ * @brief 
+ * @version 0.1
+ * @date 2019-02-17
+ * 
+ * @copyright Copyright (c) 2019
+ * 
+ */
+
 #include <QtTest/QtTest>
 #include <iostream>
 #include <string>
@@ -35,21 +46,35 @@ private:
 /*              TEST SETUP                */
 /*----------------------------------------*/
 
+/**
+ * @brief 
+ * 
+ */
 void OBD2Test::initTestCase()
 {
 }
 
+/**
+ * @brief 
+ * 
+ */
 void OBD2Test::cleanupTestCase()
 {
 }
 
-/* called before each test case */
+/**
+ * @brief 
+ * 
+ */
 void OBD2Test::init()
 {
     
 }
 
-/* called after each test case */
+/**
+ * @brief 
+ * 
+ */
 void OBD2Test::cleanup()
 {
     delete m_obd;
@@ -59,7 +84,10 @@ void OBD2Test::cleanup()
 /*     UNIT TESTS FOR OBD2 CLASS          */
 /*----------------------------------------*/
 
-/* constructor test */
+/**
+ * @brief Tests the OBD2 class constructor
+ * 
+ */
 void OBD2Test::obd2_Test()
 {
     m_obd = new obd2("/dev/rfcomm0");
@@ -73,6 +101,10 @@ void OBD2Test::obd2_Test()
     delete m_obd;
 }
 
+/**
+ * @brief 
+ * 
+ */
 void OBD2Test::SendCmd_Test()
 {
     m_obd = new obd2("/dev/rfcomm0");
@@ -92,6 +124,10 @@ void OBD2Test::SendCmd_Test()
     delete m_obd;
 }
 
+/**
+ * @brief 
+ * 
+ */
 void OBD2Test::ScanPids_Test()
 {
     m_obd = new obd2("/dev/rfcomm0");
@@ -103,11 +139,19 @@ void OBD2Test::ScanPids_Test()
     delete m_obd;
 }
 
+/**
+ * @brief 
+ * 
+ */
 void OBD2Test::PrintSupportedPids_Test()
 {
    
 }
 
+/**
+ * @brief 
+ * 
+ */
 void OBD2Test::DecodeResponse_Test()
 {
     m_obd = new obd2("/dev/rfcomm0");
@@ -126,6 +170,10 @@ void OBD2Test::DecodeResponse_Test()
     delete m_obd;
 }
 
+/**
+ * @brief 
+ * 
+ */
 void OBD2Test::DecodedCmd_Test()
 {
     m_obd = new obd2("/dev/rfcomm0");
@@ -141,11 +189,19 @@ void OBD2Test::DecodedCmd_Test()
     delete m_obd;
 }
 
+/**
+ * @brief 
+ * 
+ */
 void OBD2Test::ReadDtc_Test()
 {
 
 }
 
+/**
+ * @brief 
+ * 
+ */
 void OBD2Test::DtcDesc_Test()
 {
     m_obd = new obd2("/dev/rfcomm0");
@@ -158,6 +214,10 @@ void OBD2Test::DtcDesc_Test()
     delete m_obd;
 }
 
+/**
+ * @brief 
+ * 
+ */
 void OBD2Test::Hex2int_Test()
 {
     m_obd = new obd2("/dev/rfcomm0");
@@ -170,6 +230,10 @@ void OBD2Test::Hex2int_Test()
     delete m_obd;
 }
 
+/**
+ * @brief 
+ * 
+ */
 void OBD2Test::Int2hex_Test()
 {
     m_obd = new obd2("/dev/rfcomm0");
