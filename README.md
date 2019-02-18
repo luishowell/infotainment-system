@@ -29,3 +29,7 @@ Packages can be installed on an Ubuntu/Debian system with `sudo apt install <pac
 - `qml-module-qtquick-dialogs`
 - `qml-module-qtquick-controls`
 - `qml-module-qtquick-extras`
+
+## Documentation
+
+Documentation for all methods can be found at : https://luishowell.github.io/infotainment-system/
