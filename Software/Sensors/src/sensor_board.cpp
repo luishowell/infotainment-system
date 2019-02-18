@@ -22,8 +22,12 @@ void sensor_board::init(sensorPins_t pins)
 bool sensor_board::GetDistance(unsigned int sensor_num, double *distance)
 {
 
-    //set the mux to the correct value
-    mux->set_mux(sensor_num);
+    //set the mux to the correct value and check response
+    if(mux->set_mux(sensor_num) == false)
+    {
+        return false;
+    }
+    
     delayMicroseconds(10); //wait for mux to be set properly
 
     //get the distance and return success

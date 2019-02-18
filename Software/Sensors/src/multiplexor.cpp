@@ -28,9 +28,18 @@ void multiplexor::init(int sel_0, int sel_1, int sel_2)
 */
 bool multiplexor::set_mux(unsigned int select_val)
 {
+
+    //check the value is valid, i.e. 0-7
+    if(select_val > 7)
+    {
+        //return error response
+        return false;
+    }
     //set the pins
     digitalWrite(m_sel_0,(select_val & 1));
     digitalWrite(m_sel_1,(select_val & 2) >> 1);
     digitalWrite(m_sel_2,(select_val & 4) >> 2);
+
+    return true;
 
 }
