@@ -37,7 +37,7 @@ class multiplexor
         void init(int sel_0, int sel_1, int sel_2);
 
         /**
-         * @brief multiplexor object constructor
+         * @brief Sets the multiplexor to the given value.
          * 
          * @param select_val Value for the multiplexor to be set to. Valid values are 0-7.
          * @return bool Flag to report if the multiplexor has been set correctly.
