@@ -52,6 +52,8 @@ private:
  */
 void OBD2Test::initTestCase()
 {
+    qDebug() << "initTestCase";
+    //m_obd = new obd2("/dev/rfcomm0");
 }
 
 /**
@@ -60,6 +62,8 @@ void OBD2Test::initTestCase()
  */
 void OBD2Test::cleanupTestCase()
 {
+    qDebug() << "cleanupTestCase";
+
 }
 
 /**
@@ -68,7 +72,9 @@ void OBD2Test::cleanupTestCase()
  */
 void OBD2Test::init()
 {
-    
+    qDebug() << "init";
+    m_obd = new obd2("/dev/rfcomm0");
+
 }
 
 /**
@@ -77,6 +83,7 @@ void OBD2Test::init()
  */
 void OBD2Test::cleanup()
 {
+    qDebug() << "cleanup";
     delete m_obd;
 }
 
@@ -90,7 +97,7 @@ void OBD2Test::cleanup()
  */
 void OBD2Test::obd2_Test()
 {
-    m_obd = new obd2("/dev/rfcomm0");
+    //m_obd = new obd2("/dev/rfcomm0");
 
     QCOMPARE(m_obd->connected, true);
     delete m_obd;
@@ -98,7 +105,7 @@ void OBD2Test::obd2_Test()
     m_obd = new obd2("/dev");
     QCOMPARE(m_obd->connected, false);
     
-    delete m_obd;
+    //delete m_obd;
 }
 
 /**
@@ -107,7 +114,7 @@ void OBD2Test::obd2_Test()
  */
 void OBD2Test::SendCmd_Test()
 {
-    m_obd = new obd2("/dev/rfcomm0");
+    //m_obd = new obd2("/dev/rfcomm0");
 
     QVERIFY(m_obd->send_cmd("ATS0", true)=="OK");
     QVERIFY(m_obd->send_cmd("test", true)=="?");
@@ -121,7 +128,7 @@ void OBD2Test::SendCmd_Test()
     response = m_obd->send_cmd("03", true);
     QVERIFY(response.substr(0, 2)=="43");
 
-    delete m_obd;
+    //delete m_obd;
 }
 
 /**
@@ -130,13 +137,13 @@ void OBD2Test::SendCmd_Test()
  */
 void OBD2Test::ScanPids_Test()
 {
-    m_obd = new obd2("/dev/rfcomm0");
+    //m_obd = new obd2("/dev/rfcomm0");
 
     m_obd->scan_pids();
     QVERIFY(m_obd->supported_pids.size()>0);
     QVERIFY(m_obd->supported_pids[0]=="00");
 
-    delete m_obd;
+    //delete m_obd;
 }
 
 /**
@@ -154,7 +161,7 @@ void OBD2Test::PrintSupportedPids_Test()
  */
 void OBD2Test::DecodeResponse_Test()
 {
-    m_obd = new obd2("/dev/rfcomm0");
+    //m_obd = new obd2("/dev/rfcomm0");
 
     QVERIFY(m_obd->decode_response("41057B") == 83.0);    
     QVERIFY(m_obd->decode_response("410C1AF8") == 1726.0);    
@@ -163,11 +170,10 @@ void OBD2Test::DecodeResponse_Test()
     QVERIFY(m_obd->decode_response("4100") == -999);   
     QVERIFY(m_obd->decode_response("41") == -999);  
     QVERIFY(m_obd->decode_response("4105") == -999);  
-    QVERIFY(m_obd->decode_response("41057") == -999);  
     QVERIFY(m_obd->decode_response("010D") == -999);  
     QVERIFY(m_obd->decode_response("41057BC1") == -999); 
 
-    delete m_obd;
+    //delete m_obd;
 }
 
 /**
@@ -176,7 +182,7 @@ void OBD2Test::DecodeResponse_Test()
  */
 void OBD2Test::DecodedCmd_Test()
 {
-    m_obd = new obd2("/dev/rfcomm0");
+    //m_obd = new obd2("/dev/rfcomm0");
 
     QVERIFY(m_obd->decoded_cmd("010C") >= 0 );
     QVERIFY(m_obd->decoded_cmd("010D") >= 0 );
@@ -186,7 +192,7 @@ void OBD2Test::DecodedCmd_Test()
     QVERIFY(m_obd->decoded_cmd("5738") ==  -999);
     QVERIFY(m_obd->decoded_cmd("01") ==  -999);
 
-    delete m_obd;
+    //delete m_obd;
 }
 
 /**
@@ -204,14 +210,14 @@ void OBD2Test::ReadDtc_Test()
  */
 void OBD2Test::DtcDesc_Test()
 {
-    m_obd = new obd2("/dev/rfcomm0");
+    //m_obd = new obd2("/dev/rfcomm0");
 
     QVERIFY(m_obd->dtc_desc("P0010") ==  "A camshaft position actuator circuit (bank 1)");
     QVERIFY(m_obd->dtc_desc("B1636") ==  "Mirror Driver Right Circuit Open");
     QVERIFY(m_obd->dtc_desc("test") ==  "No DTC description");
     QVERIFY(m_obd->dtc_desc("756412") ==  "No DTC description");
 
-    delete m_obd;
+    //delete m_obd;
 }
 
 /**
@@ -220,14 +226,14 @@ void OBD2Test::DtcDesc_Test()
  */
 void OBD2Test::Hex2int_Test()
 {
-    m_obd = new obd2("/dev/rfcomm0");
+    //m_obd = new obd2("/dev/rfcomm0");
 
     QVERIFY(m_obd->hex2int("010D") == 269);  
     QVERIFY(m_obd->hex2int("0") == 0);  
     QVERIFY(m_obd->hex2int("test") == 0);  
     QVERIFY(m_obd->hex2int("-010D") == 0);  
 
-    delete m_obd;
+    //delete m_obd;
 }
 
 /**
@@ -236,13 +242,13 @@ void OBD2Test::Hex2int_Test()
  */
 void OBD2Test::Int2hex_Test()
 {
-    m_obd = new obd2("/dev/rfcomm0");
+    //m_obd = new obd2("/dev/rfcomm0");
 
     QVERIFY(m_obd->int2hex(1)=="01");
     QVERIFY(m_obd->int2hex(0)=="00");
     QVERIFY(m_obd->int2hex(3697)=="E71");
 
-    delete m_obd;
+    //delete m_obd;
 }
 
 /* run tests */
@@ -252,6 +258,8 @@ QTEST_ADD_GPU_BLACKLIST_SUPPORT_DEFS
 QT_END_NAMESPACE
 int main(int argc, char **argv)
 {
+    cout << "MAIN" << endl;
+
     QCoreApplication app(argc, argv);
     app.setAttribute(Qt::AA_Use96Dpi, true);
 
