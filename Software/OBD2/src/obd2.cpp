@@ -96,7 +96,7 @@ string obd2::send_cmd(string cmd, bool parse){
             else if (rec.find("ELM327")!=string::npos){
                 output = "OK";
             }
-            else if (rec.find("BUSINIT:ERROR")!=string::npos){
+            else if (rec.find("BUSINIT")!=string::npos){
                 output = "BUSINIT:ERROR";
             }
             else if (rec.find("?")!=string::npos){
@@ -478,10 +478,12 @@ int obd2::setup_obd(string comm_port){
         return -1;  
     }
 
-    if (send_cmd("0100", true)=="BUSINIT:ERROR"){  //initalise KWP fast
-        cout<<"KWP Fast Bus Initialisation Error"<<endl;
+    sleep(5);
+
+    if (send_cmd("0100", true).substr(0,2)!="41"){  //initalise KWP fast
+        cout<<"OBD2 bus Initialisation Error"<<endl;
         return -1;   
-    } 
+    }     
 
     return serial_port;
 }
