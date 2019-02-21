@@ -1,8 +1,16 @@
+#include "config.h"
+
 #include <iostream>
 #include <fstream>
 #include <time.h>
 #include <string>
+
+#ifndef GUI_TEST
 #include <bits/stdc++.h> 
+#else 
+#include "stdc++.h"
+#endif
+
 #include <algorithm>
 #include <fcntl.h> // Contains file controls like O_RDWR
 #include <errno.h> // Error integer and strerror() function

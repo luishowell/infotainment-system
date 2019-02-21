@@ -17,7 +17,7 @@
 #include "CANThread.h"
 #include "CANWorker.h"
 #include "GUIThread.h"
-#include "SensorThread.h"
+//#include "SensorThread.h"
 
 using namespace std;
 
@@ -34,7 +34,13 @@ int main(int argc, char** argv)
 
     /* create threads */
     CANThread canT;
+#ifndef GUI_TEST
+    obd2* myObd = new obd2("/dev/rfcomm0");
+    CANWorker canW(myObd);
+    stateMachine.m_diag->obd = myObd;
+#else
     CANWorker canW;
+#endif
     canW.moveToThread(&canT);	
     QObject::connect(&canT, SIGNAL(started()), &canW, SLOT(GetDiagData()));
     QObject::connect(&canW, SIGNAL(CANPublishDiagTx(diagMsg_t*)), &stateMachine, SLOT(CANPublishDiagRx(diagMsg_t*)));

@@ -12,7 +12,6 @@
 #include "config.h"
 #include "CANThread.h"
 #include <QtCore>
-#include "Timer.h"
 #include <iostream>
 #include <string>
 

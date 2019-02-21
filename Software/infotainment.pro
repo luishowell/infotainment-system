@@ -5,8 +5,8 @@ CONFIG              += ordered
 #SUBDIRS             =   #GUI         \
                         #OBD2       \
                         #Sensors    \
-SUBDIRS =                       Tests      \
-                        MainApp
+#SUBDIRS =                       Tests      \
+SUBDIRS           =            MainApp
 
 #GUI.depends        +=  OBD2
 #GUI.depends        +=  Sensors

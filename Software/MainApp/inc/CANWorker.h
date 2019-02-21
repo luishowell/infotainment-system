@@ -4,7 +4,6 @@
 #include <QObject>
 #include <string>
 #include "config.h"
-#include "Timer.h"
 #include "types.h"
 
 #ifndef GUI_TEST
@@ -16,11 +15,16 @@ class CANWorker : public QObject
     Q_OBJECT
 
 public:
+#ifndef GUI_TEST
+    explicit CANWorker(obd2 *obd);
+#else
     explicit CANWorker();
-    ~CANWorker();
-     diagMsg_t ObdMsg;
+#endif
+    virtual ~CANWorker();
+     
      QTimer *diagTimer;
     
+
 
 private slots:
     void GetDiagData();
@@ -37,12 +41,12 @@ private:
     //string m_dataRequest;
     void DummyData();
     bool m_running;
-    
+    diagMsg_t ObdMsg;
    
-
 #ifndef GUI_TEST
     obd2 *m_obd;
 #endif
+
 };
 
 

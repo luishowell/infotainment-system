@@ -13,8 +13,10 @@
 #include <QtCore>
 #include <iostream>
 //#include <stdio.h>
-#include "Timer.h"
+
+#ifndef GUI_TEST
 #include <wiringPi.h>
+#endif
 
 #define REAR_LEFT 5
 #define REAR_RIGHT 7

@@ -1,11 +1,14 @@
 #ifndef SENSORTHREAD_H
 #define SENSORTHREAD_H
 
-#include <QThread>
-#include "Timer.h"
-#include "types.h"
-#include "sensor_board.h"
+#include "config.h"
 
+#include <QThread>
+#include "types.h"
+
+#ifndef GUI_TEST
+#include "sensor_board.h"
+#endif
 
 class SensorThread : public QThread
 {
@@ -23,14 +26,18 @@ signals:
 private:
     sensorDist_t* m_msg;
     void run();
-	sensor_board* m_mux;
 	void DummyData();
+
+#ifndef GUI_TEST
+    sensor_board* m_mux;
     /*
     UltrasonicSensor *m_frontLeft;
     UltrasonicSensor *m_frontRight;
     UltrasonicSensor *m_rearLeft;
     UltrasonicSensor *m_rearRight;
     */
+
+#endif
 };
 
 

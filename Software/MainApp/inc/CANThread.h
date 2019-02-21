@@ -10,7 +10,6 @@
 #include <QThread>
 #include <string>
 #include "config.h"
-#include "Timer.h"
 #include "types.h"
 
 #ifndef GUI_TEST
@@ -28,8 +27,8 @@ public:
 
 private slots:
     void PublishDiagData();
-    void PublishLogData();
-    void OnNewChannelRequest(diagParams_t dataRequested, obd2Channel_t channel);
+    //void PublishLogData();
+    //void OnNewChannelRequest(diagParams_t dataRequested, obd2Channel_t channel);
 
 signals:
     void CANPublishDiagTx(diagMsg_t* msg);
