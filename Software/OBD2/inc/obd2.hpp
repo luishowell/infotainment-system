@@ -62,6 +62,14 @@ class obd2{
         float decode_response(string response, int option = 1);
 
         /**
+         * @brief Get the description of an OBD2 PID
+         * 
+         * @param pid A PID e.g "0D"
+         * @return string The description of the PID
+         */
+        string pid_desc(string pid_code);
+
+        /**
          * @brief Sends a command and decodes the response
          * 
          * @param cmd The command to send as a hex string

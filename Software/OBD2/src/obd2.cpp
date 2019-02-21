@@ -20,8 +20,7 @@ obd2::obd2(string comm_port){
         bool fixed = false;
         for (int i=0; i<2;i++){ //tries to setup 2 more times before quitting
             cout<<"Trying again..."<<endl;
-            close(serial_port);
-            sleep(5);
+            close(serial_port);   
             serial_port = setup_obd(comm_port);
             if (serial_port!=-1){
                 cout<<"Connection Fixed"<<endl;
@@ -165,22 +164,26 @@ void obd2::scan_pids(){
 
 
 void obd2::print_supported_pids(){
-    ifstream supported_pid_txt ("supported_pid_gen.txt");           
+    ifstream supported_pid_txt ("supported_pid_gen.txt");     
+    ifstream pid_desc_txt ("pid_code_list.txt");      
     string pid;
-    if (supported_pid_txt.is_open()){
-        ifstream pid_desc_txt ("pid_code_list.txt");
-        string line; 
-        while ( getline (supported_pid_txt, pid) ){
-            pid = pid.substr(0,2);
-            if (pid_desc_txt.is_open()){
+    if (supported_pid_txt.is_open()){      
+        if (pid_desc_txt.is_open()){  
+            string line; 
+            while ( getline (supported_pid_txt, pid) ){
+                pid = pid.substr(0,2);
+                
                 while (getline(pid_desc_txt, line)){
                     if (pid==line.substr(0,2)){
                         cout<<line<<endl;
                         break;
                     }
-                }
-            }
-        }
+                }  
+            }      
+        }        
+        else{
+            cout<<"Can't find PID description file"<<endl;            
+        }        
         supported_pid_txt.close();
         pid_desc_txt.close();                
     }
@@ -380,6 +383,27 @@ string obd2::dtc_desc(string dtc_code){
             }       
         }
         dtc_list_txt.close();
+    }   
+    return desc;
+}
+
+
+string obd2::pid_desc(string pid_code){
+    string line;
+    string desc = "No PID description";
+    ifstream pid_list_txt ("pid_code_list.txt");
+    if (pid_list_txt.is_open())
+    {
+        while ( getline (pid_list_txt,line) ){
+            if (pid_code == line.substr(0,2)){
+                desc = line.substr(3);
+                // if (desc[0]==' '){
+                //     desc = desc.substr(1);
+                // }
+                // break;
+            }       
+        }
+        pid_list_txt.close();
     }   
     return desc;
 }
