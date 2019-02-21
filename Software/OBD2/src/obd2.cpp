@@ -20,7 +20,7 @@
 using namespace std;
 
 
-obd2::obd2(string comm_port){
+obd2::obd2(string comm_port){    
     serial_port = setup_obd(comm_port);
 
     if (serial_port == -1){
@@ -28,8 +28,7 @@ obd2::obd2(string comm_port){
         bool fixed = false;
         for (int i=0; i<2;i++){ //tries to setup 2 more times before quitting
             cout<<"Trying again..."<<endl;
-            close(serial_port);
-            sleep(5);
+            close(serial_port);   
             serial_port = setup_obd(comm_port);
             if (serial_port!=-1){
                 cout<<"Connection Fixed"<<endl;
@@ -104,7 +103,7 @@ string obd2::send_cmd(string cmd, bool parse){
             else if (rec.find("ELM327")!=string::npos){
                 output = "OK";
             }
-            else if (rec.find("BUSINIT:ERROR")!=string::npos){
+            else if (rec.find("BUSINIT")!=string::npos){
                 output = "BUSINIT:ERROR";
             }
             else if (rec.find("?")!=string::npos){
@@ -173,22 +172,26 @@ void obd2::scan_pids(){
 
 
 void obd2::print_supported_pids(){
-    ifstream supported_pid_txt ("supported_pid_gen.txt");           
+    ifstream supported_pid_txt ("supported_pid_gen.txt");     
+    ifstream pid_desc_txt ("pid_code_list.txt");      
     string pid;
-    if (supported_pid_txt.is_open()){
-        ifstream pid_desc_txt ("pid_code_list.txt");
-        string line; 
-        while ( getline (supported_pid_txt, pid) ){
-            pid = pid.substr(0,2);
-            if (pid_desc_txt.is_open()){
+    if (supported_pid_txt.is_open()){      
+        if (pid_desc_txt.is_open()){  
+            string line; 
+            while ( getline (supported_pid_txt, pid) ){
+                pid = pid.substr(0,2);
+                
                 while (getline(pid_desc_txt, line)){
                     if (pid==line.substr(0,2)){
                         cout<<line<<endl;
                         break;
                     }
-                }
-            }
-        }
+                }  
+            }      
+        }        
+        else{
+            cout<<"Can't find PID description file"<<endl;            
+        }        
         supported_pid_txt.close();
         pid_desc_txt.close();                
     }
@@ -198,119 +201,124 @@ void obd2::print_supported_pids(){
 }
 
 
-float obd2::decode_response(string response, int option){
+float obd2::decode_response(string response, int option){        
     float output;
+    if (response.length()>4){
+        if (response.substr(0,2)=="41"){
+            string data = response.substr(4);
+            string pid = response.substr(2, 2);        
 
-    if (response.substr(0,2)=="41"){
-        string data = response.substr(4);
-        string pid = response.substr(2, 2);        
-
-        if ((pid=="04"||pid=="11"||pid=="2C"||pid=="2E"||pid=="2F"||pid=="45"||pid=="52"||pid=="5A"||pid=="5B")){ 
-            output = hex2int(data)/2.55;        
-        }
-        else if ((pid=="1F"||pid=="21"||pid=="31"||pid=="4D"||pid=="4E"||pid=="63")){   
-            int A = hex2int(data.substr(0,2));
-            int B = hex2int(data.substr(2,2));
-            output = (256*A)+B;
-        }
-        else if ((pid=="05"||pid=="0F"||pid=="46"||pid=="5C")){    
-            output = hex2int(data)-40;
-        }
-        else if ((pid=="0B"||pid=="0D"||pid=="30"||pid=="33")){    
-            output = hex2int(data);
-        }
-        else if ((pid=="06"||pid=="07"||pid=="08"||pid=="09")){
-            output = (hex2int(data)/1.28)-100.0;
-        }
-        else if ((pid=="0A")){  
-            output = hex2int(data)*3.0;
-        }
-        else if ((pid=="0C")){   
-            int A = hex2int(data.substr(0,2));
-            int B = hex2int(data.substr(2,2));
-            output = ((256*A)+B)/4.0;
-        }
-        else if ((pid=="5E")){   
-            int A = hex2int(data.substr(0,2));
-            int B = hex2int(data.substr(2,2));
-            output = ((256*A)+B)/20.0;
-        }
-        else if ((hex2int(pid)>=20&&hex2int(pid)<=27)){
-            if (option==1){
-                output = hex2int(data.substr(0, 2))/200.0;
+            if ((pid=="04"||pid=="11"||pid=="2C"||pid=="2E"||pid=="2F"||pid=="45"||pid=="52"||pid=="5A"||pid=="5B")){ 
+                output = hex2int(data)/2.55;        
             }
-            else if (option==2){
-                if (data.substr(2,2)!="FF"){
-                    output = ((100.0/128.0)*hex2int(data.substr(2,2)))-100.0;
-                }
-                else if (data.substr(2,2)=="FF"){
-                    cout<<"Sensor is not used in trim calculation"<<endl;
-                    output = -999;
-                }
-            }
-        }
-        else if ((hex2int(pid)>=36&&hex2int(pid)<=43)){
-            if (option==1){
+            else if ((pid=="1F"||pid=="21"||pid=="31"||pid=="4D"||pid=="4E"||pid=="63")){   
                 int A = hex2int(data.substr(0,2));
                 int B = hex2int(data.substr(2,2));
-                output = (2.0/65536.0)*((256*A)+B);            
+                output = (256*A)+B;
             }
-            else if (option==2){
-                int C = hex2int(data.substr(4,2));
-                int D = hex2int(data.substr(6,2));
-                output = (8.0/65536.0)*((256*C)+D);     
+            else if ((pid=="05"||pid=="0F"||pid=="46"||pid=="5C")){    
+                output = hex2int(data)-40;
             }
-        }
-        else if ((hex2int(pid)>=52&&hex2int(pid)<=59)){
-            if (option==1){
+            else if ((pid=="0B"||pid=="0D"||pid=="30"||pid=="33")){    
+                output = hex2int(data);
+            }
+            else if ((pid=="06"||pid=="07"||pid=="08"||pid=="09")){
+                output = (hex2int(data)/1.28)-100.0;
+            }
+            else if ((pid=="0A")){  
+                output = hex2int(data)*3.0;
+            }
+            else if ((pid=="0C")){   
                 int A = hex2int(data.substr(0,2));
                 int B = hex2int(data.substr(2,2));
-                output = (2.0/65536)*((256*A)+B);            
+                output = ((256*A)+B)/4.0;
             }
-            else if (option==2){
-                int C = hex2int(data.substr(4,2));
-                int D = hex2int(data.substr(6,2));
-                output = C+(D/256.0)-128.0;
+            else if ((pid=="5E")){   
+                int A = hex2int(data.substr(0,2));
+                int B = hex2int(data.substr(2,2));
+                output = ((256*A)+B)/20.0;
             }
-        }
-        else if ((pid=="3C"||pid=="3D"||pid=="3E"||pid=="3F")){   
-            int A = hex2int(data.substr(0,2));
-            int B = hex2int(data.substr(2,2));
-            output = (((256*A)+B)/10.0)-40.0;
-        }
-        else if ((pid=="10")){   
-            int A = hex2int(data.substr(0,2));
-            int B = hex2int(data.substr(2,2));
-            output = ((256*A)+B)/100.0;
-        }
-        else if ((pid=="61"||pid=="62")){  
-            output = hex2int(data)-125;
-        }
-        else if ((pid=="2D")){  
-            output = ((100.0/128.0)*hex2int(data))-100;
-        }
-        else if ((pid=="22")){  
-            int A = hex2int(data.substr(0,2));
-            int B = hex2int(data.substr(2,2));
-            output = 0.079*((256*A)+B);
-        }
-        else if ((pid=="23")){  
-            int A = hex2int(data.substr(0,2));
-            int B = hex2int(data.substr(2,2));
-            output = 10*((256*A)+B);
-        }
-        else if ((pid=="44")){  
-            int A = hex2int(data.substr(0,2));
-            int B = hex2int(data.substr(2,2));
-            output = (2.0/65536.0)*((256*A)+B);  
+            else if ((hex2int(pid)>=20&&hex2int(pid)<=27)){
+                if (option==1){
+                    output = hex2int(data.substr(0, 2))/200.0;
+                }
+                else if (option==2){
+                    if (data.substr(2,2)!="FF"){
+                        output = ((100.0/128.0)*hex2int(data.substr(2,2)))-100.0;
+                    }
+                    else if (data.substr(2,2)=="FF"){
+                        cout<<"Sensor is not used in trim calculation"<<endl;
+                        output = -999;
+                    }
+                }
+            }
+            else if ((hex2int(pid)>=36&&hex2int(pid)<=43)){
+                if (option==1){
+                    int A = hex2int(data.substr(0,2));
+                    int B = hex2int(data.substr(2,2));
+                    output = (2.0/65536.0)*((256*A)+B);            
+                }
+                else if (option==2){
+                    int C = hex2int(data.substr(4,2));
+                    int D = hex2int(data.substr(6,2));
+                    output = (8.0/65536.0)*((256*C)+D);     
+                }
+            }
+            else if ((hex2int(pid)>=52&&hex2int(pid)<=59)){
+                if (option==1){
+                    int A = hex2int(data.substr(0,2));
+                    int B = hex2int(data.substr(2,2));
+                    output = (2.0/65536)*((256*A)+B);            
+                }
+                else if (option==2){
+                    int C = hex2int(data.substr(4,2));
+                    int D = hex2int(data.substr(6,2));
+                    output = C+(D/256.0)-128.0;
+                }
+            }
+            else if ((pid=="3C"||pid=="3D"||pid=="3E"||pid=="3F")){   
+                int A = hex2int(data.substr(0,2));
+                int B = hex2int(data.substr(2,2));
+                output = (((256*A)+B)/10.0)-40.0;
+            }
+            else if ((pid=="10")){   
+                int A = hex2int(data.substr(0,2));
+                int B = hex2int(data.substr(2,2));
+                output = ((256*A)+B)/100.0;
+            }
+            else if ((pid=="61"||pid=="62")){  
+                output = hex2int(data)-125;
+            }
+            else if ((pid=="2D")){  
+                output = ((100.0/128.0)*hex2int(data))-100;
+            }
+            else if ((pid=="22")){  
+                int A = hex2int(data.substr(0,2));
+                int B = hex2int(data.substr(2,2));
+                output = 0.079*((256*A)+B);
+            }
+            else if ((pid=="23")){  
+                int A = hex2int(data.substr(0,2));
+                int B = hex2int(data.substr(2,2));
+                output = 10*((256*A)+B);
+            }
+            else if ((pid=="44")){  
+                int A = hex2int(data.substr(0,2));
+                int B = hex2int(data.substr(2,2));
+                output = (2.0/65536.0)*((256*A)+B);  
+            }
+            else{
+                output = -999;
+                cout<<"Decode function for this PID not yet implemented"<<endl;
+            }
         }
         else{
+            cout<<"Invalid Response: only decodes 01 service requests, PID may not be supported by car"<<endl;
             output = -999;
-            cout<<"Decode function for this PID not yet implemented"<<endl;
         }
     }
     else{
-        cout<<"Invalid Response: only decodes 01 service requests, PID may not be supported by car"<<endl;
+        cout<<"Response too short!"<<endl;
         output = -999;
     }
     return output;
@@ -383,6 +391,27 @@ string obd2::dtc_desc(string dtc_code){
             }       
         }
         dtc_list_txt.close();
+    }   
+    return desc;
+}
+
+
+string obd2::pid_desc(string pid_code){
+    string line;
+    string desc = "No PID description";
+    ifstream pid_list_txt ("pid_code_list.txt");
+    if (pid_list_txt.is_open())
+    {
+        while ( getline (pid_list_txt,line) ){
+            if (pid_code == line.substr(0,2)){
+                desc = line.substr(3);
+                // if (desc[0]==' '){
+                //     desc = desc.substr(1);
+                // }
+                // break;
+            }       
+        }
+        pid_list_txt.close();
     }   
     return desc;
 }
@@ -481,10 +510,12 @@ int obd2::setup_obd(string comm_port){
         return -1;  
     }
 
-    if (send_cmd("0100", true)=="BUSINIT:ERROR"){  //initalise KWP fast
-        cout<<"KWP Fast Bus Initialisation Error"<<endl;
+    sleep(5);
+
+    if (send_cmd("0100", true).substr(0,2)!="41"){  //initalise KWP fast
+        cout<<"OBD2 bus Initialisation Error"<<endl;
         return -1;   
-    } 
+    }     
 
     return serial_port;
 }

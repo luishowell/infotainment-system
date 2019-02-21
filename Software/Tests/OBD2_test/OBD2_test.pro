@@ -8,8 +8,8 @@ INCLUDEPATH +=  inc/
 INCLUDEPATH +=  ../../OBD2/inc
 
 #libraries
-DEPENDPATH  += . ../../OBD2/
-LIBS        +=  ../../OBD2/bin/libOBD2.a
+DEPENDPATH  += . ../../OBD2/inc
+LIBS        +=   ../../OBD2/bin/libOBD2.a
 
 #inputs
 SOURCES         = ./OBD2_Test.cpp
