@@ -101,6 +101,22 @@ void CANWorker::GetDiagData()
 }
 
 /**
+ * @brief Receives a request from the diagnostics view to start logging user selected parameters
+ * 
+ * @param logParams 
+ */
+void CANWorker::LogRequestRx(QVector<QString> logParams)
+{
+  qDebug() << "CANWorker: logging requested";
+  /* stop live data acquisition */
+  //m_running = false;  //fast channel
+  //diagTimer->stop();  //slow channel
+
+
+
+}
+
+/**
  * @brief 
  * 
  */

@@ -20,11 +20,15 @@
 #include <QQuickItem>
 #include <QGroupBox>
 #include <QLCDNumber>
+#include <QPointer>
+#include <QVector>
+#include <QString>
 
 #ifndef GUI_TEST
 #include "obd2.hpp"
 #endif
 
+#include "LoggerWindow.h"
 #include "types.h"
 
 class Diagnostics : public QWidget
@@ -32,14 +36,18 @@ class Diagnostics : public QWidget
     Q_OBJECT
 public:
     explicit Diagnostics(QWidget *parent = 0);
+    void CreateLayout();
     #ifndef GUI_TEST
     obd2* obd;
     #endif
+    LoggerWindow *m_logWindow;
     
 public slots:
     void StateChangeMainMenu();
     void DiagDataRx(diagMsg_t* msg);
+    //void JourneyLogRequest(std::vector<std::string>);
     void JourneyLogRequest();
+    void LogRequestRx(QVector<QString>  logParams);
     void ShowRpmGauge();
     void ShowSpeedGauge();
     void ShowAirTempGauge();
@@ -53,7 +61,7 @@ public slots:
 signals:
     void DisplayChange(state_t req_state, QWidget* currentView);
     void NewChannelRequest(diagParams_t dataRequested, obd2Channel_t channel);
-    void StartLogging();
+    void StartLogging(QVector<QString> logParams);
 
 private:
     
@@ -65,6 +73,9 @@ private:
 
     currentDisplay_t currentLeftChannel;
     currentDisplay_t currentRightChannel;
+
+    
+    //int logClicked;
 
     QPushButton *m_homeButton;
     QWidget *m_speedometer;
@@ -114,6 +125,7 @@ private:
     QGroupBox *currentRightGauge;
 
     /* parameter selection buttons */
+    /*
     QPushButton *m_rpmButton;
     QPushButton *m_speedButton;
     QPushButton *m_intakeAirTempButton;
@@ -122,6 +134,17 @@ private:
     QPushButton *m_fuelPressureButton;
     QPushButton *m_engineRuntimeButton;
     QPushButton *m_engineLoadButton;
+    */
+
+   QPointer<QPushButton> m_rpmButton;
+   QPointer<QPushButton> m_speedButton;
+   QPointer<QPushButton> m_intakeAirTempButton;
+   QPointer<QPushButton> m_throttleButton;
+   QPointer<QPushButton> m_gearButton;
+   QPointer<QPushButton> m_fuelPressureButton;
+   QPointer<QPushButton> m_engineRuntimeButton;
+   QPointer<QPushButton> m_engineLoadButton;
+
 
 
     QPushButton *m_logButton;
@@ -130,12 +153,13 @@ private:
     
     QQuickItem *speedo;
 
-    void CreateLayout();
+    
     void CreateComponents();
     void ConnectButtons();
-    diagParams_t HashPID(std::string pidString);
+    
     
     bool canConnectionFlag;
 };
+//Q_DECLARE_METATYPE(std::vector<std::string>)
 
 #endif // DIAGNOSTICS_H

@@ -41,7 +41,7 @@ SensorThread::SensorThread()
  */
 void SensorThread::run()
 {
-    cout<<"Starting sensor thread..fhershy."<<endl;
+    cout<<"Starting sensor thread..."<<endl;
 
 
 	wiringPiSetup();
@@ -83,7 +83,7 @@ void SensorThread::run()
  */
 void SensorThread::PublishSensorData()
 {
-cout << "FIRE!" << endl;
+//cout << "FIRE!" << endl;
 //#ifdef SENSOR_TEST
     if ((m_mux->GetDistance(FRONT_LEFT, &m_msg->frontLeft)
  	&& m_mux->GetDistance(REAR_LEFT, &m_msg->rearLeft)
@@ -98,14 +98,16 @@ cout << "FIRE!" << endl;
     else 
     {
         //GetDistance() failed so assume connection to sensors in lost/compromised
-	qDebug() << "Sensor connection compromised" << endl;
+	//qDebug() << "Sensor connection compromised" << endl;
         m_msg->connectionFault = true;
     }
     
+    /*
    	qDebug() << "Front left: " << m_msg->frontLeft << endl;
 	qDebug() << "Front right: " << m_msg->frontRight << endl;
 	qDebug() << "Rear left: " << m_msg->rearLeft << endl;
 	qDebug() << "Rear right: " << m_msg->rearRight << endl;
+    */
 
     /* send data to the GUI's diagnostics viewer */
     emit SensorPublishDiagTx(m_msg);

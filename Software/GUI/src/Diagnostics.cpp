@@ -30,6 +30,8 @@
 #include <iostream>
 #include "Diagnostics.h" 
 #include "config.h"
+#include "Hash.h"
+
 
 using namespace std;
 
@@ -40,17 +42,35 @@ using namespace std;
  */
 Diagnostics::Diagnostics(QWidget *parent) : QWidget(parent) 
  {   
+
+   QVector<QString> testVec;
+   testVec.push_back("0C");
+   testVec.push_back("0D");
+   testVec.push_back("0F");
+   testVec.push_back("11");
+   testVec.push_back("1F");
+   testVec.push_back("04");
+   testVec.push_back("A4");
+   testVec.push_back("0A");
+
+   m_logWindow = new LoggerWindow(testVec);
+   //connect(m_logWindow, SIGNAL (LogRequestTx(std::vector<std::string>)), this, SLOT (JourneyLogRequest(std::vector<std::string>))); 
+
+
+
    setFixedSize(widgetSize);
    CreateComponents();
-   CreateLayout();    
-   connect(m_homeButton, SIGNAL (clicked()), this, SLOT (StateChangeMainMenu())); 
+   //CreateLayout();    
+   
    connect(this, SIGNAL (NewChannelRequest(diagParams_t, obd2Channel_t)), parent, SLOT (OnNewChannelRequest(diagParams_t, obd2Channel_t))); 
 
    ConnectButtons();
-   
+   //connect(m_homeButton, SIGNAL (clicked()), this, SLOT (StateChangeMainMenu())); 
 
    /* CAN bus initially assumed disconnected until the CAN thread specifies no connection fault */
    canConnectionFlag = false;
+
+   //logClicked = 0;
 
    qRegisterMetaType<diagParams_t>("diagParams_t");
    qRegisterMetaType<obd2Channel_t>("obd2Channel_t");
@@ -63,6 +83,7 @@ Diagnostics::Diagnostics(QWidget *parent) : QWidget(parent)
  */
 void Diagnostics::CreateComponents()
 {
+   qDebug() << "DIAGNOSTICS: creating components";
    const QSize gaugeSize = QSize(100, 175);
    const QSize dialSize = QSize(170, 125);
 
@@ -130,6 +151,7 @@ void Diagnostics::CreateComponents()
    engineLoadQML->setResizeMode(QQuickView::SizeRootObjectToView);
    m_engineLoadObject = engineLoadQML->rootObject();
 
+   qDebug() << "Buttons";
    /* set up selection buttons */
    m_rpmButton             = new QPushButton("RPM");
    m_speedButton           = new QPushButton("Speed");
@@ -161,6 +183,8 @@ void Diagnostics::CreateComponents()
  */
 void Diagnostics::CreateLayout()
 {
+   qDebug() << "DIAGNOSTICS: creating layout";
+
    int pidNum;
    int pidCnt;
 
@@ -176,6 +200,7 @@ void Diagnostics::CreateLayout()
 
    m_homeButton = new QPushButton("Home");
    m_homeButton->setFixedSize(WIDGET_SIZE_X-30, 50);
+   connect(m_homeButton, SIGNAL (clicked()), this, SLOT (StateChangeMainMenu())); 
    
    /* create individual layouts for gauges */
    speedBox = new QGroupBox("Speed", titleBox);
@@ -209,9 +234,10 @@ void Diagnostics::CreateLayout()
    gearBox = new QGroupBox("Current Gear", titleBox);
    m_gearLCD = new QLCDNumber();
    gearBox->setAlignment(Qt::AlignHCenter);
-   QHBoxLayout *gearLayout = new QHBoxLayout(gearBox);
-   gearLayout->addWidget(m_gearGauge);
+   QStackedLayout *gearLayout = new QStackedLayout(gearBox);
    gearLayout->addWidget(m_gearLCD);
+   gearLayout->addWidget(m_gearGauge);
+   
  
    fuelPressureBox = new QGroupBox("Fuel Pressure", titleBox);
    m_fuelPressureLCD = new QLCDNumber();
@@ -244,10 +270,12 @@ void Diagnostics::CreateLayout()
 
    #ifndef GUI_TEST
    /* only add selection buttons for the supported obd2 pids */
+   QString QPid;
    pidNum = obd->supported_pids.size();
    for (pidCnt = 0; pidCnt < pidNum; pidCnt++)
    {
-      switch (HashPID(obd->supported_pids[pidNum]))
+      QPid = QString::fromUtf8(obd->supported_pids[pidNum].c_str());
+      switch (Hash::HashPID(QPid))
       {
          /* fast channel buttons */
          case ENGINE_LOAD :      selectLeft->addWidget(m_engineLoadButton);
@@ -285,7 +313,7 @@ void Diagnostics::CreateLayout()
    for (cnt = 0; cnt < num; cnt++)
    {
       cout << supported_pids[cnt] << endl;;
-      switch (HashPID(supported_pids[cnt]))
+      switch (Hash::HashPID(supported_pids[cnt]))
       {
          /* fast channel buttons */
          case ENGINE_LOAD :      selectLeft->addWidget(m_engineLoadButton);
@@ -380,7 +408,7 @@ void Diagnostics::DiagDataRx(diagMsg_t* msg)
 {
    if (msg->connectionFault == true)
    {
-      cout<<"WARNING: no connection to CAN bus"<<endl;
+      //cout<<"WARNING: no connection to CAN bus"<<endl;
 
       if(canConnectionFlag == true)
       {
@@ -407,7 +435,9 @@ void Diagnostics::DiagDataRx(diagMsg_t* msg)
       /* scale rpm down by factor of 100 */
       if (currentLeftChannel.obj == m_rpmObject) { leftVal = (msg->channelA) / 100; }
       else { leftVal = msg->channelA; }
+      //leftVal = msg->channelA;
       rightVal = msg->channelB;
+      
       currentLeftChannel.obj->setProperty("value", leftVal);
       currentRightChannel.obj->setProperty("value", rightVal);
       currentLeftChannel.num->display(leftVal);
@@ -434,25 +464,9 @@ void Diagnostics::ConnectButtons()
    connect(m_engineLoadButton, SIGNAL (clicked()), this, SLOT (ShowEngineLoadGauge()));
    
    connect(m_logButton, SIGNAL (clicked()), this, SLOT (JourneyLogRequest()));
+   connect(m_logWindow, SIGNAL (LogRequestTx(QVector<QString>)), this, SLOT (LogRequestRx(QVector<QString>)));
 
-}
-
-/**
- * @brief Converts a pid code from a string to an enum
- * 
- * @param inString 
- * @return diagParams_t 
- */
-diagParams_t Diagnostics::HashPID(string pidString)
-{
-   if (pidString == "0C") return RPM;
-   if (pidString == "0D") return SPEED;
-   if (pidString == "0F") return AIR_TEMP;
-   if (pidString == "11") return THROTTLE;
-   if (pidString == "1F") return ENGINE_RUNTIME;
-   if (pidString == "04") return ENGINE_LOAD;
-   if (pidString == "A4") return GEAR;
-   if (pidString == "0A") return FUEL_PRESSURE;
+   //connect(m_logButton, &QPushButton::clicked, this, &Diagnostics::JourneyLogRequest);
 
 }
 
@@ -470,6 +484,8 @@ void Diagnostics::ShowAirTempGauge()
       currentRightChannel.box->hide();
       airTempBox->show();
       currentRightChannel.box = airTempBox;
+      currentRightChannel.num = m_airTempLCD;
+      currentRightChannel.obj = m_airTempObject;
    }
 }
 
@@ -487,6 +503,8 @@ void Diagnostics::ShowSpeedGauge()
       speedBox->show();
       currentLeftChannel.box = speedBox; 
       currentLeftChannel.num = m_speedLCD;
+      currentLeftChannel.obj = m_speedObject;
+
    }
 }
 
@@ -503,6 +521,8 @@ void Diagnostics::ShowRpmGauge()
       currentLeftChannel.box->hide();
       rpmBox->show();
       currentLeftChannel.box = rpmBox;
+      currentLeftChannel.num = m_rpmLCD;
+      currentLeftChannel.obj = m_rpmObject;
    }     
 }
 
@@ -519,7 +539,8 @@ void Diagnostics::ShowThrottleGauge()
       currentLeftChannel.box->hide();
       throttleBox->show();
       currentLeftChannel.box = throttleBox;
-
+      currentLeftChannel.num = m_throttleLCD;
+      currentLeftChannel.obj = m_throttleObject;
    }  
 }
 
@@ -536,6 +557,8 @@ void Diagnostics::ShowGearGauge()
       currentRightChannel.box->hide();
       gearBox->show();
       currentRightChannel.box = gearBox;
+      currentRightChannel.num = m_gearLCD;
+      currentRightChannel.obj = m_gearObject;
    } 
 }
 
@@ -552,6 +575,8 @@ void Diagnostics::ShowFuelPressureGauge()
       currentRightChannel.box->hide();
       fuelPressureBox->show();
       currentRightChannel.box = fuelPressureBox;
+      currentRightChannel.num = m_fuelPressureLCD;
+      currentRightChannel.obj = m_fuelPressureObject;
    } 
 
 }
@@ -570,6 +595,7 @@ void Diagnostics::ShowEngineRuntimeGauge()
       engineRuntimeBox->show();
       currentRightChannel.box = engineRuntimeBox;
       currentRightChannel.num = m_engineRuntimeLCD;
+      currentRightChannel.obj = m_engineRuntimeObject;
    } 
 }
 
@@ -586,6 +612,8 @@ void Diagnostics::ShowEngineLoadGauge()
       currentRightChannel.box->hide();
       engineLoadBox->show();
       currentRightChannel.box = engineLoadBox;
+      currentRightChannel.num = m_engineLoadLCD;
+      currentRightChannel.obj = m_engineLoadObject;
    } 
 }
 
@@ -597,10 +625,32 @@ void Diagnostics::JourneyLogRequest()
 {
    cout<<"LOG REQUESTED"<<endl;
 
+   
+   //m_logWindow = new LoggerWindow(obd->supported_pids);
+
+   m_logWindow->show();
+
    /* TODO: implement log request signal*/
    /* send log request to state machine */
-   emit StartLogging();
+   //emit StartLogging();
 }
+
+/**
+ * @brief 
+ * 
+ * @param logParams 
+ */
+void Diagnostics::LogRequestRx(QVector<QString> logParams)
+{
+   qDebug() << "DIAGNOSTICS: ";
+   for (int i = 0; i < logParams.size(); i++)
+   {
+      qDebug() << logParams[i];
+   }
+   
+   emit StartLogging(logParams);
+}
+
 
 /**
  * @brief 
@@ -608,5 +658,6 @@ void Diagnostics::JourneyLogRequest()
  */
 void Diagnostics::StateChangeMainMenu()
 {
+   qDebug() << "clicked home button";
    emit DisplayChange(MAIN_MENU, this);
 }

@@ -10,6 +10,9 @@
 #include "obd2.hpp"
 #endif
 
+#include <QVector>
+#include <QString>
+
 class CANWorker : public QObject
 {
     Q_OBJECT
@@ -29,6 +32,7 @@ public:
 private slots:
     void GetDiagData();
     void PublishDiagData();
+    void LogRequestRx(QVector<QString> logParams);
     void GetLogData();
     void PublishLogData();
     void OnNewChannelRequest(diagParams_t dataRequested, obd2Channel_t channel);

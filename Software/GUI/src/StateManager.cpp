@@ -45,6 +45,8 @@ StateManager::StateManager(QWidget *parent) : QWidget(parent)
     /* connect hardware data channels from other threads to specific GUI windows */
     connect(this, SIGNAL(DiagDataTx(diagMsg_t*)), m_diags, SLOT(DiagDataRx(diagMsg_t*)));
 
+    connect(m_diags, SIGNAL(StartLogging(QVector<QString>)), this, SLOT(LogRequestRx(QVector<QString>)));
+
     /* show the home menu on startup */
     m_mainMenu->show();
     m_diags->hide();
@@ -139,4 +141,15 @@ void StateManager::OnNewChannelRequest(diagParams_t dataRequested, obd2Channel_t
     //cout<<"CHANNEL REQUESTED"<<endl;
     /* forward to the OBD2 thread */
     emit NewChannelRequest(dataRequested, channel);
+}
+
+/**
+ * @brief 
+ * 
+ * @param logParams 
+ */
+void StateManager::LogRequestRx(QVector<QString> logParams)
+{
+    qDebug() << "STATE MANAGER: logging";
+    emit LogRequestTx(logParams);
 }

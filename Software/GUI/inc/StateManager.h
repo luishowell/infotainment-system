@@ -13,6 +13,8 @@
 #define STATEMANAGER_H
 
 #include <QWidget>
+#include <QVector>
+#include <QString>
 #include "types.h"
 #include "MainMenu.h"
 #include "Diagnostics.h"
@@ -32,11 +34,13 @@ public slots:
     void ChangeRequested(state_t req_state, QWidget* self);
     void CANPublishDiagRx(diagMsg_t* msg);
     void OnNewChannelRequest(diagParams_t dataRequested, obd2Channel_t channel);
+    void LogRequestRx(QVector<QString> logParams);
 
 signals:
     void DisplayChange(state_t req_state, QWidget* currentView);
     void DiagDataTx(diagMsg_t* msg);
     void NewChannelRequest(diagParams_t dataRequested, obd2Channel_t channel);
+    void LogRequestTx(QVector<QString> logParams);
 
 private:
     MainMenu *m_mainMenu;
@@ -46,5 +50,5 @@ private:
     Media *m_media;
     
 };
-
+Q_DECLARE_METATYPE(QVector<QString>)
 #endif // STATEMANAGER_H

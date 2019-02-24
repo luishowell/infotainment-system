@@ -8,6 +8,7 @@ CircularGauge {
     property int value: 0
     maximumValue : 100 
     
+    
 
     //property bool accelerating: false
 
@@ -27,6 +28,10 @@ CircularGauge {
         }
     }
     
+    
+
+
+
     /*
     Connections{
         target: Diagnostics
