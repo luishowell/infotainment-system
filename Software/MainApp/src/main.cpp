@@ -49,6 +49,7 @@ int main(int argc, char** argv)
     CANWorker canW;
 #endif
     
+    qRegisterMetaType<QVector<QString>>("<QVector<QString>>");
     QObject::connect(&stateMachine, SIGNAL(LogRequestTx(QVector<QString>)), &canW, SLOT(LogRequestRx(QVector<QString>)));
 
     canW.moveToThread(&canT);	
@@ -76,3 +77,5 @@ int main(int argc, char** argv)
     /* kick off GUI event loop */
     return app.exec();
 }
+
+//Q_DECLARE_METATYPE(QVector<QString>)

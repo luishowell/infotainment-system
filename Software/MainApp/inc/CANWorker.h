@@ -33,7 +33,6 @@ private slots:
     void GetDiagData();
     void PublishDiagData();
     void LogRequestRx(QVector<QString> logParams);
-    void GetLogData();
     void PublishLogData();
     void OnNewChannelRequest(diagParams_t dataRequested, obd2Channel_t channel);
 
@@ -43,6 +42,7 @@ signals:
 
 private:
     //string m_dataRequest;
+    void GetLogData();
     void DummyData();
     bool m_running;
     diagMsg_t ObdMsg;

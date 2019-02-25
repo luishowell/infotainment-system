@@ -75,8 +75,8 @@ void CANWorker::GetDiagData()
   m_running = true;
   while (m_running)
   {
-	//qDebug() << "get data";
-	//sleep(1);
+	qDebug() << "CAN: Get fast data";
+	sleep(1);
 #ifndef GUI_TEST
     if (m_obd->connected)
     {
@@ -108,22 +108,29 @@ void CANWorker::GetDiagData()
 void CANWorker::LogRequestRx(QVector<QString> logParams)
 {
   qDebug() << "CANWorker: logging requested";
+  int paramSize = logParams.size();
+  QVector<float> logMsg;
+  for (int idx = 0; idx < paramSize; idx++)
+  {
+    qDebug() << logParams[idx];
+  }
   /* stop live data acquisition */
   //m_running = false;  //fast channel
   //diagTimer->stop();  //slow channel
-
-
-
+  
+  while(false) //placeholder
+  {
+    for (int idx = 0; idx < paramSize; idx++)
+    {
+      /* get data from OBD2 */
+      //logMsg.pushback(m_obd->decoded_cmd(logParams[idx]));
+      /* write to file */
+      //
+    }
+    qApp->processEvents();
+  }
 }
 
-/**
- * @brief 
- * 
- */
-void CANWorker::GetLogData()
-{
-
-}
 
 /* if the timer elapses before data is ready, 
 	this signal is blocked until qApp->processEvents() is called 
@@ -134,7 +141,7 @@ void CANWorker::GetLogData()
  */
 void CANWorker::PublishDiagData()
 {
-  qDebug() << "Publishing diag...";
+	qDebug() << "CAN: Get slow data";
 
 #ifdef GUI_TEST
   DummyData();
