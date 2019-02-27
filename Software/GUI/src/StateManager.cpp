@@ -47,6 +47,8 @@ StateManager::StateManager(QWidget *parent) : QWidget(parent)
 
     connect(m_diags, SIGNAL(StartLogging(QVector<QString>)), this, SLOT(LogRequestRx(QVector<QString>)));
 
+    connect(this, SIGNAL(SensorTx(sensorDist_t*)), m_parking, SLOT (SensorRx(sensorDist_t*)));
+
     /* show the home menu on startup */
     m_mainMenu->show();
     m_diags->hide();
@@ -152,4 +154,11 @@ void StateManager::LogRequestRx(QVector<QString> logParams)
 {
     qDebug() << "STATE MANAGER: logging";
     emit LogRequestTx(logParams);
+}
+
+
+void StateManager::SensorPublishDiagRx(sensorDist_t* sensorData)
+{
+  //cout << "SENSOR DATA: " << sensorData->rearLeft << endl;
+  emit SensorTx(sensorData);
 }

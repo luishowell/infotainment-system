@@ -57,6 +57,8 @@ int main(int argc, char** argv)
     QObject::connect(&canT, SIGNAL(started()), &canW, SLOT(GetDiagData()));
     QObject::connect(&canW, SIGNAL(CANPublishDiagTx(diagMsg_t*)), &stateMachine, SLOT(CANPublishDiagRx(diagMsg_t*)));
     QObject::connect(&stateMachine, SIGNAL(NewChannelRequest(diagParams_t, obd2Channel_t)), &canW, SLOT(OnNewChannelRequest(diagParams_t, obd2Channel_t)));
+
+    QObject::connect(&sensorsThr, SIGNAL(SensorPublishDiagTx(sensorDist_t*)), &stateMachine, SLOT(SensorPublishDiagRx(sensorDist_t*)));
     cout << "made connections" << endl;
 
     QGraphicsOpacityEffect *eff = new QGraphicsOpacityEffect();

@@ -35,12 +35,14 @@ public slots:
     void CANPublishDiagRx(diagMsg_t* msg);
     void OnNewChannelRequest(diagParams_t dataRequested, obd2Channel_t channel);
     void LogRequestRx(QVector<QString> logParams);
+    void SensorPublishDiagRx(sensorDist_t* sensorData);
 
 signals:
     void DisplayChange(state_t req_state, QWidget* currentView);
     void DiagDataTx(diagMsg_t* msg);
     void NewChannelRequest(diagParams_t dataRequested, obd2Channel_t channel);
     void LogRequestTx(QVector<QString> logParams);
+    void SensorTx(sensorDist_t* msg);
 
 private:
     MainMenu *m_mainMenu;
