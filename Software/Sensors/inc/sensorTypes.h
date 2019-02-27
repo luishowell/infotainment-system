@@ -21,4 +21,11 @@ typedef struct sensorPins_t {
     int en;
 } sensorPins_t;
 
+/* @brief: Accelerometer data type. */
+typedef struct accValues_t {
+    double xAxis;
+    double yAxis;
+    double zAxis;
+} accValues_t;
+
 #endif //SENSORTYPES_H
