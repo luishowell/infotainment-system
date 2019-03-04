@@ -15,7 +15,7 @@
 //#include <stdio.h>
 
 #ifndef GUI_TEST
-#include <wiringPi.h>
+//#include <wiringPi.h>
 #endif
 
 #define REAR_LEFT 5
@@ -42,23 +42,23 @@ void SensorThread::run()
 {
     cout<<"Starting sensor thread..."<<endl;
 
-    wiringPiSetup();
+    // wiringPiSetup();
 
-    sensorPins_t pins;
-    pins.en = 3;
-    pins.echoPin = 2;
-    pins.triggerPin = 0;
-    pins.sel[0] = 12;
-    pins.sel[1] = 13;
-    pins.sel[2] = 14;
+    // sensorPins_t pins;
+    // pins.en = 3;
+    // pins.echoPin = 2;
+    // pins.triggerPin = 0;
+    // pins.sel[0] = 12;
+    // pins.sel[1] = 13;
+    // pins.sel[2] = 14;
 
-    m_mux = new sensor_board();
-    m_mux->init(pins);
+    // m_mux = new sensor_board();
+    // m_mux->init(pins);
 
     /* setup periodic data publishing callback */
     QTimer timer;
     connect(&timer, SIGNAL(timeout()), this, SLOT(PublishSensorData()), Qt::DirectConnection);
-    timer.start(100); //msecs 
+    timer.start(50); //msecs 
 
     /* init sensor data */
     m_msg = new sensorDist_t;
@@ -106,12 +106,10 @@ void SensorThread::PublishSensorData()
 
     //testing
     float max_distance = 2.0;
-    float increment_dist = 0.01;
+    float increment_dist = 0.05;
 
     if (m_msg->rearLeft<max_distance)
-    {
-        test_dist=test_dist+increment_dist;
-        
+    {        
         m_msg->frontCentre=m_msg->frontCentre+increment_dist;
         m_msg->frontLeft=m_msg->frontLeft+increment_dist;
         m_msg->frontRight= m_msg->frontRight+increment_dist;

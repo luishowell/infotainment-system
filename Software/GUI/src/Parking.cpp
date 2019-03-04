@@ -162,15 +162,18 @@ void Parking::paintEvent(QPaintEvent *e)
 void Parking::draw_sensor_lines(QPainter *qp) 
 {
   int centre_offset = -40;
-  int centre_x = 800/4;
+  int centre_x = 800/4-30;
   int centre_y = 480/2+centre_offset;
   int car_width = 50;
   int car_length = int(car_width*1.5);
   int bar_width = int(car_width*0.5);
+  int marker_width = int(bar_width/4);
 
-  QPen pen(Qt::black, 2, Qt::SolidLine);  
-  qp->setPen(pen);
-  qp->drawRect(centre_x-(car_width/2), centre_y-(car_length/2), car_width, car_length);
+  QPen pen2(Qt::black, 2, Qt::SolidLine);  
+  QPen pen1(Qt::black, 1, Qt::SolidLine);  
+  qp->setPen(pen2);
+  //qp->drawRect(centre_x-(car_width/2), centre_y-(car_length/2), car_width, car_length); //drawing car
+  qp->drawRoundedRect(centre_x-(car_width/2), centre_y-(car_length/2), car_width, car_length, 40.0, 20.0, Qt::RelativeSize);
 
   vector<int> line_coords;
   int x, y;
@@ -180,18 +183,67 @@ void Parking::draw_sensor_lines(QPainter *qp)
   y = centre_y-(car_length/2)-dist2pix(frontCentre);
   line_coords = calc_line_coor(x, y, bar_width, 0);
   qp->drawLine(line_coords[0], line_coords[1], line_coords[2], line_coords[3]);
+  qp->setPen(pen1); 
+  for (float marker_dist=0.5; marker_dist<2.1; marker_dist=marker_dist+0.5)
+  {
+    if (marker_dist==2.0)
+    {
+      marker_width=int(bar_width*0.75);
+    }
+    else{
+      marker_width=int(bar_width/4);
+    }
+    x = centre_x;
+    y = centre_y-(car_length/2)-dist2pix(marker_dist);
+    line_coords = calc_line_coor(x, y, marker_width, 0);
+    qp->drawLine(line_coords[0], line_coords[1], line_coords[2], line_coords[3]);
+  }
+  qp->drawText(centre_x+marker_width, centre_y-(car_length/2)-dist2pix(2.0)+4, "2.0m");
+  qp->setPen(pen2);
 
   //front right
   x = (centre_x+(car_width/2))+cos(deg2rad(45))*dist2pix(frontRight);
   y = (centre_y-(car_length/2))-sin(deg2rad(45))*dist2pix(frontRight);
   line_coords = calc_line_coor(x, y, bar_width, -45);
   qp->drawLine(line_coords[0], line_coords[1], line_coords[2], line_coords[3]);
+  qp->setPen(pen1); 
+  for (float marker_dist=0.5; marker_dist<2.1; marker_dist=marker_dist+0.5)
+  {
+    if (marker_dist==2.0)
+    {
+      marker_width=int(bar_width*0.75);
+    }
+    else{
+      marker_width=int(bar_width/4);
+    }
+    x = (centre_x+(car_width/2))+cos(deg2rad(45))*dist2pix(marker_dist);
+    y = (centre_y-(car_length/2))-sin(deg2rad(45))*dist2pix(marker_dist);
+    line_coords = calc_line_coor(x, y, marker_width, -45);
+    qp->drawLine(line_coords[0], line_coords[1], line_coords[2], line_coords[3]);
+  }
+  qp->setPen(pen2);
 
   //front left
   x = (centre_x-(car_width/2))-cos(deg2rad(45))*dist2pix(frontLeft);
   y = (centre_y-(car_length/2))-sin(deg2rad(45))*dist2pix(frontLeft);
   line_coords = calc_line_coor(x, y, bar_width, 45);
   qp->drawLine(line_coords[0], line_coords[1], line_coords[2], line_coords[3]);
+  qp->setPen(pen1); 
+  for (float marker_dist=0.5; marker_dist<2.1; marker_dist=marker_dist+0.5)
+  {
+    if (marker_dist==2.0)
+    {
+      marker_width=int(bar_width*0.75);
+    }
+    else{
+      marker_width=int(bar_width/4);
+    }
+    x = (centre_x-(car_width/2))-cos(deg2rad(45))*dist2pix(marker_dist);
+    y = (centre_y-(car_length/2))-sin(deg2rad(45))*dist2pix(marker_dist);
+    line_coords = calc_line_coor(x, y, marker_width, 45);
+    qp->drawLine(line_coords[0], line_coords[1], line_coords[2], line_coords[3]);
+  }
+  qp->setPen(pen2);
 
 
   //rear centre
@@ -199,17 +251,65 @@ void Parking::draw_sensor_lines(QPainter *qp)
   y = centre_y+(car_length/2)+dist2pix(rearCentre);
   line_coords = calc_line_coor(x, y, bar_width, 0);
   qp->drawLine(line_coords[0], line_coords[1], line_coords[2], line_coords[3]);
+  qp->setPen(pen1); 
+  for (float marker_dist=0.5; marker_dist<2.1; marker_dist=marker_dist+0.5)
+  {
+    if (marker_dist==2.0)
+    {
+      marker_width=int(bar_width*0.75);
+    }
+    else{
+      marker_width=int(bar_width/4);
+    }
+    x = centre_x;
+    y = centre_y+(car_length/2)+dist2pix(marker_dist);
+    line_coords = calc_line_coor(x, y, marker_width, 0);
+    qp->drawLine(line_coords[0], line_coords[1], line_coords[2], line_coords[3]);
+  }
+  qp->setPen(pen2);
 
   //rear right
   x = (centre_x+(car_width/2))+cos(deg2rad(45))*dist2pix(rearRight);
   y = (centre_y+(car_length/2))+sin(deg2rad(45))*dist2pix(rearRight);
   line_coords = calc_line_coor(x, y, bar_width, 45);
   qp->drawLine(line_coords[0], line_coords[1], line_coords[2], line_coords[3]);
+  qp->setPen(pen1); 
+  for (float marker_dist=0.5; marker_dist<2.1; marker_dist=marker_dist+0.5)
+  {
+    if (marker_dist==2.0)
+    {
+      marker_width=int(bar_width*0.75);
+    }
+    else{
+      marker_width=int(bar_width/4);
+    }
+    x = (centre_x+(car_width/2))+cos(deg2rad(45))*dist2pix(marker_dist);
+    y = (centre_y+(car_length/2))+sin(deg2rad(45))*dist2pix(marker_dist);
+    line_coords = calc_line_coor(x, y, marker_width, 45);
+    qp->drawLine(line_coords[0], line_coords[1], line_coords[2], line_coords[3]);
+  }
+  qp->setPen(pen2);
 
   //rear left
   x = (centre_x-(car_width/2))-cos(deg2rad(45))*dist2pix(rearLeft);
   y = (centre_y+(car_length/2))+sin(deg2rad(45))*dist2pix(rearLeft);
   line_coords = calc_line_coor(x, y, bar_width, -45);
   qp->drawLine(line_coords[0], line_coords[1], line_coords[2], line_coords[3]);
+  qp->setPen(pen1); 
+  for (float marker_dist=0.5; marker_dist<2.1; marker_dist=marker_dist+0.5)
+  {
+    if (marker_dist==2.0)
+    {
+      marker_width=int(bar_width*0.75);
+    }
+    else{
+      marker_width=int(bar_width/4);
+    }
+    x = (centre_x-(car_width/2))-cos(deg2rad(45))*dist2pix(marker_dist);
+    y = (centre_y+(car_length/2))+sin(deg2rad(45))*dist2pix(marker_dist);
+    line_coords = calc_line_coor(x, y, marker_width, -45);
+    qp->drawLine(line_coords[0], line_coords[1], line_coords[2], line_coords[3]);
+  }
+  qp->setPen(pen2);
 }
 
