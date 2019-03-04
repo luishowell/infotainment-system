@@ -2,7 +2,7 @@
 
 This project aims to create a drop-in infotainment system which can be used in any vehicle with an OBD2 port.
 
-![GUI](https://i.imgur.com/vgiZvmy.png)
+![Logo](https://i.imgur.com/GvyDmrq.png)
 
 ## Planned Features
 - Graphical user interface designed for use with a touchscreen 
