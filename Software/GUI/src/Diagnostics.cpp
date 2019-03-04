@@ -464,7 +464,7 @@ void Diagnostics::ConnectButtons()
    connect(m_engineLoadButton, SIGNAL (clicked()), this, SLOT (ShowEngineLoadGauge()));
    
    connect(m_logButton, SIGNAL (clicked()), this, SLOT (JourneyLogRequest()));
-   connect(m_logWindow, SIGNAL (LogRequestTx(QVector<QString>)), this, SLOT (LogRequestRx(QVector<QString>)));
+   connect(m_logWindow, SIGNAL (LogRequestTx(QVector<QString>, bool)), this, SLOT (LogRequestRx(QVector<QString>, bool)));
 
    //connect(m_logButton, &QPushButton::clicked, this, &Diagnostics::JourneyLogRequest);
 
@@ -640,15 +640,20 @@ void Diagnostics::JourneyLogRequest()
  * 
  * @param logParams 
  */
-void Diagnostics::LogRequestRx(QVector<QString> logParams)
+void Diagnostics::LogRequestRx(QVector<QString> logParams, bool start)
 {
    qDebug() << "DIAGNOSTICS: ";
    for (int i = 0; i < logParams.size(); i++)
    {
       qDebug() << logParams[i];
    }
+
+   if (start == false)
+   {
+      m_logWindow->hide();
+   }
    
-   emit StartLogging(logParams);
+   emit StartLogging(logParams, start);
 }
 
 

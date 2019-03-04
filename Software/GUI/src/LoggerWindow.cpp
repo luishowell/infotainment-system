@@ -87,7 +87,8 @@ LoggerWindow::LoggerWindow(QVector<QString> supportedPids)
     hLayout->addLayout(selectRight);
     vLayout->addLayout(hLayout);
     vLayout->addWidget(m_startButton);
-    
+    vLayout->addWidget(m_stopButton);
+    m_stopButton->hide();
 
     this->setLayout(vLayout);
     this->setWindowFlags(Qt::Window | Qt::FramelessWindowHint);
@@ -112,16 +113,7 @@ void LoggerWindow::ConnectButtons()
     connect(m_fuelPressureButton, SIGNAL (clicked()), this, SLOT (OnClicked()));
     connect(m_engineRuntimeButton, SIGNAL (clicked()), this, SLOT (OnClicked()));
     connect(m_engineLoadButton, SIGNAL (clicked()), this, SLOT (OnClicked()));
-    /*
-   connect(m_rpmButton, SIGNAL (clicked()), this, SLOT (RpmSelect()));
-   connect(m_speedButton, SIGNAL (clicked()), this, SLOT (SpeedSelect()));
-   connect(m_intakeAirTempButton, SIGNAL (clicked()), this, SLOT (AirTempSelect()));
-   connect(m_throttleButton, SIGNAL (clicked()), this, SLOT (ThrottleSelect()));
-   connect(m_gearButton, SIGNAL (clicked()), this, SLOT (GearSelect()));
-   connect(m_fuelPressureButton, SIGNAL (clicked()), this, SLOT (FuelPressureSelect()));
-   connect(m_engineRuntimeButton, SIGNAL (clicked()), this, SLOT (EngineRuntimeSelect()));
-   connect(m_engineLoadButton, SIGNAL (clicked()), this, SLOT (EngineLoadSelect()));
-   */
+
 }
 
 /**
@@ -132,7 +124,10 @@ void LoggerWindow::StartLogging()
 {
     /* emit start signal */
     qDebug() << "LOGGER: start button clicked";
-    emit LogRequestTx(selectedParams);
+
+    m_startButton->hide();
+    m_stopButton->show();
+    emit LogRequestTx(selectedParams, true);
 }
 
 /**
@@ -141,8 +136,12 @@ void LoggerWindow::StartLogging()
  */
 void LoggerWindow::StopLogging()
 {
-
     /* emit stop signal */
+    qDebug() << "LOGGER: start button clicked";
+
+    m_stopButton->hide();
+    m_startButton->show();
+    emit LogRequestTx(selectedParams, false);
 }
 
 /**
