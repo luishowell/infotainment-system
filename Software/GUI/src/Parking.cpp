@@ -136,7 +136,7 @@ void Parking::CreateLayout()
 
   cout<<"Cameras: "<<QCameraInfo::availableCameras().count()<<endl;
 
-  QCamera* cam = new QCamera("/dev/video1");  
+  QCamera* cam = new QCamera();  
   QCameraViewfinder* viewf = new QCameraViewfinder;
   //QCameraViewfinder* viewf = new QCameraViewfinder(titleBox);
   //viewf->setGeometry(400, 30, 360, 260);
