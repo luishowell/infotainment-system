@@ -1,7 +1,7 @@
 #setup
 TEMPLATE    = app 
 TARGET      = MainApp
-QT          += widgets qml quick quickwidgets testlib 
+QT          += widgets qml quick quickwidgets multimedia multimediawidgets testlib 
 
 #includes
 INCLUDEPATH += inc/
