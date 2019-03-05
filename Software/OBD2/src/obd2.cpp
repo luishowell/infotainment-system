@@ -406,10 +406,6 @@ string obd2::pid_desc(string pid_code){
         while ( getline (pid_list_txt,line) ){
             if (pid_code == line.substr(0,2)){
                 desc = line.substr(3);
-                // if (desc[0]==' '){
-                //     desc = desc.substr(1);
-                // }
-                // break;
             }       
         }
         pid_list_txt.close();
@@ -430,6 +426,7 @@ unsigned long obd2::hex2int(string hex_string){
 
 
 string obd2::int2hex(long int_value){ 
+    int_value = abs(int_value);
     stringstream hex_value;
     hex_value<< setfill('0') << setw(2)<< uppercase<< hex<<int_value;
     return hex_value.str();    

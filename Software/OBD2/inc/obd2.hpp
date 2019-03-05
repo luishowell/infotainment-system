@@ -101,9 +101,9 @@ class obd2{
         unsigned long hex2int(string hex_string);
 
         /**
-         * @brief Converts an integer to a hex string
+         * @brief Converts a positive integer to a hex string
          * 
-         * @param int_value An integer value
+         * @param int_value A positive integer value, negative values will be inverted
          * @return string A hex string representation of the integer
          */
         string int2hex(long int_value);
