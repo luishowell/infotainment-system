@@ -1,7 +1,7 @@
 #setup
 TEMPLATE        = lib
 CONFIG          += static
-QT              += widgets qml quick quickwidgets testlib qtquickcompiler
+QT              += widgets qml quick quickwidgets multimedia multimediawidgets testlib qtquickcompiler
 
 #includes
 HEADERS         += ../OBD2/inc/*.hpp

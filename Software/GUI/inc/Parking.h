@@ -14,6 +14,7 @@
 
 #include <QWidget>
 #include <QPushButton>
+#include <QLabel>
 #include <QObject>
 #include "types.h"
 #include <vector>
@@ -39,6 +40,7 @@ signals:
 
 private:
     QPushButton *m_homeButton;
+    QLabel *viz_label;
     void CreateLayout ();
     double rearLeft;
     double rearRight;

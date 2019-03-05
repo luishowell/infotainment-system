@@ -13,6 +13,12 @@
 #include <QGridLayout>
 #include <QGroupBox>
 #include <QPainter>
+#include <QCamera>
+#include <QCameraViewfinder>
+#include <QCameraInfo>
+#include <QPixmap>
+#include <QLabel>
+
 #include <iostream>
 #include <vector>
 #include <math.h>
@@ -126,15 +132,31 @@ void Parking::CreateLayout()
   QGroupBox* titleBox = new QGroupBox("Parking Mode", this);
   titleBox->setAlignment(Qt::AlignHCenter);
 
-  QGridLayout* boxLayout = new QGridLayout(titleBox);
-  boxLayout->setVerticalSpacing(10);
+  QHBoxLayout* hbox = new QHBoxLayout;
+
+  cout<<"Cameras: "<<QCameraInfo::availableCameras().count()<<endl;
+
+  QCamera* cam = new QCamera("/dev/video1");  
+  QCameraViewfinder* viewf = new QCameraViewfinder;
+  //QCameraViewfinder* viewf = new QCameraViewfinder(titleBox);
+  //viewf->setGeometry(400, 30, 360, 260);
+
+  cam->setViewfinder(viewf);
+ 
+  viz_label = new QLabel;
+
+  hbox->addWidget(viz_label);
+  hbox->addWidget(viewf);  
+  titleBox->setLayout(hbox);
+
+  cam->start();  
 
   m_homeButton = new QPushButton("Home");
   m_homeButton->setFixedSize(WIDGET_SIZE_X-30, 50);
 
   titleBox->setFixedSize(WIDGET_SIZE_X-30, 300);
   vLayout->addWidget(titleBox);
-  vLayout->addWidget(m_homeButton, Qt::AlignBottom);
+  vLayout->addWidget(m_homeButton, Qt::AlignBottom);  
 }
 
 void Parking::SensorRx(sensorDist_t* msg)
@@ -153,17 +175,18 @@ void Parking::SensorRx(sensorDist_t* msg)
 void Parking::paintEvent(QPaintEvent *e) 
 {    
   Q_UNUSED(e);
-  
-  QPainter qp(this);
+  QPixmap drawing(240, 300);
+  drawing.fill(QWidget::palette().color(QWidget::backgroundRole()));
+  QPainter qp(&drawing);
   draw_sensor_lines(&qp);
+  viz_label->setPixmap(drawing);
 }
 
 
 void Parking::draw_sensor_lines(QPainter *qp) 
 {
-  int centre_offset = -40;
-  int centre_x = 800/4-30;
-  int centre_y = 480/2+centre_offset;
+  int centre_x = 800/4-80;
+  int centre_y = 150;
   int car_width = 50;
   int car_length = int(car_width*1.5);
   int bar_width = int(car_width*0.5);
