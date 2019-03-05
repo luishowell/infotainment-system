@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <string>
+#include <fstream>
 #include "config.h"
 #include "types.h"
 
@@ -32,7 +33,7 @@ public:
 private slots:
     void GetDiagData();
     void PublishDiagData();
-    void LogRequestRx(QVector<QString> logParams);
+    void LogRequestRx(QVector<QString> logParams, bool start);
     void PublishLogData();
     void OnNewChannelRequest(diagParams_t dataRequested, obd2Channel_t channel);
 
@@ -46,6 +47,7 @@ private:
     void DummyData();
     bool m_running;
     diagMsg_t ObdMsg;
+    ofstream m_logFile;
    
 #ifndef GUI_TEST
     obd2 *m_obd;

@@ -38,7 +38,7 @@ public slots:
     void OnClicked();
 
 signals:
-    void LogRequestTx(QVector<QString>logParams);
+    void LogRequestTx(QVector<QString>logParams, bool start);
 
 private:
     void RemoveParameter(QString param);

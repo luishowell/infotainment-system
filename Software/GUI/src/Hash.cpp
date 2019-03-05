@@ -35,3 +35,23 @@ diagParams_t Hash::HashPID(QString pidString)
    if (pidString == "A4") return GEAR;
    if (pidString == "0A") return FUEL_PRESSURE;
 }
+
+/**
+ * @brief Converts a pid code to a parameter name
+ * 
+ * @param pidString 
+ * @return std::string
+ */
+std::string Hash::PID2Name(QString pidString)
+{
+   if (pidString == "0C") return "RPM";
+   if (pidString == "0D") return "Speed";
+   if (pidString == "0F") return "Air-Temperature";
+   if (pidString == "11") return "Throttle";
+   if (pidString == "1F") return "Engine-Runtime";
+   if (pidString == "04") return "Engine-Load";
+   if (pidString == "A4") return "Gear";
+   if (pidString == "0A") return "Fuel-Pressure";
+}
+
+

@@ -47,7 +47,7 @@ public slots:
     void DiagDataRx(diagMsg_t* msg);
     //void JourneyLogRequest(std::vector<std::string>);
     void JourneyLogRequest();
-    void LogRequestRx(QVector<QString>  logParams);
+    void LogRequestRx(QVector<QString>  logParams, bool start);
     void ShowRpmGauge();
     void ShowSpeedGauge();
     void ShowAirTempGauge();
@@ -61,7 +61,7 @@ public slots:
 signals:
     void DisplayChange(state_t req_state, QWidget* currentView);
     void NewChannelRequest(diagParams_t dataRequested, obd2Channel_t channel);
-    void StartLogging(QVector<QString> logParams);
+    void StartLogging(QVector<QString> logParams, bool start);
 
 private:
     

@@ -10,10 +10,15 @@
  */
 
 #include "CANWorker.h"
+#include "Hash.h"
+
 #include <QtCore>
 #include <iostream>
+#include <fstream>
 #include <unistd.h>
 #include <QThread>
+#include <chrono>
+#include <ctime> 
 
 using namespace std;
 
@@ -32,6 +37,13 @@ CANWorker::CANWorker(obd2* obd)
   qRegisterMetaType<diagMsg_t>("diagMsg_t");
 
   m_obd = obd;
+
+  /* setup fast data publishing callback */
+  diagTimer = new QTimer(this);
+  connect(diagTimer, SIGNAL(timeout()), this, SLOT(PublishDiagData()));
+
+  /* create data logging file*/
+  //m_logFile = new ofstream;
 }
 #else
 CANWorker::CANWorker()
@@ -66,12 +78,8 @@ CANWorker::~CANWorker()
  */
 void CANWorker::GetDiagData()
 {
-
-  /* setup fast data publishing callback */
-  diagTimer = new QTimer(this);
-  connect(diagTimer, SIGNAL(timeout()), this, SLOT(PublishDiagData()));
   diagTimer->start(1000); //msecs
-
+  
   m_running = true;
   while (m_running)
   {
@@ -89,7 +97,7 @@ void CANWorker::GetDiagData()
     { 
         ObdMsg.connectionFault = true; 
 	    //DummyData();
-    	usleep(50000); // JB: this time should not exceed the publishing timer interval 
+    	usleep(1000); // JB: this time should not exceed the publishing timer interval 
     }
     /* publish the fast channel data as fast as possible */
     emit CANPublishDiagTx(&ObdMsg);
@@ -105,30 +113,85 @@ void CANWorker::GetDiagData()
  * 
  * @param logParams 
  */
-void CANWorker::LogRequestRx(QVector<QString> logParams)
+void CANWorker::LogRequestRx(QVector<QString> logParams, bool start)
 {
-  qDebug() << "CANWorker: logging requested";
-  int paramSize = logParams.size();
-  QVector<float> logMsg;
-  for (int idx = 0; idx < paramSize; idx++)
+  qDebug() << "CANWorker: logging requested" << start;
+
+  if (start)
   {
-    qDebug() << logParams[idx];
-  }
-  /* stop live data acquisition */
-  //m_running = false;  //fast channel
-  //diagTimer->stop();  //slow channel
-  
-  while(false) //placeholder
-  {
+    /* start timing */
+    auto startTime = std::chrono::system_clock::now();
+
+    /* open data logging file */
+    m_logFile.open("DataLog.csv");
+    if(!m_logFile.is_open())
+    {
+      qDebug() << "CANWorker: error opening log file";
+    }
+
+    int paramSize = logParams.size();
+    QVector<float> logMsg;
     for (int idx = 0; idx < paramSize; idx++)
     {
-      /* get data from OBD2 */
-      //logMsg.pushback(m_obd->decoded_cmd(logParams[idx]));
-      /* write to file */
-      //
+      qDebug() << logParams[idx];
     }
-    qApp->processEvents();
+
+    /* stop live data acquisition */
+    diagTimer->stop();  //slow channel
+    
+    /* column titles for csv file */
+    m_logFile << "Time,";
+    for (int idx = 0; idx < paramSize; idx++)
+    {
+      m_logFile << Hash::PID2Name(logParams[idx]);
+      if (idx == paramSize - 1)
+      {
+        m_logFile << endl << endl;
+      }
+      else
+      {
+        m_logFile << ",";
+      }
+    }
+
+    while(m_running) //placeholder
+    {
+      qDebug() << "CANWorker: logging";
+      sleep(1);
+
+      /* get current time */
+      auto endTime = std::chrono::system_clock::now();
+      std::chrono::duration<double> currentTime = endTime - startTime;
+      m_logFile << currentTime.count() << ",";
+
+      for (int idx = 0; idx < paramSize; idx++)
+      {
+        /* write to csv file */
+        m_logFile << m_obd->decoded_cmd(logParams[idx].toStdString());
+        if (idx == paramSize - 1)
+        {
+          m_logFile << endl;
+        }
+        else
+        {
+          m_logFile << ",";
+        }
+      }
+      qApp->processEvents();
+    }
   }
+  else
+  {
+    m_running = 0;
+    qDebug() << "CANWorker: logging stopped";
+    m_logFile.close();
+
+    /* Start default live data acquisition routine */
+    GetDiagData();
+
+  }
+  
+  
 }
 
 

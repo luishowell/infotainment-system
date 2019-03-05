@@ -45,7 +45,7 @@ StateManager::StateManager(QWidget *parent) : QWidget(parent)
     /* connect hardware data channels from other threads to specific GUI windows */
     connect(this, SIGNAL(DiagDataTx(diagMsg_t*)), m_diags, SLOT(DiagDataRx(diagMsg_t*)));
 
-    connect(m_diags, SIGNAL(StartLogging(QVector<QString>)), this, SLOT(LogRequestRx(QVector<QString>)));
+    connect(m_diags, SIGNAL(StartLogging(QVector<QString>, bool)), this, SLOT(LogRequestRx(QVector<QString>, bool)));
 
     connect(this, SIGNAL(SensorTx(sensorDist_t*)), m_parking, SLOT (SensorRx(sensorDist_t*)));
 
@@ -150,10 +150,10 @@ void StateManager::OnNewChannelRequest(diagParams_t dataRequested, obd2Channel_t
  * 
  * @param logParams 
  */
-void StateManager::LogRequestRx(QVector<QString> logParams)
+void StateManager::LogRequestRx(QVector<QString> logParams, bool start)
 {
     qDebug() << "STATE MANAGER: logging";
-    emit LogRequestTx(logParams);
+    emit LogRequestTx(logParams, start);
 }
 
 
