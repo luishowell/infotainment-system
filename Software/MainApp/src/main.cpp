@@ -19,7 +19,7 @@
 #include "GUIThread.h"
 #include <QGraphicsOpacityEffect>
 #include <QPropertyAnimation>
-//#include "SensorThread.h"
+#include "SensorThread.h"
 
 using namespace std;
 
@@ -36,7 +36,7 @@ int main(int argc, char** argv)
 
     /* create threads */
     CANThread canT;
-    //SensorThread sensorsThr;
+    SensorThread sensorsThr;
 #ifndef GUI_TEST
     obd2* myObd = new obd2("/dev/rfcomm0");
     cout << "created obd object" << endl;
@@ -58,7 +58,7 @@ int main(int argc, char** argv)
     QObject::connect(&canW, SIGNAL(CANPublishDiagTx(diagMsg_t*)), &stateMachine, SLOT(CANPublishDiagRx(diagMsg_t*)));
     QObject::connect(&stateMachine, SIGNAL(NewChannelRequest(diagParams_t, obd2Channel_t)), &canW, SLOT(OnNewChannelRequest(diagParams_t, obd2Channel_t)));
 
-    //QObject::connect(&sensorsThr, SIGNAL(SensorPublishDiagTx(sensorDist_t*)), &stateMachine, SLOT(SensorPublishDiagRx(sensorDist_t*)));
+    QObject::connect(&sensorsThr, SIGNAL(SensorPublishDiagTx(sensorDist_t*)), &stateMachine, SLOT(SensorPublishDiagRx(sensorDist_t*)));
     cout << "made connections" << endl;
 
     QGraphicsOpacityEffect *eff = new QGraphicsOpacityEffect();
@@ -73,7 +73,7 @@ int main(int argc, char** argv)
 
     /* start threads */
     canT.start();
-    //sensorsThr.start();
+    sensorsThr.start();
     //stateMachine.showFullScreen();
     stateMachine.show();
 

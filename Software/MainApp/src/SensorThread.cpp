@@ -18,10 +18,10 @@
 //#include <wiringPi.h>
 #endif
 
-#define REAR_LEFT 5
-#define REAR_RIGHT 7
-#define FRONT_LEFT 4
-#define FRONT_RIGHT 6
+#define REAR_LEFT 1
+#define REAR_RIGHT 2
+#define FRONT_LEFT 3
+#define FRONT_RIGHT 4
 
 using namespace std;
 
@@ -42,23 +42,23 @@ void SensorThread::run()
 {
     cout<<"Starting sensor thread..."<<endl;
 
-    // wiringPiSetup();
+    wiringPiSetup();
 
-    // sensorPins_t pins;
-    // pins.en = 3;
-    // pins.echoPin = 2;
-    // pins.triggerPin = 0;
-    // pins.sel[0] = 12;
-    // pins.sel[1] = 13;
-    // pins.sel[2] = 14;
+    sensorPins_t pins;
+	pins.en = 13;
+	pins.echoPin = 12;
+	pins.triggerPin = 14;
+	pins.sel[0] = 23;
+	pins.sel[1] = 22;
+	pins.sel[2] = 21;
 
-    // m_mux = new sensor_board();
-    // m_mux->init(pins);
+    m_mux = new sensor_board();
+    m_mux->init(pins);
 
     /* setup periodic data publishing callback */
     QTimer timer;
     connect(&timer, SIGNAL(timeout()), this, SLOT(PublishSensorData()), Qt::DirectConnection);
-    timer.start(50); //msecs 
+    timer.start(100); //msecs 
 
     /* init sensor data */
     m_msg = new sensorDist_t;
@@ -83,28 +83,27 @@ void SensorThread::PublishSensorData()
 {
 //cout << "FIRE!" << endl;
 //#ifdef SENSOR_TEST
-    // if (!DRAW_TEST)
-    // {
-    //     if ((m_mux->GetDistance(FRONT_LEFT, &m_msg->frontLeft)
-    //     && m_mux->GetDistance(REAR_LEFT, &m_msg->rearLeft)
-    //     && m_mux->GetDistance(FRONT_RIGHT, &m_msg->frontRight)
-    //     && m_mux->GetDistance(REAR_RIGHT, &m_msg->rearRight))	
-    //     == true)          
-    //     {
-    //         //GetDistance() was successful 
+
+         if ((m_mux->GetDistance(FRONT_LEFT, &m_msg->frontLeft)
+         && m_mux->GetDistance(REAR_LEFT, &m_msg->rearLeft)
+         && m_mux->GetDistance(FRONT_RIGHT, &m_msg->frontRight)
+         && m_mux->GetDistance(REAR_RIGHT, &m_msg->rearRight))	
+         == true)          
+         {
+             //GetDistance() was successful 
         
-    //         m_msg->connectionFault = false;
-    //     }
-    //     else 
-    //     {
-    //         //GetDistance() failed so assume connection to sensors in lost/compromised
-    //     //qDebug() << "Sensor connection compromised" << endl;
-    //         m_msg->connectionFault = true;
-    //     }
-    // }
+             m_msg->connectionFault = false;
+         }
+         else 
+         {
+             //GetDistance() failed so assume connection to sensors in lost/compromised
+         //qDebug() << "Sensor connection compromised" << endl;
+             m_msg->connectionFault = true;
+         }
+ 
 
 
-    //testing
+ /*   //testing
     float max_distance = 2.0;
     float increment_dist = 0.05;
 
@@ -129,7 +128,7 @@ void SensorThread::PublishSensorData()
         m_msg->connectionFault = false;   
     }
     //cout<<"Sensor Spawn: "<<m_msg->frontCentre<<endl;
-
+*/
 
     /*
    	qDebug() << "Front left: " << m_msg->frontLeft << endl;
