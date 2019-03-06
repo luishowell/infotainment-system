@@ -10,5 +10,5 @@ This PCB is placed upon the raspberry pi as a shield and contains:
 - 2x CD4051 Multiplexor
 
 ## Schematic
-![Alt text](Raspberry%20Pi%20Shield%20PCB/Schematic/schematic_page_1.PNG)
-![Alt text](Raspberry%20Pi%20Shield%20PCB/Schematic/schematic_page_2.PNG)
+![Alt text](Schematic/schematic_page_1.PNG)
+![Alt text](Schematic/schematic_page_2.PNG)
