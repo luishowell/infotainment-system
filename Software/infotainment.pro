@@ -4,7 +4,7 @@ CONFIG              += ordered
 
 SUBDIRS             =   GUI        \
                         OBD2       \
-                        Sensors    \
+   #                     Sensors    \
                         Tests      \
                         MainApp
 

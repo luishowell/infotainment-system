@@ -42,8 +42,8 @@ using namespace std;
  */
 Diagnostics::Diagnostics(QWidget *parent) : QWidget(parent) 
  {   
-
-   QVector<QString> testVec;
+    
+   std::vector<std::string> testVec;
    testVec.push_back("0C");
    testVec.push_back("0D");
    testVec.push_back("0F");
@@ -53,8 +53,8 @@ Diagnostics::Diagnostics(QWidget *parent) : QWidget(parent)
    testVec.push_back("A4");
    testVec.push_back("0A");
 
-   //m_logWindow = new LoggerWindow(testVec);
-   m_logWindow = new LoggerWindow(obd->supported_pids);
+   m_logWindow = new LoggerWindow(testVec);
+   //m_logWindow = new LoggerWindow(obd->supported_pids);
  
    setFixedSize(widgetSize);
    CreateComponents();

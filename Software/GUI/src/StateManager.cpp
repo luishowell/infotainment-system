@@ -29,7 +29,9 @@ StateManager::StateManager(QWidget *parent) : QWidget(parent)
     setFixedSize(widgetSize);
 
     /* create GUI views */
+    
     m_mainMenu = new MainMenu(this);
+    //qDebug() << "hi";
     m_diags = new Diagnostics(this);
     m_errorCodes = new ErrorCodes(this);
     m_parking = new Parking(this);

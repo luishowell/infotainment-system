@@ -27,6 +27,7 @@
  */
 LoggerWindow::LoggerWindow(std::vector<std::string> supportedPids)
 {
+    qDebug() << "log";
     uint16_t count;
     QVBoxLayout* selectLeft = new QVBoxLayout;
     QVBoxLayout* selectRight = new QVBoxLayout;

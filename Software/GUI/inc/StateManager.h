@@ -12,9 +12,6 @@
 #ifndef STATEMANAGER_H
 #define STATEMANAGER_H
 
-#include <QWidget>
-#include <QVector>
-#include <QString>
 #include "types.h"
 #include "MainMenu.h"
 #include "Diagnostics.h"
@@ -22,13 +19,18 @@
 #include "ErrorCodes.h"
 #include "Media.h"
 
+#include <QWidget>
+#include <QVector>
+#include <QString>
+#include <QPointer>
+
 class StateManager : public QWidget
 {
     Q_OBJECT
 
 public:
     explicit StateManager(QWidget *parent = 0);
-    Diagnostics *m_diags;
+    QPointer<Diagnostics> m_diags;
 
 public slots:
     void ChangeRequested(state_t req_state, QWidget* self);
@@ -45,11 +47,10 @@ signals:
     void SensorTx(sensorDist_t* msg);
 
 private:
-    MainMenu *m_mainMenu;
-    
-    Parking *m_parking;
-    ErrorCodes *m_errorCodes;
-    Media *m_media;
+    QPointer<MainMenu> m_mainMenu;
+    QPointer<Parking> m_parking;
+    QPointer<ErrorCodes> m_errorCodes;
+    QPointer<Media> m_media;
     
 };
 Q_DECLARE_METATYPE(QVector<QString>)
