@@ -28,7 +28,7 @@ class LoggerWindow : public QWidget
 {
     Q_OBJECT
 public:
-    explicit LoggerWindow(QVector<QString> supportedPids);
+    explicit LoggerWindow(std::vector<std::string> supportedPids);
     QVector<QString> supportedPids;
     QVector<QString> selectedParams;
 

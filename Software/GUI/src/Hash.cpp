@@ -24,7 +24,7 @@ diagParams_t Hash::HashParameterName(QString name)
  * @param inString 
  * @return diagParams_t 
  */
-diagParams_t Hash::HashPID(QString pidString)
+diagParams_t Hash::HashPID(std::string pidString)
 {
    if (pidString == "0C") return RPM;
    if (pidString == "0D") return SPEED;

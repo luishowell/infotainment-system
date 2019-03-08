@@ -53,11 +53,9 @@ Diagnostics::Diagnostics(QWidget *parent) : QWidget(parent)
    testVec.push_back("A4");
    testVec.push_back("0A");
 
-   m_logWindow = new LoggerWindow(testVec);
-   //connect(m_logWindow, SIGNAL (LogRequestTx(std::vector<std::string>)), this, SLOT (JourneyLogRequest(std::vector<std::string>))); 
-
-
-
+   //m_logWindow = new LoggerWindow(testVec);
+   m_logWindow = new LoggerWindow(obd->supported_pids);
+ 
    setFixedSize(widgetSize);
    CreateComponents();
    //CreateLayout();    
@@ -274,8 +272,8 @@ void Diagnostics::CreateLayout()
    pidNum = obd->supported_pids.size();
    for (pidCnt = 0; pidCnt < pidNum; pidCnt++)
    {
-      QPid = QString::fromUtf8(obd->supported_pids[pidNum].c_str());
-      switch (Hash::HashPID(QPid))
+      //QPid = QString::fromUtf8(obd->supported_pids[pidNum].c_str());
+      switch (Hash::HashPID(obd->supported_pids[pidNum]))
       {
          /* fast channel buttons */
          case ENGINE_LOAD :      selectLeft->addWidget(m_engineLoadButton);

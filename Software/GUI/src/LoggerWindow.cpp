@@ -25,7 +25,7 @@
  * @param parent 
  * @param supportedPids 
  */
-LoggerWindow::LoggerWindow(QVector<QString> supportedPids)
+LoggerWindow::LoggerWindow(std::vector<std::string> supportedPids)
 {
     uint16_t count;
     QVBoxLayout* selectLeft = new QVBoxLayout;
@@ -174,14 +174,14 @@ void LoggerWindow::OnClicked()
 
     switch(Hash::HashParameterName(name))
     {
-        case RPM:               pid = "0C"; break;
-        case SPEED:             pid = "0D"; break;                    
-        case AIR_TEMP:          pid = "0F"; break;
-        case THROTTLE:          pid = "11"; break;
-        case ENGINE_RUNTIME:    pid = "1F"; break;        
-        case ENGINE_LOAD:       pid = "04"; break;
-        case GEAR:              pid = "A4"; break;
-        case FUEL_PRESSURE:     pid = "0A"; break;
+        case RPM:               pid = "010C"; break;
+        case SPEED:             pid = "010D"; break;                    
+        case AIR_TEMP:          pid = "010F"; break;
+        case THROTTLE:          pid = "0111"; break;
+        case ENGINE_RUNTIME:    pid = "011F"; break;        
+        case ENGINE_LOAD:       pid = "0104"; break;
+        case GEAR:              pid = "01A4"; break;
+        case FUEL_PRESSURE:     pid = "010A"; break;
     }
 
     if (button->isChecked())   

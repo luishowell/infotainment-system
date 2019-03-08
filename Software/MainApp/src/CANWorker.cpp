@@ -43,7 +43,7 @@ CANWorker::CANWorker(obd2* obd)
   connect(diagTimer, SIGNAL(timeout()), this, SLOT(PublishDiagData()));
 
   /* create data logging file*/
-  //m_logFile = new ofstream;
+  //m_logFile = new ofstream;git
 }
 #else
 CANWorker::CANWorker()

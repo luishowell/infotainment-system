@@ -13,7 +13,7 @@
 #include <QGridLayout>
 #include <QGroupBox>
 #include <QPainter>
-#include <QCamera>
+#include <QtMultimedia/QCamera>
 #include <QCameraViewfinder>
 #include <QCameraInfo>
 #include <QPixmap>
