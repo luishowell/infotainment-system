@@ -29,6 +29,7 @@ Packages can be installed on an Ubuntu/Debian system with `sudo apt install <pac
 - `qml-module-qtquick-dialogs`
 - `qml-module-qtquick-controls`
 - `qml-module-qtquick-extras`
+- `qtmultimedia5-dev`
 
 ## Documentation
 
