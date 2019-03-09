@@ -12,10 +12,17 @@
 #ifndef MEDIA_H
 #define MEDIA_H
 
+/* own headers */
+#include "types.h"
+#include "MediaControls.h"
+
+#include <QPointer>
 #include <QWidget>
 #include <QPushButton>
 #include <QObject>
-#include "types.h"
+#include <QMediaPlayer>
+#include <QMediaPlaylist>
+#include <QAudioProbe>
 
 class Media : public QWidget
 {
@@ -29,9 +36,13 @@ public slots:
 signals:
     void DisplayChange(state_t req_state, QWidget* currentView);
 
-private:
-    QPushButton *m_homeButton;
+private:  
     void CreateLayout();
+    QPointer<MediaControls> m_controls;
+    QPointer<QPushButton> m_homeButton;
+    QPointer<QMediaPlayer> m_player;
+    QPointer<QMediaPlaylist> m_playlist;
+
 };
 
 #endif // MEDIA_H

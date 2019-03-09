@@ -12,6 +12,7 @@
 #ifndef SENSORTYPES_H
 #define SENSORTYPES_H
 
+#include "config.h"
 
 /* @brief: Struct containing parking sensor pins */
 typedef struct sensorPins_t {

@@ -1,3 +1,4 @@
+#include "config.h"
 #include "sensor_board.h"
 
 
@@ -21,15 +22,17 @@ void sensor_board::init(sensorPins_t pins)
 //main get distance function
 bool sensor_board::GetDistance(unsigned int sensor_num, double *distance)
 {
+#ifdef RPI
 
     //set the mux to the correct value and check response
     if(mux->set_mux(sensor_num) == false)
     {
         return false;
     }
-    
+
     delayMicroseconds(10); //wait for mux to be set properly
 
+#endif
     //get the distance and return success
     return sensor->GetDistance(distance);
 

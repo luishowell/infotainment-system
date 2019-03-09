@@ -35,7 +35,7 @@ class Diagnostics : public QWidget
 {
     Q_OBJECT
 public:
-    explicit Diagnostics(QWidget *parent = 0);
+    explicit Diagnostics(QWidget *parent = 0, obd2* myObd = 0);
     void CreateLayout();
     #ifndef GUI_TEST
     obd2* obd;

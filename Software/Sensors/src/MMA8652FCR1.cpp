@@ -1,3 +1,4 @@
+#include "config.h"
 #include "MMA8652FCR1.h"
 
 
@@ -14,7 +15,7 @@ MMA8652FCR1::MMA8652FCR1(){}
 */
 bool MMA8652FCR1::init(int devID, int intPin1, int intPin2)
 {
-
+#ifdef RPI
     //set the interrupt pins as inputs
     this->m_intPin1 = intPin1;
     this->m_intPin2 = intPin2;
@@ -49,7 +50,7 @@ bool MMA8652FCR1::init(int devID, int intPin1, int intPin2)
     result = wiringPiI2CWriteReg8(this->fd, 0x2D, 0x01); //set the interrupt to be triggered by data ready
     result = wiringPiI2CWriteReg8(this->fd, 0x2E, 0x00); //route interrupt to INT2 pin
     
-
+#endif
     return true; 
 
 }
@@ -61,6 +62,8 @@ bool MMA8652FCR1::init(int devID, int intPin1, int intPin2)
 */
 void MMA8652FCR1::getData(accValues_t *data)
 {
+#ifdef RPI
+
     //read the data values from the registers
     int xMSB = wiringPiI2CReadReg8(this->fd,0x01);
     int xLSB = wiringPiI2CReadReg8(this->fd,0x02);
@@ -75,6 +78,7 @@ void MMA8652FCR1::getData(accValues_t *data)
     data->yAxis = this->twosComp(yMSB, yLSB);
     data->zAxis = this->twosComp(zMSB, zLSB);
     
+#endif
     return;
 }
 

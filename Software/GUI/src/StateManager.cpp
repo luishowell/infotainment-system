@@ -22,9 +22,11 @@ using namespace std;
  * 
  * @param parent The parent object of the state manager
  */
-StateManager::StateManager(QWidget *parent) : QWidget(parent)
+StateManager::StateManager(QWidget *parent, obd2* myObd) : QWidget(parent)
 {
     cout << "State manager started" << endl;
+
+    m_obd = myObd;
 
     setFixedSize(widgetSize);
 
@@ -32,7 +34,7 @@ StateManager::StateManager(QWidget *parent) : QWidget(parent)
     
     m_mainMenu = new MainMenu(this);
     //qDebug() << "hi";
-    m_diags = new Diagnostics(this);
+    m_diags = new Diagnostics(this, m_obd);
     m_errorCodes = new ErrorCodes(this);
     m_parking = new Parking(this);
     m_media = new Media(this);

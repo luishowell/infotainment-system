@@ -12,15 +12,19 @@
 #ifndef MMA8652FCR1_H
 #define MMA8652FCR1_H
 
-#include <stdio.h>
-#include <wiringPi.h>
-#include <iostream>
-#include <errno.h>
-#include <wiringPiI2C.h>
-#include <cmath>
-#include <string.h>
+#include "config.h"
 #include "sensorTypes.h"
 
+#include <stdio.h>
+#include <iostream>
+#include <errno.h>
+#include <cmath>
+#include <string.h>
+
+#ifdef RPI
+#include <wiringPi.h>
+#include <wiringPiI2C.h>
+#endif
 
 class MMA8652FCR1
 {

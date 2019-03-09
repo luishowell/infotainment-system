@@ -40,7 +40,7 @@ using namespace std;
  * 
  * @param parent 
  */
-Diagnostics::Diagnostics(QWidget *parent) : QWidget(parent) 
+Diagnostics::Diagnostics(QWidget *parent, obd2* myObd) : QWidget(parent) 
  {   
     
    std::vector<std::string> testVec;
@@ -53,12 +53,13 @@ Diagnostics::Diagnostics(QWidget *parent) : QWidget(parent)
    testVec.push_back("A4");
    testVec.push_back("0A");
 
-   m_logWindow = new LoggerWindow(testVec);
-   //m_logWindow = new LoggerWindow(obd->supported_pids);
+   obd = myObd;
+   //m_logWindow = new LoggerWindow(testVec);
+   m_logWindow = new LoggerWindow(obd->supported_pids);
  
    setFixedSize(widgetSize);
    CreateComponents();
-   //CreateLayout();    
+   CreateLayout();    
    
    connect(this, SIGNAL (NewChannelRequest(diagParams_t, obd2Channel_t)), parent, SLOT (OnNewChannelRequest(diagParams_t, obd2Channel_t))); 
 

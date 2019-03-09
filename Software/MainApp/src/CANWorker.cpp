@@ -22,10 +22,9 @@
 
 using namespace std;
 
-#ifndef GUI_TEST
 CANWorker::CANWorker(obd2* obd)
 {
-  qDebug() << "Creating CAN worker...";
+  qDebug() << "CAN WORKER: creating...";
 
   /* initialise diagnostics data */
   ObdMsg.channelB = 0;
@@ -45,23 +44,6 @@ CANWorker::CANWorker(obd2* obd)
   /* create data logging file*/
   //m_logFile = new ofstream;git
 }
-#else
-CANWorker::CANWorker()
-{
-  qDebug() << "Creating CAN worker...";
-
-  /* initialise diagnostics data */
-  ObdMsg.channelB = 0;
-  ObdMsg.requestB = "010D"; /* speed */
-  ObdMsg.channelA = 0;
-  ObdMsg.requestA = "010C"; /* rpm */
-  ObdMsg.connectionFault = true;
-
-  qRegisterMetaType<diagMsg_t>("diagMsg_t");
-
-
-}
-#endif
 
 /**
  * @brief Destroy the CANWorker::CANWorker object
@@ -83,7 +65,7 @@ void CANWorker::GetDiagData()
   m_running = true;
   while (m_running)
   {
-	qDebug() << "CAN: Get fast data";
+	qDebug() << "CAN WORKER: Get fast data";
 	sleep(1);
 #ifndef GUI_TEST
     if (m_obd->connected)
@@ -115,7 +97,7 @@ void CANWorker::GetDiagData()
  */
 void CANWorker::LogRequestRx(QVector<QString> logParams, bool start)
 {
-  qDebug() << "CANWorker: logging requested" << start;
+  qDebug() << "CAN WORKER: logging requested" << start;
 
   if (start)
   {
@@ -126,7 +108,7 @@ void CANWorker::LogRequestRx(QVector<QString> logParams, bool start)
     m_logFile.open("DataLog.csv");
     if(!m_logFile.is_open())
     {
-      qDebug() << "CANWorker: error opening log file";
+      qDebug() << "CAN WORKER: error opening log file";
     }
 
     int paramSize = logParams.size();
@@ -156,7 +138,7 @@ void CANWorker::LogRequestRx(QVector<QString> logParams, bool start)
 
     while(m_running) //placeholder
     {
-      qDebug() << "CANWorker: logging";
+      qDebug() << "CAN WORKER: logging";
       sleep(1);
 
       /* get current time */
@@ -183,7 +165,7 @@ void CANWorker::LogRequestRx(QVector<QString> logParams, bool start)
   else
   {
     m_running = 0;
-    qDebug() << "CANWorker: logging stopped";
+    qDebug() << "CAN WORKER: logging stopped";
     m_logFile.close();
 
     /* Start default live data acquisition routine */
@@ -204,7 +186,7 @@ void CANWorker::LogRequestRx(QVector<QString> logParams, bool start)
  */
 void CANWorker::PublishDiagData()
 {
-	qDebug() << "CAN: Get slow data";
+	qDebug() << "CAN WORKER: get slow data";
 
 #ifdef GUI_TEST
   DummyData();

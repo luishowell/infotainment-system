@@ -12,10 +12,14 @@
 #ifndef ULTRASONIC_SENSOR_H
 #define ULTRASONIC_SENSOR_H
 
+#include "config.h"
+
 #include <stdio.h>
-#include <wiringPi.h>
 #include <time.h>
 
+#ifdef RPI
+#include <wiringPi.h>
+#endif
 
 class ultrasonic_sensor
 {

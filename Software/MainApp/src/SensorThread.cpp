@@ -12,11 +12,6 @@
 #include "SensorThread.h"
 #include <QtCore>
 #include <iostream>
-//#include <stdio.h>
-
-#ifndef GUI_TEST
-//#include <wiringPi.h>
-#endif
 
 #define REAR_LEFT 1
 #define REAR_RIGHT 2
@@ -81,9 +76,6 @@ void SensorThread::run()
  */
 void SensorThread::PublishSensorData()
 {
-//cout << "FIRE!" << endl;
-//#ifdef SENSOR_TEST
-
          if ((m_mux->GetDistance(FRONT_LEFT, &m_msg->frontLeft)
          && m_mux->GetDistance(REAR_LEFT, &m_msg->rearLeft)
          && m_mux->GetDistance(FRONT_RIGHT, &m_msg->frontRight)

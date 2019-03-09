@@ -1,3 +1,4 @@
+#include "config.h"
 #include "multiplexor.h"
 
 //constructor
@@ -8,6 +9,7 @@ multiplexor::multiplexor(){}
 */
 void multiplexor::init(int sel_0, int sel_1, int sel_2)
 {
+#ifdef RPI
     //set the pins as outputs and save values
      this->m_sel_0 = sel_0;
      pinMode(sel_0, OUTPUT);
@@ -20,7 +22,7 @@ void multiplexor::init(int sel_0, int sel_1, int sel_2)
      digitalWrite(sel_0, LOW);
      digitalWrite(sel_1, LOW);
      digitalWrite(sel_2, LOW);
-
+#endif
 }
 
 /*
@@ -28,6 +30,7 @@ void multiplexor::init(int sel_0, int sel_1, int sel_2)
 */
 bool multiplexor::set_mux(unsigned int select_val)
 {
+#ifdef RPI
 
     //check the value is valid, i.e. 0-7
     if(select_val > 7)
@@ -39,7 +42,7 @@ bool multiplexor::set_mux(unsigned int select_val)
     digitalWrite(m_sel_0,(select_val & 1));
     digitalWrite(m_sel_1,(select_val & 2) >> 1);
     digitalWrite(m_sel_2,(select_val & 4) >> 2);
-
+#endif
     return true;
 
 }

@@ -12,9 +12,13 @@
 #ifndef MULTIPLEXOR_H
 #define MULTIPLEXOR_H
 
+#include "config.h"
 
 #include <stdio.h>
+
+#ifdef RPI
 #include <wiringPi.h>
+#endif
 
 class multiplexor
 {

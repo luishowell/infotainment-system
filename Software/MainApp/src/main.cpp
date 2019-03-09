@@ -19,50 +19,51 @@
 #include "GUIThread.h"
 #include <QGraphicsOpacityEffect>
 #include <QPropertyAnimation>
-//#include "SensorThread.h"
+#include "SensorThread.h"
 
 using namespace std;
 
+//#define RPI 1
+
 int main(int argc, char** argv)
 {
-    cout<<"Starting heads-up display..."<<endl;
+    cout << "/***************LET ME INFOTAIN YOU!/***************" << endl;
     QApplication app (argc, argv);
 
     qApp->setStyle(QStyleFactory::create("macintosh"));
-    
+
+    obd2* myObd = new obd2("/dev/rfcomm0");
+
     /* GUI stuff in state machine class*/
-    StateManager stateMachine;
-    cout << "created state manager" << endl;
+    StateManager stateMachine(0, myObd);
+    cout << "INFOTAINYOU: created state manager" << endl;
 
     /* create threads */
     CANThread canT;
-    //SensorThread sensorsThr;
-#ifndef GUI_TEST
-    obd2* myObd = new obd2("/dev/rfcomm0");
-    cout << "created obd object" << endl;
-    CANWorker canW(myObd);
-    cout << "created CAN worker object" << endl;
-    stateMachine.m_diags->obd = myObd;
-    cout << "set obd to diag" << endl;
-    stateMachine.m_diags->CreateLayout();
-#else
-    CANWorker canW;
+#ifdef RPI
+    SensorThread sensorsThr;
 #endif
+    
+    cout << "INFOTAINYOU: created obd object" << endl;
+    CANWorker canW(myObd);
+    cout << "INFOTAINYOU: created CAN worker object" << endl;
     
     qRegisterMetaType<QVector<QString>>("<QVector<QString>>");
     QObject::connect(&stateMachine, SIGNAL(LogRequestTx(QVector<QString>, bool)), &canW, SLOT(LogRequestRx(QVector<QString>, bool)));
 
     canW.moveToThread(&canT);	
-    cout << "moved worker to thread" << endl;
+    cout << "INFOTAINYOU: moved worker to thread" << endl;
     QObject::connect(&canT, SIGNAL(started()), &canW, SLOT(GetDiagData()));
     QObject::connect(&canW, SIGNAL(CANPublishDiagTx(diagMsg_t*)), &stateMachine, SLOT(CANPublishDiagRx(diagMsg_t*)));
     QObject::connect(&stateMachine, SIGNAL(NewChannelRequest(diagParams_t, obd2Channel_t)), &canW, SLOT(OnNewChannelRequest(diagParams_t, obd2Channel_t)));
 
-    //QObject::connect(&sensorsThr, SIGNAL(SensorPublishDiagTx(sensorDist_t*)), &stateMachine, SLOT(SensorPublishDiagRx(sensorDist_t*)));
+#ifdef RPI
+    QObject::connect(&sensorsThr, SIGNAL(SensorPublishDiagTx(sensorDist_t*)), &stateMachine, SLOT(SensorPublishDiagRx(sensorDist_t*)));
+#endif
 
+    cout << "INFOTAINYOU: made connections" << endl;
 
-    cout << "made connections" << endl;
-
+    /*
     QGraphicsOpacityEffect *eff = new QGraphicsOpacityEffect();
     stateMachine.setGraphicsEffect(eff);
     QPropertyAnimation *a = new QPropertyAnimation(eff,"opacity");
@@ -71,14 +72,19 @@ int main(int argc, char** argv)
     a->setEndValue(1);
     a->setEasingCurve(QEasingCurve::InBack);
     a->start(QPropertyAnimation::DeleteWhenStopped);
-    
+    */
 
     /* start threads */
     canT.start();
-    //sensorsThr.start();
+#ifdef RPI
+    sensorsThr.start();
+#endif
 
-    //stateMachine.showFullScreen();
+#ifdef RPI
+    stateMachine.showFullScreen();
+#else
     stateMachine.show();
+#endif
 
     /* kick off GUI event loop */
     return app.exec();

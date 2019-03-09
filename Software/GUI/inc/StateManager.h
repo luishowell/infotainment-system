@@ -29,7 +29,7 @@ class StateManager : public QWidget
     Q_OBJECT
 
 public:
-    explicit StateManager(QWidget *parent = 0);
+    explicit StateManager(QWidget *parent = 0, obd2* myObd = 0);
     QPointer<Diagnostics> m_diags;
 
 public slots:
@@ -47,6 +47,7 @@ signals:
     void SensorTx(sensorDist_t* msg);
 
 private:
+    obd2* m_obd;
     QPointer<MainMenu> m_mainMenu;
     QPointer<Parking> m_parking;
     QPointer<ErrorCodes> m_errorCodes;

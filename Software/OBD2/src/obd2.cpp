@@ -130,7 +130,7 @@ string obd2::send_cmd(string cmd, bool parse){
         }
     }
     else{
-        cout<<"Not Connected!"<<endl;
+        cout<<"OBD2: not Connected!"<<endl;
         return "";
     }
 }
@@ -319,7 +319,7 @@ float obd2::decode_response(string response, int option){
         }
     }
     else{
-        cout<<"Response too short!"<<endl;
+        cout<<"OBD2: response too short!"<<endl;
         output = -999;
     }
     return output;
