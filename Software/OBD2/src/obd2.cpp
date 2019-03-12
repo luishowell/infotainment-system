@@ -379,7 +379,7 @@ vector<string> obd2::read_dtc(){
 string obd2::dtc_desc(string dtc_code){
     string line;
     string desc = "No DTC description";
-    ifstream dtc_list_txt ("dtc_code_list.txt");
+    ifstream dtc_list_txt ("./OBD2/dtc_code_list.txt");
     if (dtc_list_txt.is_open())
     {
         while ( getline (dtc_list_txt,line) ){
@@ -393,6 +393,10 @@ string obd2::dtc_desc(string dtc_code){
         }
         dtc_list_txt.close();
     }   
+    else
+    {
+        cout<<"No DTC code file found!"<<endl;
+    }    
     return desc;
 }
 
@@ -400,7 +404,7 @@ string obd2::dtc_desc(string dtc_code){
 string obd2::pid_desc(string pid_code){
     string line;
     string desc = "No PID description";
-    ifstream pid_list_txt ("pid_code_list.txt");
+    ifstream pid_list_txt ("./OBD2/pid_code_list.txt");
     if (pid_list_txt.is_open())
     {
         while ( getline (pid_list_txt,line) ){
@@ -410,6 +414,10 @@ string obd2::pid_desc(string pid_code){
         }
         pid_list_txt.close();
     }   
+    else
+    {
+        cout<<"No PID code file found!"<<endl;
+    }    
     return desc;
 }
 

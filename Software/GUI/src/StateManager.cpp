@@ -35,7 +35,7 @@ StateManager::StateManager(QWidget *parent, obd2* myObd) : QWidget(parent)
     m_mainMenu = new MainMenu(this);
     //qDebug() << "hi";
     m_diags = new Diagnostics(this, m_obd);
-    m_errorCodes = new ErrorCodes(this);
+    m_errorCodes = new ErrorCodes(this, m_obd);
     m_parking = new Parking(this);
     m_media = new Media(this);
 
