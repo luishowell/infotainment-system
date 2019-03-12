@@ -9,15 +9,17 @@
  * 
  */
 
+#include "ErrorCodes.h" 
+#include "config.h"
+#include "Mutex.h"
+
+#include <QtCore>
 #include <QApplication>
 #include <QGridLayout>
 #include <QGroupBox>
 #include <QHeaderView>
-
 #include <iostream>
-#include "ErrorCodes.h" 
-#include "config.h"
-
+#include <unistd.h>
 
 /**
  * @brief Construct a new Error Codes:: Error Codes object
@@ -33,8 +35,8 @@ ErrorCodes::ErrorCodes(QWidget *parent, obd2* myObd) : QWidget(parent)
    CreateLayout();    
 
    connect(m_homeButton, SIGNAL (clicked()), this, SLOT (StateChangeMainMenu()));    
-   connect(getButton, SIGNAL (clicked()), this, SLOT (get_error_codes()));
-   connect(clearButton, SIGNAL (clicked()), this, SLOT (clear_error_codes()));
+   connect(getButton, SIGNAL (clicked()), this, SLOT (GetErrorCodes()));
+   connect(clearButton, SIGNAL (clicked()), this, SLOT (ClearErrorCodes()));
 }
 
 /**
@@ -83,13 +85,47 @@ void ErrorCodes::CreateLayout()
 }
 
 
-void ErrorCodes::get_error_codes()
+void ErrorCodes::GetErrorCodes()
 {
-   std::cout<<"Get Codes"<<std::endl;
+   bool waiting = true;
+   bool notifyFlag = true; 
+
+   //qDebug() << "ERROR CODES: clicked";
+   while (waiting)
+   {
+      if (Mutex::TryOBD2())
+      {
+         qDebug() << "ERROR CODES: getting error codes..."; 
+
+         /* get error codes here */
+
+         Mutex::UnlockOBD2();
+
+         /* turn the button back on */
+         getButton->setEnabled(true);
+         waiting = false;
+      }
+      
+      else
+      {
+         if (notifyFlag)
+         {
+             qDebug() << "ERROR CODES: waiting...";
+
+             /* turn off the button while waiting */
+             getButton->setEnabled(false);
+
+             notifyFlag = false;
+         }
+
+         /* unblock the executive while waiting */
+         qApp->processEvents();
+      }
+   } 
 }
 
 
-void ErrorCodes::clear_error_codes()
+void ErrorCodes::ClearErrorCodes()
 {
    std::cout<<"Clear Codes"<<std::endl;
 }

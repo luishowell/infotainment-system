@@ -101,7 +101,7 @@ int MediaControls::volume() const
 
     return qRound(linearVolume * 100);
     */
-   return 0;
+   return m_volumeSlider->value();
 }
 
 
@@ -167,14 +167,7 @@ void MediaControls::onStopClicked()
 
 }
 
-void MediaControls::onFwdClicked()
-{
-    qDebug() << "MEDIA CONTROLS: fwd clicked";
-
-}
-
 void MediaControls::onBackClicked()
 {
-    qDebug() << "MEDIA CONTROLS: back clicked";
-
+    emit backRequest();
 }

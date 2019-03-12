@@ -40,9 +40,9 @@ int main(int argc, char** argv)
 
     /* create threads */
     CANThread canT;
-#ifdef RPI
+//#ifdef RPI
     SensorThread sensorsThr;
-#endif
+//#endif
     
     cout << "INFOTAINYOU: created obd object" << endl;
     CANWorker canW(myObd);
@@ -57,9 +57,9 @@ int main(int argc, char** argv)
     QObject::connect(&canW, SIGNAL(CANPublishDiagTx(diagMsg_t*)), &stateMachine, SLOT(CANPublishDiagRx(diagMsg_t*)));
     QObject::connect(&stateMachine, SIGNAL(NewChannelRequest(diagParams_t, obd2Channel_t)), &canW, SLOT(OnNewChannelRequest(diagParams_t, obd2Channel_t)));
 
-#ifdef RPI
+//#ifdef RPI
     QObject::connect(&sensorsThr, SIGNAL(SensorPublishDiagTx(sensorDist_t*)), &stateMachine, SLOT(SensorPublishDiagRx(sensorDist_t*)));
-#endif
+//#endif
 
     cout << "INFOTAINYOU: made connections" << endl;
 
@@ -76,9 +76,9 @@ int main(int argc, char** argv)
 
     /* start threads */
     canT.start();
-#ifdef RPI
+//#ifdef RPI
     sensorsThr.start();
-#endif
+//#endif
 
 #ifdef RPI
     stateMachine.showFullScreen();

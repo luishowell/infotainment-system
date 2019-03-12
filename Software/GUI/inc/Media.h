@@ -29,12 +29,20 @@ class Media : public QWidget
     Q_OBJECT
 public:
     explicit Media(QWidget *parent = 0);
+
+    void AddToPlaylist(const QList<QUrl> &urls);
+    
+    
     
 public slots:
     void StateChangeMainMenu();
-
+    void Open();
+    
 signals:
     void DisplayChange(state_t req_state, QWidget* currentView);
+
+private slots:
+    void onBackClicked();
 
 private:  
     void CreateLayout();
@@ -42,7 +50,9 @@ private:
     QPointer<QPushButton> m_homeButton;
     QPointer<QMediaPlayer> m_player;
     QPointer<QMediaPlaylist> m_playlist;
+    QPointer<QPushButton> m_openButton;
 
 };
 
+static bool IsPlaylist(const QUrl &url);
 #endif // MEDIA_H

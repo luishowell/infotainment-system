@@ -21,6 +21,10 @@
 #include <QAbstractButton>
 #include <QAbstractSlider>
 
+/**
+ * @brief 
+ * 
+ */
 class MediaControls : public QWidget
 {
     Q_OBJECT
@@ -51,7 +55,6 @@ private slots:
     void onPlayClicked();
     void onMuteClicked();
     void onStopClicked();
-    void onFwdClicked();
     void onBackClicked();
 
 private:

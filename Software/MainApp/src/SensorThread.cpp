@@ -10,8 +10,11 @@
  */
 
 #include "SensorThread.h"
+#include "Mutex.h"
+
 #include <QtCore>
 #include <iostream>
+#include <unistd.h>
 
 #define REAR_LEFT 1
 #define REAR_RIGHT 2
@@ -37,6 +40,7 @@ void SensorThread::run()
 {
     cout<<"Starting sensor thread..."<<endl;
 
+#ifdef RPI
     wiringPiSetup();
 
     sensorPins_t pins;
@@ -65,8 +69,21 @@ void SensorThread::run()
     m_msg->rearCentre = 0;
     m_msg->connectionFault = true;
 
+#endif //RPI
+
     /* kick off the thread */
     exec();
+
+    //JB: was using the following code to test the mutexes ( comment out exec(); )
+    /*
+    while (true)
+    {
+        Mutex::LockOBD2();
+        sleep(5);
+        Mutex::UnlockOBD2();
+        qApp->processEvents();
+    }
+    */
 }
                            
 /**

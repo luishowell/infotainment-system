@@ -11,6 +11,7 @@
 
 #include "CANWorker.h"
 #include "Hash.h"
+#include "Mutex.h"
 
 #include <QtCore>
 #include <iostream>
@@ -19,6 +20,8 @@
 #include <QThread>
 #include <chrono>
 #include <ctime> 
+
+//extern QMutex Mutex::OBD2Mutex;
 
 using namespace std;
 
@@ -60,30 +63,44 @@ CANWorker::~CANWorker()
  */
 void CANWorker::GetDiagData()
 {
+  bool locked;
+
   diagTimer->start(1000); //msecs
   
   m_running = true;
   while (m_running)
   {
+
+#ifndef RPI
 	qDebug() << "CAN WORKER: Get fast data";
 	sleep(1);
-#ifndef GUI_TEST
+#endif
+    //qDebug() << "hello there";
     if (m_obd->connected)
+    //if (true)
     {
-	//cout << m_obd->send_cmd(ObdMsg.requestA, true) << endl;
-      ObdMsg.connectionFault = false;
-      ObdMsg.channelA = m_obd->decoded_cmd(ObdMsg.requestA);
       
+      ObdMsg.connectionFault = false;
+      qDebug() << "CAN WORKER: trying obd2";
+      if ( Mutex::TryOBD2() )
+      {
+        ObdMsg.channelA = m_obd->decoded_cmd(ObdMsg.requestA);
+        Mutex::UnlockOBD2();
+      }
+      else
+      {
+        qDebug() << "CAN WORKER: OBD2 bus is currently busy";
+      }
     }
     else 
     { 
-        ObdMsg.connectionFault = true; 
-	    //DummyData();
+      qDebug() << "CAN WORKER: connection fault";
+      ObdMsg.connectionFault = true; 
     	usleep(1000); // JB: this time should not exceed the publishing timer interval 
+
     }
     /* publish the fast channel data as fast as possible */
     emit CANPublishDiagTx(&ObdMsg);
-#endif
 
     /* currently blocking the executive so process any pending events now */
     qApp->processEvents();
@@ -188,11 +205,16 @@ void CANWorker::PublishDiagData()
 {
 	qDebug() << "CAN WORKER: get slow data";
 
-#ifdef GUI_TEST
-  DummyData();
-#else
-  ObdMsg.channelB = m_obd->decoded_cmd(ObdMsg.requestB);
-#endif
+  if (Mutex::TryOBD2())
+  {
+    ObdMsg.channelB = m_obd->decoded_cmd(ObdMsg.requestB);
+    Mutex::UnlockOBD2();
+  }
+  else
+  {
+    qDebug() << "CAN WORKER: obd2 busy (diag timer)";
+  }
+  
   /* send data to GUI diagnostics viewer */
   emit CANPublishDiagTx(&ObdMsg);
 }

@@ -13,7 +13,7 @@ INCLUDEPATH += ../Sensors/inc
 #HEADERS     += ./inc/*.h
 HEADERS     += ./inc/CANThread.h 
 HEADERS     += ./inc/CANWorker.h 
-#HEADERS     += ./inc/SensorThread.h 
+HEADERS     += ./inc/SensorThread.h 
 
 
 
@@ -39,7 +39,7 @@ MOC_DIR         = ./moc
 SOURCES     += src/main.cpp
 SOURCES     += src/CANThread.cpp
 SOURCES     += src/CANWorker.cpp
-#SOURCES    += src/SensorThread.cpp
+SOURCES    += src/SensorThread.cpp
 
 
 #DEFINES             += "RPI=1"

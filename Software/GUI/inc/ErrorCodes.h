@@ -23,20 +23,46 @@
 
 #include "types.h"
 
+/**
+ * @brief 
+ * 
+ */
 class ErrorCodes : public QWidget
 {
     Q_OBJECT
 public:
+
+    /**
+     * @brief Construct a new Error Codes object
+     * 
+     * @param parent 
+     * @param myObd 
+     */
     explicit ErrorCodes(QWidget *parent = 0, obd2* myObd = 0);
 
-    #ifndef GUI_TEST
+    /**
+     * @brief 
+     * 
+     */
     obd2* obd;
-    #endif
+
     
 public slots:
+
+    /**
+     * @brief 
+     * 
+     */
     void StateChangeMainMenu();
 
 signals:
+
+    /**
+     * @brief 
+     * 
+     * @param req_state 
+     * @param currentView 
+     */
     void DisplayChange(state_t req_state, QWidget* currentView);
 
 private:
@@ -45,11 +71,25 @@ private:
     QPushButton *clearButton;
     QTableWidget *errorTable;
     
+    /**
+     * @brief 
+     * 
+     */
     void CreateLayout();
 
 private slots:
-    void get_error_codes();
-    void clear_error_codes();
+
+    /**
+     * @brief 
+     * 
+     */
+    void GetErrorCodes();
+
+    /**
+     * @brief 
+     * 
+     */
+    void ClearErrorCodes();
 };
 
 #endif // ERRORCODES_h
