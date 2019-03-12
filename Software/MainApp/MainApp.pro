@@ -23,10 +23,10 @@ DEPENDPATH  += . ../OBD2/
 DEPENDPATH  += . ../Sensors/
 PRE_TARGETDEPS += ../GUI/bin/libGUI.a
 PRE_TARGETDEPS += ../OBD2/bin/libOBD2.a
-PRE_TARGETDEPS += ../Sensors/bin/libSensors.a
+PRE_TARGETDEPS += ../Sensors/bin/libSENSORS.a
 LIBS        +=  -L../GUI/bin/ -lGUI
 LIBS        +=  -L../OBD2/bin/ -lOBD2
-LIBS        +=  ../Sensors/bin/libSENSORS.a
+LIBS        +=  -L../Sensors/bin/ -lSENSORS
 #LIBS += -L/usr/local/lib -lwiringPi
 
 #inputs

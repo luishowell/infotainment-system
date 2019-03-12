@@ -8,9 +8,10 @@ cd ./GUI && qmake
 cd ../OBD2 && qmake
 cd ../Sensors && qmake
 cd ../Tests && qmake
+cd ../MainApp && qmake
 cd .. 
 
 echo BUILDING...
-make
+make -j4
 
 #exit 0
