@@ -34,3 +34,9 @@ Packages can be installed on an Ubuntu/Debian system with `sudo apt install <pac
 ## Documentation
 
 Documentation for all methods can be found at : https://luishowell.github.io/infotainment-system/
+
+## Social Media
+
+- [Instagram](https://www.instagram.com/infotainyou/)
+- [Twitter](https://twitter.com/InfotainYou)
+- [Youtube](https://www.youtube.com/channel/UCcqjJ8Hy_WSgq_QDlyoAUrA)
