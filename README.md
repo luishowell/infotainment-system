@@ -1,4 +1,4 @@
-# Raspberry Pi Infotainment System
+# Let Me Infotain You!
 
 This project aims to create a drop-in infotainment system which can be used in any vehicle with an OBD2 port.
 
