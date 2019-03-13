@@ -42,13 +42,20 @@ bool MMA8652FCR1::init(int devID, int intPin1, int intPin2)
     }
     
     //set the configuration registers
+    
+    result = wiringPiI2CWriteReg8(this->fd, 0x2A, 0x00); //put into standby mode
+    
     result = wiringPiI2CWriteReg8(this->fd, 0x09, 0x00); //turn off the FIFO
     result = wiringPiI2CWriteReg8(this->fd, 0x0E, 0x02); //set the range to 8G
-    result = wiringPiI2CWriteReg8(this->fd, 0x2A, 0x19); //set data rate to 100Hz
+    result = wiringPiI2CWriteReg8(this->fd, 0x2A, 0x18); //set data rate to 100Hz
     result = wiringPiI2CWriteReg8(this->fd, 0x2B, 0x00); //set power mode to auto sleep off
-    result = wiringPiI2CWriteReg8(this->fd, 0x2C, 0x02); //set interrupt to be active high
+    result = wiringPiI2CWriteReg8(this->fd, 0x2C, 0x00); //set interrupt to be active high
     result = wiringPiI2CWriteReg8(this->fd, 0x2D, 0x01); //set the interrupt to be triggered by data ready
-    result = wiringPiI2CWriteReg8(this->fd, 0x2E, 0x00); //route interrupt to INT2 pin
+    result = wiringPiI2CWriteReg8(this->fd, 0x2E, 0x01); //route interrupt to INT2 pin
+    
+    result = wiringPiI2CWriteReg8(this->fd, 0x2A, 0x19); //set to active mode
+    
+
     
 #endif
     return true; 

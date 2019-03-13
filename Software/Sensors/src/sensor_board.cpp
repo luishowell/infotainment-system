@@ -9,6 +9,7 @@ sensor_board::sensor_board(){}
 //initialisation function
 void sensor_board::init(sensorPins_t pins)
 {
+
     //initialise the sensor
     sensor = new ultrasonic_sensor();
     sensor->init(pins.triggerPin, pins.echoPin);
@@ -16,6 +17,11 @@ void sensor_board::init(sensorPins_t pins)
     //initialise the mux
     mux = new multiplexor();
     mux->init(pins.sel[0], pins.sel[1], pins.sel[2]);
+#ifdef RPI  
+    //control enable pin
+    pinMode(pins.en, OUTPUT);
+    digitalWrite(pins.en, LOW);
+#endif
 
 }
 
