@@ -48,7 +48,7 @@ obd2::obd2(string comm_port){
         cout<<"Connection Successful"<<endl;
         connected = true;
     }        
-    ifstream supported_pid_txt ("supported_pid_gen.txt");           
+    ifstream supported_pid_txt ("./OBD2/supported_pid_gen.txt");           
     string pid;
     supported_pids.clear();
     if (supported_pid_txt.is_open()){
@@ -58,6 +58,10 @@ obd2::obd2(string comm_port){
         }
         supported_pid_txt.close();                         
     }
+    else
+    {
+        cout<<"No supported PID file found!"<<endl;
+    }    
 }
 
 string obd2::send_cmd(string cmd, bool parse){
@@ -141,7 +145,7 @@ void obd2::scan_pids(){
     cout<<"May take up to 5 minutes"<<endl;
 
     fstream pid_save_file;
-    pid_save_file.open("supported_pid_gen.txt", fstream::out | fstream::trunc);    
+    pid_save_file.open("./OBD2/supported_pid_gen.txt", fstream::out | fstream::trunc);    
 
     supported_pids.clear();
     string pid_code_hex;
@@ -173,31 +177,10 @@ void obd2::scan_pids(){
 
 
 void obd2::print_supported_pids(){
-    ifstream supported_pid_txt ("supported_pid_gen.txt");     
-    ifstream pid_desc_txt ("pid_code_list.txt");      
-    string pid;
-    if (supported_pid_txt.is_open()){      
-        if (pid_desc_txt.is_open()){  
-            string line; 
-            while ( getline (supported_pid_txt, pid) ){
-                pid = pid.substr(0,2);
-                
-                while (getline(pid_desc_txt, line)){
-                    if (pid==line.substr(0,2)){
-                        cout<<line<<endl;
-                        break;
-                    }
-                }  
-            }      
-        }        
-        else{
-            cout<<"Can't find PID description file"<<endl;            
-        }        
-        supported_pid_txt.close();
-        pid_desc_txt.close();                
-    }
-    else{
-        cout<<"Supported PID file may not exist, trying running scan_pids() first"<<endl;
+    cout<<"Supported PIDs:"<<endl;
+    for (int i=0; i<supported_pids.size(); i++)
+    {
+        cout<<supported_pids[i]<<" "<<pid_desc(supported_pids[i])<<endl;
     }
 }
 
@@ -341,7 +324,6 @@ vector<string> obd2::read_dtc(){
         string dtc_hex = received.substr(2);    
 
         int number_dtc_codes = dtc_hex.size()/4;
-
         
         string code_prefix;
 
