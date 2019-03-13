@@ -15,6 +15,9 @@ HEADERS     += ./inc/CANThread.h
 HEADERS     += ./inc/CANWorker.h 
 HEADERS     += ./inc/SensorThread.h 
 HEADERS     += ./inc/SensorWorker.h 
+HEADERS     += ./inc/AccThread.h
+HEADERS     += ./inc/AccWorker.h
+
 
 
 
@@ -43,6 +46,9 @@ SOURCES     += src/CANThread.cpp
 SOURCES     += src/CANWorker.cpp
 SOURCES    += src/SensorThread.cpp
 SOURCES     += src/SensorWorker.cpp
+SOURCES     += src/AccThread.cpp
+SOURCES     += src/AccWorker.cpp
+
 
 
 #DEFINES             += "RPI=1"

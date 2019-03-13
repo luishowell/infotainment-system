@@ -16,6 +16,7 @@
 #include "GUIThread.h"
 #include "SensorWorker.h"
 #include "SensorThread.h"
+#include "AccThread.h"
 
 #include <iostream>
 #include <QApplication>
@@ -51,6 +52,7 @@ int main(int argc, char** argv)
     /* create threads */
     CANThread canT;
     SensorThread sensorT;
+    AccThread accT;
     CANWorker canW(myObd);
     SensorWorker sensorW;
     /* move workers into appropriate threads */
@@ -74,6 +76,7 @@ int main(int argc, char** argv)
     /* start threads */
     canT.start();
     sensorT.start();
+    accT.start();
 
 #ifdef RPI
     stateMachine.showFullScreen();
