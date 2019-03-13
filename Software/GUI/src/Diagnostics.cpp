@@ -90,7 +90,7 @@ void Diagnostics::CreateComponents()
    QQuickView *speedoQML = new QQuickView();
    m_speedometer = QWidget::createWindowContainer(speedoQML, this);  
    m_speedometer->setFixedSize(dialSize);
-   speedoQML->setSource(QUrl::fromLocalFile("../GUI/src/Speedometer.qml"));
+   speedoQML->setSource(QUrl::fromLocalFile("./GUI/src/Speedometer.qml"));
    speedoQML->setResizeMode(QQuickView::SizeRootObjectToView);
    m_speedObject = speedoQML->rootObject();
 
@@ -98,7 +98,7 @@ void Diagnostics::CreateComponents()
    QQuickView *rpmQML = new QQuickView();
    m_rpmGauge = QWidget::createWindowContainer(rpmQML, this);  
    m_rpmGauge->setFixedSize(dialSize);
-   rpmQML->setSource(QUrl::fromLocalFile("../GUI/src/RpmGauge.qml"));
+   rpmQML->setSource(QUrl::fromLocalFile("./GUI/src/RpmGauge.qml"));
    rpmQML->setResizeMode(QQuickView::SizeRootObjectToView);
    m_rpmObject = rpmQML->rootObject();
 
@@ -106,7 +106,7 @@ void Diagnostics::CreateComponents()
    QQuickView *airTempQML = new QQuickView();
    m_airTempGauge = QWidget::createWindowContainer(airTempQML, this);  
    m_airTempGauge->setFixedSize(gaugeSize);
-   airTempQML->setSource(QUrl::fromLocalFile("../GUI/src/AirTempGauge.qml"));
+   airTempQML->setSource(QUrl::fromLocalFile("./GUI/src/AirTempGauge.qml"));
    airTempQML->setResizeMode(QQuickView::SizeRootObjectToView);
    m_airTempObject = airTempQML->rootObject();
 
@@ -114,7 +114,7 @@ void Diagnostics::CreateComponents()
    QQuickView *throttleQML = new QQuickView();
    m_throttleGauge = QWidget::createWindowContainer(throttleQML, this);  
    m_throttleGauge->setFixedSize(gaugeSize);
-   throttleQML->setSource(QUrl::fromLocalFile("../GUI/src/ThrottleGauge.qml"));
+   throttleQML->setSource(QUrl::fromLocalFile("./GUI/src/ThrottleGauge.qml"));
    throttleQML->setResizeMode(QQuickView::SizeRootObjectToView);
    m_throttleObject = throttleQML->rootObject();
 
@@ -122,7 +122,7 @@ void Diagnostics::CreateComponents()
    QQuickView *gearQML = new QQuickView();
    m_gearGauge = QWidget::createWindowContainer(gearQML, this);  
    m_gearGauge->setFixedSize(gaugeSize);
-   gearQML->setSource(QUrl::fromLocalFile("../GUI/src/ThrottleGauge.qml"));
+   gearQML->setSource(QUrl::fromLocalFile("./GUI/src/ThrottleGauge.qml"));
    gearQML->setResizeMode(QQuickView::SizeRootObjectToView);
    m_gearObject = gearQML->rootObject();
 
@@ -130,7 +130,7 @@ void Diagnostics::CreateComponents()
    QQuickView *fuelPressureQML = new QQuickView();
    m_fuelPressureGauge = QWidget::createWindowContainer(fuelPressureQML, this);  
    m_fuelPressureGauge->setFixedSize(gaugeSize);
-   fuelPressureQML->setSource(QUrl::fromLocalFile("../GUI/src/FuelPressureGauge.qml"));
+   fuelPressureQML->setSource(QUrl::fromLocalFile("./GUI/src/FuelPressureGauge.qml"));
    fuelPressureQML->setResizeMode(QQuickView::SizeRootObjectToView);
    m_fuelPressureObject = fuelPressureQML->rootObject();
 
@@ -138,7 +138,7 @@ void Diagnostics::CreateComponents()
    QQuickView *engineRuntimeQML = new QQuickView();
    m_engineRuntimeGauge = QWidget::createWindowContainer(engineRuntimeQML, this);  
    m_engineRuntimeGauge->setFixedSize(gaugeSize);
-   engineRuntimeQML->setSource(QUrl::fromLocalFile("../GUI/src/ThrottleGauge.qml"));
+   engineRuntimeQML->setSource(QUrl::fromLocalFile("./GUI/src/ThrottleGauge.qml"));
    engineRuntimeQML->setResizeMode(QQuickView::SizeRootObjectToView);
    m_engineRuntimeObject = engineRuntimeQML->rootObject();
   
@@ -146,7 +146,7 @@ void Diagnostics::CreateComponents()
    QQuickView *engineLoadQML = new QQuickView();
    m_engineLoadGauge = QWidget::createWindowContainer(engineLoadQML, this);  
    m_engineLoadGauge->setFixedSize(gaugeSize);
-   engineLoadQML->setSource(QUrl::fromLocalFile("../GUI/src/EngineLoadGauge.qml"));
+   engineLoadQML->setSource(QUrl::fromLocalFile("./GUI/src/EngineLoadGauge.qml"));
    engineLoadQML->setResizeMode(QQuickView::SizeRootObjectToView);
    m_engineLoadObject = engineLoadQML->rootObject();
 
@@ -274,7 +274,7 @@ void Diagnostics::CreateLayout()
    for (pidCnt = 0; pidCnt < pidNum; pidCnt++)
    {
       //QPid = QString::fromUtf8(obd->supported_pids[pidNum].c_str());
-      switch (Hash::HashPID(obd->supported_pids[pidNum]))
+      switch (Hash::HashPID(obd->supported_pids[pidCnt])) // JB: fixed bug here (13/03/19)
       {
          /* fast channel buttons */
          case ENGINE_LOAD :      selectLeft->addWidget(m_engineLoadButton);
