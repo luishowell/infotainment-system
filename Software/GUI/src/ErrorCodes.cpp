@@ -84,7 +84,7 @@ void ErrorCodes::CreateLayout()
    vLayout->addWidget(m_homeButton, Qt::AlignBottom);
 }
 
-
+/* TODO: move the OBD2 call  */
 void ErrorCodes::GetErrorCodes()
 {
    bool waiting = true;

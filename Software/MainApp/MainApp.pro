@@ -14,6 +14,8 @@ INCLUDEPATH += ../Sensors/inc
 HEADERS     += ./inc/CANThread.h 
 HEADERS     += ./inc/CANWorker.h 
 HEADERS     += ./inc/SensorThread.h 
+HEADERS     += ./inc/SensorWorker.h 
+
 
 
 
@@ -40,6 +42,7 @@ SOURCES     += src/main.cpp
 SOURCES     += src/CANThread.cpp
 SOURCES     += src/CANWorker.cpp
 SOURCES    += src/SensorThread.cpp
+SOURCES     += src/SensorWorker.cpp
 
 
 #DEFINES             += "RPI=1"
