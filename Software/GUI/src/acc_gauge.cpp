@@ -9,14 +9,20 @@
 #include "acc_gauge.h"
 
 
-AccGauge::AccGauge(float max_G, int size, QWidget *parent)
-: QWidget(parent), _max_G(max_G)
+AccGauge::AccGauge(float max_G, accValues_t acc_cal, int size, QWidget *parent)
+: QWidget(parent), _max_G(max_G), x_axis(1.0, 0.0, 0.0), y_axis(0.0, 1.0, 0.0), z_axis(0.0, 0.0, 1.0)
 {
   if (size!=0)
   {
     _size=size;
     resize_widget = false;
   }    
+
+  glm::vec3 acc_down(acc_cal.xAxis, acc_cal.yAxis, acc_cal.zAxis);
+  _z_rot = radians(270)-xy_angle(acc_down);   
+  glm::vec3 rotated = rotate(acc_down, z_axis, _z_rot);
+  _x_rot = radians(270)-yz_angle(rotated);
+
     label = new QLabel();
     QVBoxLayout *vbox = new QVBoxLayout();
     vbox->addWidget(label);
@@ -92,9 +98,6 @@ float AccGauge::xz_angle(const glm::vec3& v)
 }
 
 
-// v: a vector in 3D space
-// k: a unit vector describing the axis of rotation
-// theta: the angle (in radians) that v rotates around k
 glm::vec3 AccGauge::rotate(const glm::vec3& v, const glm::vec3& k, float theta)
 {
     float cos_theta = cos(theta);

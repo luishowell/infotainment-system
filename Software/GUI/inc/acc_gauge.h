@@ -1,11 +1,12 @@
 #include <QWidget>
 #include <QLabel>
 #include <glm/glm.hpp>
+#include "sensorTypes.h"
 
 class AccGauge : public QWidget {
 
 public:
-    AccGauge(float max_G, int size=0, QWidget *parent = 0);
+    AccGauge(float max_G, accValues_t acc_cal, int size=0, QWidget *parent = 0);
 
     int _size;
     float _max_G;
@@ -15,6 +16,11 @@ private:
 
     float _acc_x;
     float _acc_y;
+    float _z_rot;
+    float _x_rot;
+    glm::vec3 x_axis;
+    glm::vec3 y_axis;
+    glm::vec3 z_axis;
     bool resize_widget = true;
 
     float degrees(float rad);
