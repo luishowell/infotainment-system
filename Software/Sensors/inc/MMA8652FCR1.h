@@ -13,7 +13,7 @@
 #define MMA8652FCR1_H
 
 #include "config.h"
-#include "sensorTypes.h"
+#include "types.h"
 
 #include <stdio.h>
 #include <iostream>

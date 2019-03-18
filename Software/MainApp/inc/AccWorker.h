@@ -13,7 +13,7 @@
 #define ACCWORKER_H
 
 #include "config.h"
-#include "sensorTypes.h"
+#include "types.h"
 #include "MMA8652FCR1.h"
 
 #include <QObject>

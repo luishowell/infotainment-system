@@ -17,7 +17,7 @@
 #include <stdio.h>
 #include "ultrasonic_sensor.h"
 #include "multiplexor.h"
-#include "sensorTypes.h"
+#include "types.h"
 
 #ifdef RPI
 #include <wiringPi.h>

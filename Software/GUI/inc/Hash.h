@@ -2,6 +2,8 @@
 #include <string>
 #include <vector>
 #include "types.h"
+#include <QGroupBox>
+#include <QMetaType>
 
 /**
  * @brief 

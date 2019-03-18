@@ -5,6 +5,7 @@ CONFIG          += staticlib
 #includes
 INCLUDEPATH     += ./inc/
 INCLUDEPATH     += ../MainApp/inc
+INCLUDEPATH     += ../GUI/inc/
 
 #libraries
 #LIBS += -L/usr/local/lib -lwiringPi

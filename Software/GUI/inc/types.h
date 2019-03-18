@@ -12,8 +12,9 @@
 #ifndef TYPES_H
 #define TYPES_H
 
-#include <QGroupBox>
-#include <QMetaType>
+//#include <QGroupBox>
+//#include <QMetaType>
+#include <string>
 
 /**
  * @brief GUI view states
@@ -77,6 +78,28 @@ typedef struct sensorDist {
     double frontRight;
     double frontCentre;
 } sensorDist_t;
+
+
+/**
+ * @brief: Struct containing parking sensor pins 
+ *
+ */
+typedef struct sensorPins_t {
+    int sel[3];
+    int echoPin;
+    int triggerPin;
+    int en;
+} sensorPins_t;
+
+/**
+ * @brief: Accelerometer data type. 
+ *
+ */
+typedef struct accValues_t {
+    double xAxis;
+    double yAxis;
+    double zAxis;
+} accValues_t;
 
 
 
