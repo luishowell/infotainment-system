@@ -53,6 +53,15 @@ class MMA8652FCR1
          */
         void getData(accValues_t *data);
         
+        //recording of the accelerometer values when static
+        accValues_t *staticVals;
+        
+        /**
+         * @brief Records the current accelerometer reading in staticVals.
+         *
+         */
+        void recordStatic();
+        
     private:
     
         //2's complement data conversion functions
@@ -63,10 +72,6 @@ class MMA8652FCR1
         int m_intPin1;
         int m_intPin2;
         
-        //accelerometer offset values
-        //double xOffset;
-        //double yOffset;
-        //double zOffset;
         
         //devid of the sensor
         int m_devID;

@@ -42,7 +42,6 @@ bool MMA8652FCR1::init(int devID, int intPin1, int intPin2)
     }
     
     //set the configuration registers
-    
     result = wiringPiI2CWriteReg8(this->fd, 0x2A, 0x00); //put into standby mode
     
     result = wiringPiI2CWriteReg8(this->fd, 0x09, 0x00); //turn off the FIFO
@@ -55,11 +54,23 @@ bool MMA8652FCR1::init(int devID, int intPin1, int intPin2)
     
     result = wiringPiI2CWriteReg8(this->fd, 0x2A, 0x19); //set to active mode
     
+    //get static values
+    staticVals = new accValues_t;
+    this->recordStatic();   
 
     
 #endif
     return true; 
 
+}
+
+
+/*
+    Records current readings in staticVals
+*/
+void MMA8652FCR1::recordStatic()
+{
+    this->getData(staticVals);
 }
 
 
