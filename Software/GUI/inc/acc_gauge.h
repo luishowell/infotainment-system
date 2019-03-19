@@ -1,7 +1,7 @@
 #include <QWidget>
 #include <QLabel>
 #include <glm/glm.hpp>
-#include "sensorTypes.h"
+#include "types.h"
 
 class AccGauge : public QWidget {
 

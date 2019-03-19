@@ -7,6 +7,7 @@
 #include "sensor_board.h"
 
 #include <QObject>
+#include <QTimer>
 
 class SensorWorker : public QObject
 {

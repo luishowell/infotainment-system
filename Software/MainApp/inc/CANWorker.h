@@ -1,9 +1,6 @@
 #ifndef CANWORKER_H
 #define CANWORKER_H
 
-#include <QObject>
-#include <string>
-#include <fstream>
 #include "config.h"
 #include "types.h"
 
@@ -11,8 +8,14 @@
 #include "obd2.hpp"
 #endif
 
+#include <QGroupBox>
+#include <QMetaType>
 #include <QVector>
 #include <QString>
+#include <QTimer>
+#include <QObject>
+#include <string>
+#include <fstream>
 
 class CANWorker : public QObject
 {
