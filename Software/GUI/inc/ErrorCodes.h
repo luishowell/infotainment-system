@@ -66,6 +66,7 @@ signals:
     void DisplayChange(state_t req_state, QWidget* currentView);
 
 private:
+    int _default_rows = 7;
     QPushButton *m_homeButton;
     QPushButton *getButton;
     QPushButton *clearButton;
