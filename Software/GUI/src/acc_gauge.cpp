@@ -9,7 +9,7 @@
 #include "acc_gauge.h"
 
 
-AccGauge::AccGauge(float max_G, accValues_t acc_cal, int size, QWidget *parent)
+AccGauge::AccGauge(float max_G, accValues_t* acc_cal, int size, QWidget *parent)
 : QWidget(parent), _max_G(max_G), x_axis(1.0, 0.0, 0.0), y_axis(0.0, 1.0, 0.0), z_axis(0.0, 0.0, 1.0)
 {
   if (size!=0)
@@ -18,7 +18,7 @@ AccGauge::AccGauge(float max_G, accValues_t acc_cal, int size, QWidget *parent)
     resize_widget = false;
   }    
 
-  glm::vec3 acc_down(acc_cal.xAxis, acc_cal.yAxis, acc_cal.zAxis);
+  glm::vec3 acc_down(acc_cal->xAxis, acc_cal->yAxis, acc_cal->zAxis);
   _z_rot = radians(270)-xy_angle(acc_down);   
   glm::vec3 rotated = rotate(acc_down, z_axis, _z_rot);
   _x_rot = radians(270)-yz_angle(rotated);
@@ -108,6 +108,18 @@ glm::vec3 AccGauge::rotate(const glm::vec3& v, const glm::vec3& k, float theta)
     return rotated;
 }
 
+void AccGauge::update_gauge(accValues_t* acc_value)
+{
+  glm::vec3 v(acc_value->xAxis, acc_value->yAxis, acc_value->zAxis);
+
+  glm::vec3 rotated = rotate(v, z_axis, _z_rot);
+  rotated = rotate(rotated, x_axis, _x_rot);
+
+  _acc_x = rotated.x;
+  _acc_y = rotated.y;
+  update();
+}
+
 
 void AccGauge::paintEvent(QPaintEvent *e) 
 {    
@@ -145,8 +157,8 @@ void AccGauge::draw_acc_viz(QPainter *qp)
 {
 
   //placeholder
-  _acc_x = 1;
-  _acc_y = -1;
+  //_acc_x = 1;
+  //_acc_y = -1;
 
   int dot_radius = int(_size*0.05);
   

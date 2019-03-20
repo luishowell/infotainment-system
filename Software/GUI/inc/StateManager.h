@@ -18,6 +18,8 @@
 #include "Parking.h"
 #include "ErrorCodes.h"
 #include "Media.h"
+#include "acc_gauge.h"
+#include "MMA8652FCR1.h"
 
 #include <QWidget>
 #include <QVector>
@@ -29,7 +31,7 @@ class StateManager : public QWidget
     Q_OBJECT
 
 public:
-    explicit StateManager(QWidget *parent = 0, obd2* myObd = 0);
+    explicit StateManager(QWidget *parent = 0, obd2* myObd = 0, MMA8652FCR1* acc = 0);
     QPointer<Diagnostics> m_diags;
 
 public slots:
@@ -38,6 +40,7 @@ public slots:
     void OnNewChannelRequest(diagParams_t dataRequested, obd2Channel_t channel);
     void LogRequestRx(QVector<QString> logParams, bool start);
     void SensorPublishDiagRx(sensorDist_t* sensorData);
+    void AccDataRx(accValues_t* msg);
 
 signals:
     void DisplayChange(state_t req_state, QWidget* currentView);
@@ -45,6 +48,7 @@ signals:
     void NewChannelRequest(diagParams_t dataRequested, obd2Channel_t channel);
     void LogRequestTx(QVector<QString> logParams, bool start);
     void SensorTx(sensorDist_t* msg);
+    void AccDataTx(accValues_t* msg);
 
 private:
     obd2* m_obd;

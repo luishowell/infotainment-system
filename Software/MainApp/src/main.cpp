@@ -17,6 +17,8 @@
 #include "SensorWorker.h"
 #include "SensorThread.h"
 #include "AccThread.h"
+#include "AccWorker.h"
+#include "acc_gauge.h"
 
 #include <iostream>
 #include <QApplication>
@@ -44,19 +46,25 @@ int main(int argc, char** argv)
     qApp->setStyle(QStyleFactory::create("macintosh"));
 
     obd2* myObd = new obd2("/dev/rfcomm0");
+    MMA8652FCR1* guiAccel;
 
-    /* GUI stuff in state machine class*/
-    StateManager stateMachine(0, myObd);
-    cout << "INFOTAINYOU: created state manager" << endl;
+    
 
     /* create threads */
     CANThread canT;
-    SensorThread sensorT;
-    AccThread accT;
     CANWorker canW(myObd);
+    SensorThread sensorT;
     SensorWorker sensorW;
+    AccThread accT;
+    AccWorker accW;
+
+    /* GUI stuff in state machine class*/
+    StateManager stateMachine(0, myObd, accW.acc);
+    
+    
     /* move workers into appropriate threads */
     canW.moveToThread(&canT);
+    accW.moveToThread(&accT);
     //sensorW.moveToThread(&sensorT);	
 
 
@@ -67,9 +75,14 @@ int main(int argc, char** argv)
 
     QObject::connect(&canT, SIGNAL(started()), &canW, SLOT(GetDiagData()));
     //QObject::connect(&sensorT, SIGNAL(started()), &sensorW, SLOT(Work()));
+    QObject::connect(&accT, SIGNAL(started()), &accW, SLOT(Work()));
 
+    /* connect CAN thread data to GUI */
     QObject::connect(&canW, SIGNAL(CANPublishDiagTx(diagMsg_t*)), &stateMachine, SLOT(CANPublishDiagRx(diagMsg_t*)));
     QObject::connect(&stateMachine, SIGNAL(NewChannelRequest(diagParams_t, obd2Channel_t)), &canW, SLOT(OnNewChannelRequest(diagParams_t, obd2Channel_t)));
+
+    /* connect acc thread data to GUI */
+    QObject::connect(&accW, SIGNAL(SendData(accValues_t*)), &stateMachine, SLOT(AccDataRx(accValues_t*)));
 
     QObject::connect(&sensorW, SIGNAL(SensorPublishDiagTx(sensorDist_t*)), &stateMachine, SLOT(SensorPublishDiagRx(sensorDist_t*)));
 

@@ -12,6 +12,12 @@
 #ifndef DIAGNOSTICS_H
 #define DIAGNOSTICS_H
 
+#include "obd2.hpp"
+#include "LoggerWindow.h"
+#include "types.h"
+#include "acc_gauge.h"
+#include "MMA8652FCR1.h"
+
 #include <QWidget>
 #include <QPushButton>
 #include <QObject>
@@ -24,18 +30,11 @@
 #include <QVector>
 #include <QString>
 
-#ifndef GUI_TEST
-#include "obd2.hpp"
-#endif
-
-#include "LoggerWindow.h"
-#include "types.h"
-
 class Diagnostics : public QWidget
 {
     Q_OBJECT
 public:
-    explicit Diagnostics(QWidget *parent = 0, obd2* myObd = 0);
+    explicit Diagnostics(QWidget *parent = 0, obd2* myObd = 0, MMA8652FCR1* acc = 0);
     void CreateLayout();
     #ifndef GUI_TEST
     obd2* obd;
@@ -45,6 +44,7 @@ public:
 public slots:
     void StateChangeMainMenu();
     void DiagDataRx(diagMsg_t* msg);
+    void AccDataRx(accValues_t* msg);
     //void JourneyLogRequest(std::vector<std::string>);
     void JourneyLogRequest();
     void LogRequestRx(QVector<QString>  logParams, bool start);
@@ -56,7 +56,7 @@ public slots:
     void ShowFuelPressureGauge();
     void ShowEngineRuntimeGauge();
     void ShowEngineLoadGauge();
- 
+    void ShowAccGauge();
 
 signals:
     void DisplayChange(state_t req_state, QWidget* currentView);
@@ -103,12 +103,14 @@ private:
     QObject *m_engineLoadObject;
     QLCDNumber *m_engineLoadLCD;
 
-
+    QPointer<AccGauge> m_accGauge;
+    MMA8652FCR1* m_acc;
 
 /*
     QObject *m_currentLeftObj;
     QObject *m_currentRightObj;
 */
+    QPointer<QGroupBox> accBox;
     QGroupBox* speedBox;
     QGroupBox* rpmBox;
     QGroupBox* selectBox;
@@ -144,7 +146,7 @@ private:
    QPointer<QPushButton> m_fuelPressureButton;
    QPointer<QPushButton> m_engineRuntimeButton;
    QPointer<QPushButton> m_engineLoadButton;
-
+   QPointer<QPushButton> m_accButton;
 
 
     QPushButton *m_logButton;

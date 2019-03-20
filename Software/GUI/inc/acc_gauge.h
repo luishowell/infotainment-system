@@ -1,3 +1,17 @@
+/**
+ * @file acc_gauge.h
+ * @author your name (you@domain.com)
+ * @brief 
+ * @version 0.1
+ * @date 2019-03-20
+ * 
+ * @copyright Copyright (c) 2019
+ * 
+ */
+
+#ifndef ACCGAUGE_H
+#define ACCGAUGE_H
+
 #include <QWidget>
 #include <QLabel>
 #include <glm/glm.hpp>
@@ -6,10 +20,11 @@
 class AccGauge : public QWidget {
 
 public:
-    AccGauge(float max_G, accValues_t acc_cal, int size=0, QWidget *parent = 0);
+    AccGauge(float max_G, accValues_t* acc_cal, int size=0, QWidget *parent = 0);
 
     int _size;
     float _max_G;
+    void update_gauge(accValues_t* acc_value);
 
 private:
     QLabel *label;
@@ -23,6 +38,7 @@ private:
     glm::vec3 z_axis;
     bool resize_widget = true;
 
+    
     float degrees(float rad);
     float radians(float deg);
     float xy_angle(const glm::vec3& v);
@@ -43,3 +59,5 @@ protected:
      */
     void draw_acc_viz(QPainter *qp);
 };
+
+#endif //ACCGAUGE_H

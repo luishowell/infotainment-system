@@ -25,19 +25,20 @@ class AccWorker : public QObject
 
 public:
     explicit AccWorker();
-    
+    MMA8652FCR1* acc;
+
 private slots:
-    //void PublishAccData();
+    void Publish();
     void Work();
 
 signals:
-    //void SensorPublishDiagTx(sensorDist_t* msg);
+    void SendData(accValues_t* msg);
 
 private:
     accValues_t* m_msg;
     //void run();
     QTimer* m_timer;
-    MMA8652FCR1* m_acc;
+    
   
 };
 

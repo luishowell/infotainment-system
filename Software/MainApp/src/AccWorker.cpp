@@ -23,10 +23,13 @@
 
 AccWorker::AccWorker()
 {
-    m_acc = new MMA8652FCR1;
-    m_acc->init(DEV_ID, IRQ_PIN1, IRQ_PIN2);
+    acc = new MMA8652FCR1;
+    acc->init(DEV_ID, IRQ_PIN1, IRQ_PIN2);
 
     m_msg = new accValues_t;
+
+    m_timer = new QTimer(this);
+    connect(m_timer, SIGNAL(timeout()), this, SLOT(Publish()));
 
 }
 
@@ -37,6 +40,9 @@ void AccWorker::Work()
     time_t whileStart;
     time_t whileEnd;
     time_t timeTaken;
+
+    /* start publishing timer */
+    m_timer->start(250);
 
     while(true)
     {
@@ -56,7 +62,7 @@ void AccWorker::Work()
             {
                 /* triggered by IRQ */
             }
-            m_acc->getData(m_msg);
+            acc->getData(m_msg);
             qDebug () << "ACC WORKER: x-data = " << m_msg->xAxis;
             
         }
@@ -64,4 +70,16 @@ void AccWorker::Work()
         qApp->processEvents();
 
     }
+}
+
+void AccWorker::Publish()
+{
+    qDebug() << "ACC WORKER: send!";
+
+    /* send */
+    emit SendData(m_msg);
+
+
+
+    
 }

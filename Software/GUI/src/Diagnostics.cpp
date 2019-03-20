@@ -31,6 +31,7 @@
 #include "Diagnostics.h" 
 #include "config.h"
 #include "Hash.h"
+#include "MMA8652FCR1.h"
 
 
 using namespace std;
@@ -40,8 +41,9 @@ using namespace std;
  * 
  * @param parent 
  */
-Diagnostics::Diagnostics(QWidget *parent, obd2* myObd) : QWidget(parent) 
+Diagnostics::Diagnostics(QWidget *parent, obd2* myObd, MMA8652FCR1* acc) : QWidget(parent) 
  {   
+   m_acc = acc;
     
    std::vector<std::string> testVec;
    testVec.push_back("0C");
@@ -85,6 +87,9 @@ void Diagnostics::CreateComponents()
    qDebug() << "DIAGNOSTICS: creating components";
    const QSize gaugeSize = QSize(100, 175);
    const QSize dialSize = QSize(170, 125);
+
+   /* create g-force meter */
+   m_accGauge = new AccGauge(1, m_acc->staticVals);
 
    /* set up speedometer */
    QQuickView *speedoQML = new QQuickView();
@@ -160,6 +165,7 @@ void Diagnostics::CreateComponents()
    m_engineLoadButton      = new QPushButton("Engine \nLoad");
    m_gearButton            = new QPushButton("Current \nGear");
    m_fuelPressureButton    = new QPushButton("Fuel \nPressure");
+   m_accButton             = new QPushButton("G-Force");
 
    const QSize btnSize = QSize(120, 50);
    m_rpmButton->setFixedSize(btnSize);
@@ -171,6 +177,7 @@ void Diagnostics::CreateComponents()
    m_engineLoadButton->setFixedSize(btnSize);
    m_gearButton->setFixedSize(btnSize);
    m_fuelPressureButton->setFixedSize(btnSize);
+   m_accButton->setFixedSize(btnSize);
    
    m_logButton = new QPushButton("Log Journey");
    m_logButton->setFixedSize(400, 50);
@@ -202,6 +209,11 @@ void Diagnostics::CreateLayout()
    connect(m_homeButton, SIGNAL (clicked()), this, SLOT (StateChangeMainMenu())); 
    
    /* create individual layouts for gauges */
+   accBox = new QGroupBox("G-Force", titleBox);
+   accBox->setAlignment(Qt::AlignHCenter);
+   QPointer<QVBoxLayout> accLayout = new QVBoxLayout(accBox);
+   accLayout->addWidget(m_accGauge);
+
    speedBox = new QGroupBox("Speed", titleBox);
    m_speedLCD = new QLCDNumber();
    speedBox->setAlignment(Qt::AlignHCenter);
@@ -297,6 +309,7 @@ void Diagnostics::CreateLayout()
          default :               break;
       }
    }
+   selectRight->addWidget(m_accButton);
    #else
    vector<string> supported_pids;
    supported_pids.push_back("0D");
@@ -351,6 +364,8 @@ void Diagnostics::CreateLayout()
    fuelPressureBox->setFixedSize(boxSize);
    engineLoadBox->setFixedSize(boxSize);
    engineRuntimeBox->setFixedSize(boxSize);
+   accBox->setFixedSize(boxSize);
+   
    titleBox->setFixedSize(WIDGET_SIZE_X-30, WIDGET_SIZE_Y-100);
 
    /* default shown gauges */
@@ -363,6 +378,8 @@ void Diagnostics::CreateLayout()
    boxLayout->addWidget(engineRuntimeBox, 1, 2);
    boxLayout->addWidget(engineLoadBox, 1, 2);
    boxLayout->addWidget(fuelPressureBox, 1, 2);
+   boxLayout->addWidget(accBox, 1, 2);
+
 
    boxLayout->addWidget(m_logButton, 2, 1);
    //boxLayout->addWidget(m_engineRuntimeLCD, 1, 4);
@@ -384,6 +401,7 @@ void Diagnostics::CreateLayout()
 
    /* default hidden gauges */
    rpmBox->hide();
+   accBox->hide();
    //airTempBox->hide();
    throttleBox->hide();
    gearBox->hide();
@@ -424,10 +442,6 @@ void Diagnostics::DiagDataRx(diagMsg_t* msg)
          canConnectionFlag = true;
       }
        
-      //cout<<"/******DIAG******/"<<endl;
-      //cout<<"A:"<< msg->channelA << endl;
-      //cout<<"B:"<< msg->channelB <<endl;
-      //cout<<"/****************/"<<endl;
       int leftVal;
       int rightVal;
 
@@ -438,12 +452,23 @@ void Diagnostics::DiagDataRx(diagMsg_t* msg)
       rightVal = msg->channelB;
       
       currentLeftChannel.obj->setProperty("value", leftVal);
-      currentRightChannel.obj->setProperty("value", rightVal);
       currentLeftChannel.num->display(leftVal);
-      currentRightChannel.num->display(msg->channelB);
-      
+
+      if (currentRightGauge != accBox)
+      {
+         currentRightChannel.obj->setProperty("value", rightVal);
+         currentRightChannel.num->display(msg->channelB);
+      }
+           
    }
    
+}
+
+void Diagnostics::AccDataRx(accValues_t* msg)
+{
+   qDebug() << "DIAGNOSTICS: received acc values";
+
+   m_accGauge->update_gauge(msg);
 }
 
 /**
@@ -461,6 +486,7 @@ void Diagnostics::ConnectButtons()
    connect(m_fuelPressureButton, SIGNAL (clicked()), this, SLOT (ShowFuelPressureGauge()));
    connect(m_engineRuntimeButton, SIGNAL (clicked()), this, SLOT (ShowEngineRuntimeGauge()));
    connect(m_engineLoadButton, SIGNAL (clicked()), this, SLOT (ShowEngineLoadGauge()));
+   connect(m_accButton, SIGNAL (clicked()), this, SLOT (ShowAccGauge()));
    
    connect(m_logButton, SIGNAL (clicked()), this, SLOT (JourneyLogRequest()));
    connect(m_logWindow, SIGNAL (LogRequestTx(QVector<QString>, bool)), this, SLOT (LogRequestRx(QVector<QString>, bool)));
@@ -470,6 +496,22 @@ void Diagnostics::ConnectButtons()
 }
 
 /* public slots */
+
+void Diagnostics::ShowAccGauge()
+{
+   //qDebug() << "clicked acc button";
+   if (currentRightGauge != accBox)
+   {
+      currentRightChannel.box->hide();
+      accBox->show();
+      //m_accGauge->show();
+      currentRightChannel.box = accBox;
+      currentRightChannel.num = nullptr;
+      currentRightChannel.obj = nullptr;
+   }
+   
+}
+
 /**
  * @brief 
  * 
