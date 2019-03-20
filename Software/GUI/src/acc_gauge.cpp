@@ -115,7 +115,7 @@ void AccGauge::update_gauge(accValues_t* acc_value)
   glm::vec3 rotated = rotate(v, z_axis, _z_rot);
   rotated = rotate(rotated, x_axis, _x_rot);
 
-  _acc_x = rotated.x;
+  _acc_x = -rotated.x;
   _acc_y = rotated.y;
   update();
 }
