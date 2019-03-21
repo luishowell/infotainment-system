@@ -9,11 +9,12 @@
  * 
  */
 
+#include "StateManager.h"
+#include "config.h"
+#include "acc_gauge.h"
 
 #include <QApplication>
 #include <iostream>
-#include "StateManager.h"
-#include "config.h"
 
 using namespace std;
 
@@ -22,16 +23,20 @@ using namespace std;
  * 
  * @param parent The parent object of the state manager
  */
-StateManager::StateManager(QWidget *parent) : QWidget(parent)
+StateManager::StateManager(QWidget *parent, obd2* myObd, MMA8652FCR1* acc) : QWidget(parent)
 {
     cout << "State manager started" << endl;
+
+    m_obd = myObd;
 
     setFixedSize(widgetSize);
 
     /* create GUI views */
+    
     m_mainMenu = new MainMenu(this);
-    m_diags = new Diagnostics(this);
-    m_errorCodes = new ErrorCodes(this);
+    //qDebug() << "hi";
+    m_diags = new Diagnostics(this, m_obd, acc);
+    m_errorCodes = new ErrorCodes(this, m_obd);
     m_parking = new Parking(this);
     m_media = new Media(this);
 
@@ -44,6 +49,11 @@ StateManager::StateManager(QWidget *parent) : QWidget(parent)
 
     /* connect hardware data channels from other threads to specific GUI windows */
     connect(this, SIGNAL(DiagDataTx(diagMsg_t*)), m_diags, SLOT(DiagDataRx(diagMsg_t*)));
+    connect(this, SIGNAL(AccDataTx(accValues_t*)), m_diags, SLOT(AccDataRx(accValues_t*)));
+
+    connect(m_diags, SIGNAL(StartLogging(QVector<QString>, bool)), this, SLOT(LogRequestRx(QVector<QString>, bool)));
+
+    connect(this, SIGNAL(SensorTx(sensorDist_t*)), m_parking, SLOT (SensorRx(sensorDist_t*)));
 
     /* show the home menu on startup */
     m_mainMenu->show();
@@ -63,6 +73,14 @@ void StateManager::CANPublishDiagRx(diagMsg_t* msg)
 {
     /* forward to diagnostics window */
     emit DiagDataTx(msg);
+}
+
+void StateManager::AccDataRx(accValues_t* msg)
+{
+    qDebug() << "STATE MANAGER: received acc data";
+
+    /* forward to diagnostics window */
+    emit AccDataTx(msg);
 }
 
 /**
@@ -139,4 +157,22 @@ void StateManager::OnNewChannelRequest(diagParams_t dataRequested, obd2Channel_t
     //cout<<"CHANNEL REQUESTED"<<endl;
     /* forward to the OBD2 thread */
     emit NewChannelRequest(dataRequested, channel);
+}
+
+/**
+ * @brief 
+ * 
+ * @param logParams 
+ */
+void StateManager::LogRequestRx(QVector<QString> logParams, bool start)
+{
+    qDebug() << "STATE MANAGER: logging";
+    emit LogRequestTx(logParams, start);
+}
+
+
+void StateManager::SensorPublishDiagRx(sensorDist_t* sensorData)
+{
+  //cout << "SENSOR DATA: " << sensorData->rearLeft << endl;
+  emit SensorTx(sensorData);
 }

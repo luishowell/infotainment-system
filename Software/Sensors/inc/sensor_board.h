@@ -12,11 +12,16 @@
 #ifndef SENSOR_BOARD_H
 #define SENSOR_BOARD_H
 
+#include "config.h"
+
 #include <stdio.h>
-#include <wiringPi.h>
 #include "ultrasonic_sensor.h"
 #include "multiplexor.h"
-#include "sensorTypes.h"
+#include "types.h"
+
+#ifdef RPI
+#include <wiringPi.h>
+#endif
 
 class sensor_board 
 {

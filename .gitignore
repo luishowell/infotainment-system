@@ -1,3 +1,13 @@
 Software/GUI/bin/
+Software/MainApp/bin/
+Software/Tests/OBD2_test/Offline/bin/
+Software/Tests/OBD2_test/Online/bin/
 .vscode
 *.out
+*.o
+*.a
+moc_*
+*moc
+Makefile
+*.stash
+Software/OBD2/supported_pid_gen.txt

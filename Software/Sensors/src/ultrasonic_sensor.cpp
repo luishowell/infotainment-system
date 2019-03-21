@@ -1,3 +1,4 @@
+#include "config.h"
 #include "ultrasonic_sensor.h"
 #include <iostream>
 
@@ -12,6 +13,7 @@ ultrasonic_sensor::ultrasonic_sensor(){}
 */
 void ultrasonic_sensor::init(int trigger_pin, int echo_pin)
  {
+#ifdef RPI
 
      //set the trigger pin as an output
      this->m_trigger_pin = trigger_pin;
@@ -23,16 +25,17 @@ void ultrasonic_sensor::init(int trigger_pin, int echo_pin)
 
      //write a 0 to trigger pin
      digitalWrite (trigger_pin, LOW);
-     
-
+    
+#endif
  }
 
 /*
     Function used to measure the distance from the sensor to the object
 */
 bool ultrasonic_sensor::GetDistance(double *distance)
- {
-    
+{
+#ifdef RPI
+
      //pulse the trigger pin for 10us
      digitalWrite(m_trigger_pin, HIGH);
      delayMicroseconds(10);
@@ -86,7 +89,7 @@ bool ultrasonic_sensor::GetDistance(double *distance)
      //calculate the distance and return
      time_diff = difftime(end_time, start_time);
      *distance = (time_diff * 340)/2000000;                //d = v*t where v is the speed of sound at 340 m/s, div by two for there and back
+     
+#endif
      return true; 
-
-
  }

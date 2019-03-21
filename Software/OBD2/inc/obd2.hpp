@@ -35,7 +35,7 @@ class obd2{
          * @param parse A bool flag which sets whether the response should be parsed to remove all non-data in the response e.g spaces, new lines
          * @return string The reponse from the OBD2 module
          */
-        string send_cmd(string cmd, bool parse = false);
+        string send_cmd(string cmd, bool parse = false, bool fast_send = false);
 
         /**
          * @brief Scans the OBD2 PIDs supported by the vehcile
@@ -60,6 +60,14 @@ class obd2{
          * @return float The decoded value
          */
         float decode_response(string response, int option = 1);
+
+        /**
+         * @brief Get the description of an OBD2 PID
+         * 
+         * @param pid A PID e.g "0D"
+         * @return string The description of the PID
+         */
+        string pid_desc(string pid_code);
 
         /**
          * @brief Sends a command and decodes the response
@@ -93,9 +101,9 @@ class obd2{
         unsigned long hex2int(string hex_string);
 
         /**
-         * @brief Converts an integer to a hex string
+         * @brief Converts a positive integer to a hex string
          * 
-         * @param int_value An integer value
+         * @param int_value A positive integer value, negative values will be inverted
          * @return string A hex string representation of the integer
          */
         string int2hex(long int_value);

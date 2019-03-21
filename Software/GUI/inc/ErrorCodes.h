@@ -14,24 +14,83 @@
 
 #include <QWidget>
 #include <QPushButton>
+#include <QTableWidget>
 #include <QObject>
+
+#ifndef GUI_TEST
+#include "obd2.hpp"
+#endif
+
 #include "types.h"
 
+/**
+ * @brief 
+ * 
+ */
 class ErrorCodes : public QWidget
 {
     Q_OBJECT
 public:
-    explicit ErrorCodes(QWidget *parent = 0);
+
+    /**
+     * @brief Construct a new Error Codes object
+     * 
+     * @param parent 
+     * @param myObd 
+     */
+    explicit ErrorCodes(QWidget *parent = 0, obd2* myObd = 0);
+
+    /**
+     * @brief 
+     * 
+     */
+    obd2* obd;
+
     
 public slots:
+
+    /**
+     * @brief 
+     * 
+     */
     void StateChangeMainMenu();
 
 signals:
+
+    /**
+     * @brief 
+     * 
+     * @param req_state 
+     * @param currentView 
+     */
     void DisplayChange(state_t req_state, QWidget* currentView);
 
 private:
+
     QPushButton *m_homeButton;
+    QPushButton *getButton;
+    QPushButton *clearButton;
+    QTableWidget *errorTable;
+    
+    /**
+     * @brief 
+     * 
+     */
     void CreateLayout();
+
+private slots:
+
+    /**
+     * @brief 
+     * 
+     */
+    void GetErrorCodes();
+
+    /**
+     * @brief 
+     * 
+     */
+    void ClearErrorCodes();
 };
 
 #endif // ERRORCODES_h

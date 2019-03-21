@@ -12,10 +12,14 @@
 #ifndef TYPES_H
 #define TYPES_H
 
-#include <QGroupBox>
+//#include <QGroupBox>
+//#include <QMetaType>
+#include <string>
 
-
-/* @brief: GUI view states */
+/**
+ * @brief GUI view states
+ * 
+ */
 typedef enum{
     MAIN_MENU,
     DIAGNOSTICS,
@@ -24,7 +28,10 @@ typedef enum{
     PARKING
 } state_t;
 
-/* @brief: diagnostics messages */
+/**
+ * @brief diagnostics messages
+ * 
+ */
 typedef struct diagMsg {
     bool connectionFault;
     int channelA;
@@ -33,20 +40,35 @@ typedef struct diagMsg {
     std::string requestB;
 } diagMsg_t;
 
-/* @brief: parameters that can be requested from the OBD2 thread */
+/**
+ * @brief parameters that can be requested from the OBD2 thread
+ * 
+ */
 typedef enum {
     SPEED,
     RPM,
     AIR_TEMP, 
-    THROTTLE
+    THROTTLE,
+    GEAR,
+    FUEL_PRESSURE,
+    ENGINE_LOAD,
+    ENGINE_RUNTIME
 } diagParams_t;
+//Q_DECLARE_METATYPE(diagParams_t)
 
+/**
+ * @brief 
+ * 
+ */
 typedef enum {
     CHANNEL_A,
     CHANNEL_B
 } obd2Channel_t;
 
-/* @brief: parking sensor signals */
+/**
+ * @brief parking sensor signals
+ * 
+ */
 typedef struct sensorDist {
     bool connectionFault;
     double rearLeft;
@@ -57,6 +79,27 @@ typedef struct sensorDist {
     double frontCentre;
 } sensorDist_t;
 
+
+/**
+ * @brief: Struct containing parking sensor pins 
+ *
+ */
+typedef struct sensorPins_t {
+    int sel[3];
+    int echoPin;
+    int triggerPin;
+    int en;
+} sensorPins_t;
+
+/**
+ * @brief: Accelerometer data type. 
+ *
+ */
+typedef struct accValues_t {
+    double xAxis;
+    double yAxis;
+    double zAxis;
+} accValues_t;
 
 
 
