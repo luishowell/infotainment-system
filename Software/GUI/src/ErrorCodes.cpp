@@ -70,13 +70,15 @@ void ErrorCodes::CreateLayout()
    m_homeButton = new QPushButton("Home");
    m_homeButton->setFixedSize(WIDGET_SIZE_X-30, 50);
 
-   errorTable = new QTableWidget(_default_rows, 2, this);
+   errorTable = new QTableWidget(0, 2, this);
    errorTable->horizontalHeader()->setStretchLastSection(true);
    errorTable->setEditTriggers(QAbstractItemView::NoEditTriggers);   //prevent table editing
    errorTable->setHorizontalHeaderLabels(QStringList() << "Error Code" << "Description");
 
    getButton = new QPushButton("Get Error Codes");
    clearButton = new QPushButton("Clear Error Codes");   
+   getButton->setMinimumHeight(80);
+   clearButton->setMinimumHeight(80);
 
    gridLayout->addWidget(errorTable, 0, 0, 4, 1);
    gridLayout->addWidget(getButton,0,1,2,1);
@@ -104,13 +106,10 @@ void ErrorCodes::GetErrorCodes()
 
          /* get error codes here */
          dtc_codes = obd->read_dtc();
+         errorTable->setRowCount(dtc_codes.size());
 
          if (dtc_codes.size()>0)
          {
-            if (dtc_codes.size()>_default_rows)
-            {
-               errorTable->setRowCount(dtc_codes.size());
-            }
             for (int i=0; i<dtc_codes.size(); i++)
             {
                errorTable->setItem(i, 0, new QTableWidgetItem(QString::fromStdString(dtc_codes[i])));
@@ -173,12 +172,13 @@ void ErrorCodes::ClearErrorCodes()
          {
             std::cout<<"Clearing diagnostic trouble codes..."<<std::endl;
             string rec = obd->send_cmd("04", false);
-
+            std::cout<<"Clear DTC rec: "<<rec<<std::endl;
+            
             QMessageBox msgBox;
                   
             if (rec.find("44")!=string::npos)
             {
-               errorTable->setRowCount(_default_rows);
+               errorTable->setRowCount(0);
                msgBox.setText("DTC Reset Success!");
             }
             else

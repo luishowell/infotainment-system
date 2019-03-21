@@ -10,3 +10,4 @@ moc_*
 *moc
 Makefile
 *.stash
+Software/OBD2/supported_pid_gen.txt

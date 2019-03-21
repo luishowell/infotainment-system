@@ -68,6 +68,91 @@ obd2::obd2(string comm_port){
     }
 }
 
+int obd2::setup_obd(string comm_port){
+    
+    serial_port = open(comm_port.c_str(), O_RDWR | O_NOCTTY);
+    
+    tcflush(serial_port, TCIOFLUSH);
+    
+    if (serial_port < 0) {
+        printf("Error %i from open: %s\n", errno, strerror(errno));
+        return -1;
+    }
+
+    struct termios tty;
+    memset(&tty, 0, sizeof tty);
+
+    if(tcgetattr(serial_port, &tty) != 0) {
+        printf("Error %i from tcgetattr: %s\n", errno, strerror(errno));
+        return -1;
+    }
+
+    fcntl(serial_port, F_SETFL, 0);
+
+    tty.c_cflag |= (CLOCAL | CREAD);
+    tty.c_lflag &= !(ICANON | ECHO | ECHOE | ISIG);
+    tty.c_oflag &= !(OPOST); 
+
+    tty.c_cc[VTIME] = 30;   
+    tty.c_cc[VMIN] = 0;
+
+    //baud rate
+    cfsetispeed(&tty, B38400);
+    cfsetospeed(&tty, B38400);
+    
+    if (tcsetattr(serial_port, TCSAFLUSH, &tty) != 0) {   //TCSANOW
+        printf("Error %i from tcsetattr: %s\n", errno, strerror(errno));
+        return -1;
+    }
+
+    tcflush(serial_port, TCIOFLUSH);
+
+    if (send_cmd("ATZ", true)=="OK"){
+        cout<<"Reset OK"<<endl;
+    }
+    else{
+        cout<<"Transmission error"<<endl;
+        return -1;        
+    }
+    if (send_cmd("ATE0", true)=="OK"){
+        cout<<"Echo off OK"<<endl;
+    }
+    else{
+        cout<<"Transmission error"<<endl;
+        return -1;  
+    }
+    if (send_cmd("ATL0", true)=="OK"){
+        cout<<"Linefeed off OK"<<endl;
+    }
+    else{
+        cout<<"Transmission error"<<endl;
+        return -1;  
+    }
+    if (send_cmd("ATS0", true)=="OK"){
+        cout<<"Spaces off OK"<<endl;
+    }
+    else{
+        cout<<"Transmission error"<<endl;
+        return -1;  
+    }
+    if (send_cmd("ATSP5", true)=="OK"){
+        cout<<"OBD2 Protocol set OK"<<endl;
+    }
+    else{
+        cout<<"Transmission error"<<endl;
+        return -1;  
+    }
+
+    sleep(5);
+
+    if (send_cmd("0100", true).substr(0,2)!="41"){  //initalise KWP fast
+        cout<<"OBD2 bus Initialisation Error"<<endl;
+        return -1;   
+    }     
+
+    return serial_port;
+}
+
 string obd2::send_cmd(string cmd, bool parse){
     if (serial_port!=-1){
         cmd = cmd + "\r";
@@ -321,6 +406,7 @@ float obd2::decoded_cmd(string cmd){
 vector<string> obd2::read_dtc(){
 
     string received = send_cmd("03", true);
+    //string received = "430133";   //for testing
     vector<string> dtc_codes;
 
     if (received.substr(0, 2)=="43"){
@@ -424,90 +510,4 @@ string obd2::int2hex(long int_value){
     stringstream hex_value;
     hex_value<< setfill('0') << setw(2)<< uppercase<< hex<<int_value;
     return hex_value.str();    
-}
-
-
-int obd2::setup_obd(string comm_port){
-    
-    serial_port = open(comm_port.c_str(), O_RDWR | O_NOCTTY);
-    
-    tcflush(serial_port, TCIOFLUSH);
-    
-    if (serial_port < 0) {
-        printf("Error %i from open: %s\n", errno, strerror(errno));
-        return -1;
-    }
-
-    struct termios tty;
-    memset(&tty, 0, sizeof tty);
-
-    if(tcgetattr(serial_port, &tty) != 0) {
-        printf("Error %i from tcgetattr: %s\n", errno, strerror(errno));
-        return -1;
-    }
-
-    fcntl(serial_port, F_SETFL, 0);
-
-    tty.c_cflag |= (CLOCAL | CREAD);
-    tty.c_lflag &= !(ICANON | ECHO | ECHOE | ISIG);
-    tty.c_oflag &= !(OPOST); 
-
-    tty.c_cc[VTIME] = 30;   
-    tty.c_cc[VMIN] = 0;
-
-    //baud rate
-    cfsetispeed(&tty, B38400);
-    cfsetospeed(&tty, B38400);
-    
-    if (tcsetattr(serial_port, TCSAFLUSH, &tty) != 0) {   //TCSANOW
-        printf("Error %i from tcsetattr: %s\n", errno, strerror(errno));
-        return -1;
-    }
-
-    tcflush(serial_port, TCIOFLUSH);
-
-    if (send_cmd("ATZ", true)=="OK"){
-        cout<<"Reset OK"<<endl;
-    }
-    else{
-        cout<<"Transmission error"<<endl;
-        return -1;        
-    }
-    if (send_cmd("ATE0", true)=="OK"){
-        cout<<"Echo off OK"<<endl;
-    }
-    else{
-        cout<<"Transmission error"<<endl;
-        return -1;  
-    }
-    if (send_cmd("ATL0", true)=="OK"){
-        cout<<"Linefeed off OK"<<endl;
-    }
-    else{
-        cout<<"Transmission error"<<endl;
-        return -1;  
-    }
-    if (send_cmd("ATS0", true)=="OK"){
-        cout<<"Spaces off OK"<<endl;
-    }
-    else{
-        cout<<"Transmission error"<<endl;
-        return -1;  
-    }
-    if (send_cmd("ATSP5", true)=="OK"){
-        cout<<"OBD2 Protocol set OK"<<endl;
-    }
-    else{
-        cout<<"Transmission error"<<endl;
-        return -1;  
-    }
-
-    sleep(5);
-
-    if (send_cmd("0100", true).substr(0,2)!="41"){  //initalise KWP fast
-        cout<<"OBD2 bus Initialisation Error"<<endl;
-        return -1;   
-    }     
-
-    return serial_port;
 }

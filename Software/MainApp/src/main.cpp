@@ -93,6 +93,7 @@ int main(int argc, char** argv)
 
 #ifdef RPI
     stateMachine.showFullScreen();
+    //QApplication::setOverrideCursor(Qt::BlankCursor); //maybe invisible cursor on touchscreen
 #else
     stateMachine.show();
 #endif

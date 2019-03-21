@@ -506,8 +506,8 @@ void Diagnostics::ShowAccGauge()
       accBox->show();
       //m_accGauge->show();
       currentRightChannel.box = accBox;
-      currentRightChannel.num = nullptr;
-      currentRightChannel.obj = nullptr;
+      //currentRightChannel.num = nullptr;
+      //currentRightChannel.obj = nullptr;
    }
    
 }
