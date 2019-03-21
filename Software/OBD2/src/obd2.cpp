@@ -153,8 +153,12 @@ int obd2::setup_obd(string comm_port){
     return serial_port;
 }
 
-string obd2::send_cmd(string cmd, bool parse){
+string obd2::send_cmd(string cmd, bool parse, bool fast_send){
     if (serial_port!=-1){
+        if ((cmd.substr(0, 2)=="01") && fast_send)
+        {
+            cmd = cmd + "1";
+        }
         cmd = cmd + "\r";
         write(serial_port, cmd.c_str(), cmd.length());
 

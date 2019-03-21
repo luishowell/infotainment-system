@@ -35,7 +35,7 @@ class obd2{
          * @param parse A bool flag which sets whether the response should be parsed to remove all non-data in the response e.g spaces, new lines
          * @return string The reponse from the OBD2 module
          */
-        string send_cmd(string cmd, bool parse = false);
+        string send_cmd(string cmd, bool parse = false, bool fast_send = false);
 
         /**
          * @brief Scans the OBD2 PIDs supported by the vehcile
