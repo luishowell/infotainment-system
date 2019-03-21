@@ -42,12 +42,12 @@ private:
     QPushButton *m_homeButton;
     QLabel *viz_label;
     void CreateLayout ();
-    double rearLeft;
-    double rearRight;
-    double rearCentre;
-    double frontLeft;
-    double frontRight;
-    double frontCentre;
+    double rearLeft=0;
+    double rearRight=0;
+    double rearCentre=0;
+    double frontLeft=0;
+    double frontRight=0;
+    double frontCentre=0;
 
     /**
      * @brief Round a float up or down to the nearest integer
