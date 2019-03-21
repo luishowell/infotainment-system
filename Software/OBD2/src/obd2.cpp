@@ -62,6 +62,10 @@ obd2::obd2(string comm_port){
     {
         cout<<"No supported PID file found!"<<endl;
     }    
+    if (connected && supported_pids.size()<1)
+    {
+        scan_pids();
+    }
 }
 
 string obd2::send_cmd(string cmd, bool parse){
