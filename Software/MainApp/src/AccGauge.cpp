@@ -6,7 +6,7 @@
 #include <iostream>
 #include <cmath>
 #include <glm/glm.hpp>
-#include "acc_gauge.h"
+#include "AccGauge.h"
 
 
 AccGauge::AccGauge(float max_G, accValues_t* acc_cal, int size, QWidget *parent)

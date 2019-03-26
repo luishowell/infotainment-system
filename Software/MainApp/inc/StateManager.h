@@ -18,7 +18,7 @@
 #include "Parking.h"
 #include "ErrorCodes.h"
 #include "Media.h"
-#include "acc_gauge.h"
+#include "AccGauge.h"
 #include "MMA8652FCR1.h"
 
 #include <QWidget>

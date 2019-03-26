@@ -18,7 +18,7 @@
 #include "SensorThread.h"
 #include "AccThread.h"
 #include "AccWorker.h"
-#include "acc_gauge.h"
+#include "AccGauge.h"
 
 #include <iostream>
 #include <QApplication>

@@ -15,7 +15,7 @@
 #include "obd2.hpp"
 #include "LoggerWindow.h"
 #include "types.h"
-#include "acc_gauge.h"
+#include "AccGauge.h"
 #include "MMA8652FCR1.h"
 
 #include <QWidget>

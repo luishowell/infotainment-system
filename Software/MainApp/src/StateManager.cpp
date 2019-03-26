@@ -9,9 +9,8 @@
  * 
  */
 
-#include "StateManager.h"
 #include "config.h"
-#include "acc_gauge.h"
+#include "StateManager.h"
 
 #include <QApplication>
 #include <iostream>
