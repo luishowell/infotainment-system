@@ -13,7 +13,6 @@
 #include "StateManager.h"
 #include "CANThread.h"
 #include "CANWorker.h"
-#include "GUIThread.h"
 #include "SensorWorker.h"
 #include "SensorThread.h"
 #include "AccThread.h"
