@@ -10,12 +10,16 @@
  */
 
 #include "MainMenu.h" 
+#include "config.h"
+
 #include <QApplication>
 #include <QHBoxLayout>
 #include <QGridLayout>
 #include <QGroupBox>
 #include <Qt>
-#include "config.h"
+#include <QString>
+#include <QSize>
+#include <QIcon>
 
 /**
  * @brief Construct a new Main Menu:: Main Menu object
@@ -45,16 +49,44 @@ void MainMenu::CreateLayout()
    QGroupBox* titleBox = new QGroupBox("Main Menu", this);
 
    /* create buttons */
-   m_diagButton = new QPushButton("Diagnostics");
-   m_mediaButton = new QPushButton("Media");
-   m_parkButton = new QPushButton("Parking Mode");
-   m_errorButton = new QPushButton("Error Codes");
+   m_diagButton = new QToolButton;
+   m_mediaButton = new QToolButton;
+   m_parkButton = new QToolButton;
+   m_errorButton = new QToolButton;
 
-   const QSize btnSize = QSize(200, 140);
+   /* create icons */
+   QIcon diagIcon;
+   diagIcon.addFile(QString::fromUtf8("./MainApp/images/wrench.png"), QSize(), QIcon::Normal, QIcon::Off);
+   QIcon errorIcon;
+   errorIcon.addFile(QString::fromUtf8("./MainApp/images/hazard.png"), QSize(), QIcon::Normal, QIcon::Off);
+   QIcon mediaIcon;
+   mediaIcon.addFile(QString::fromUtf8("./MainApp/images/speaker.png"), QSize(), QIcon::Normal, QIcon::Off);
+   QIcon parkingIcon;
+   parkingIcon.addFile(QString::fromUtf8("./MainApp/images/hatchback.png"), QSize(), QIcon::Normal, QIcon::Off);
+
+   const QSize btnSize = QSize(300, 140);
    m_diagButton->setFixedSize(btnSize);
    m_mediaButton->setFixedSize(btnSize);
    m_parkButton->setFixedSize(btnSize);
    m_errorButton->setFixedSize(btnSize);
+
+   /* add icons */
+   m_diagButton->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
+   m_diagButton->setIcon(diagIcon);
+   m_diagButton->setIconSize(QSize(125, 125));
+   m_diagButton->setText("Diagnostics");
+   m_errorButton->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
+   m_errorButton->setIcon(errorIcon);
+   m_errorButton->setIconSize(QSize(100, 100));
+   m_errorButton->setText("Fault Codes");
+   m_mediaButton->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
+   m_mediaButton->setIcon(mediaIcon);
+   m_mediaButton->setIconSize(QSize(90, 90));
+   m_mediaButton->setText("Media");
+   m_parkButton->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
+   m_parkButton->setIcon(parkingIcon);
+   m_parkButton->setIconSize(QSize(125, 125));
+   m_parkButton->setText("Parking Mode");
 
    /* set layout */
    QGridLayout* layout = new QGridLayout(titleBox);

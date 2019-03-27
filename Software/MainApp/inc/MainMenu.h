@@ -12,10 +12,14 @@
 #ifndef MAINMENU_H
 #define MAINMENU_H
 
+#include "types.h"
+
 #include <QWidget>
 #include <QPushButton>
+#include <QToolButton>
 #include <QObject>
-#include "types.h"
+#include <QIcon>
+#include <QPointer>
 
 class MainMenu : public QWidget
 {
@@ -33,10 +37,11 @@ signals:
     void DisplayChange(state_t req_state, QWidget* currentView);
 
 private:
-    QPushButton *m_mediaButton;
-    QPushButton *m_diagButton;
-    QPushButton *m_errorButton;
-    QPushButton *m_parkButton;
+    QPointer<QToolButton> m_mediaButton;
+    QToolButton *m_diagButton;
+    QPointer<QToolButton> m_errorButton;
+    QPointer<QToolButton> m_parkButton;
+    QPointer<QIcon> m_diagIcon;
     void CreateLayout();
 };
 
