@@ -46,6 +46,7 @@ bool MMA8652FCR1::init(int devID, int intPin1, int intPin2)
     
     result = wiringPiI2CWriteReg8(this->fd, MMA8652FCR1_F_SETUP_REG, 0x00); //turn off the FIFO
     result = wiringPiI2CWriteReg8(this->fd, MMA8652FCR1_XYZ_DATA_CFG_REG, 0x02); //set the range to 8G
+    m_accRange = 8;
     result = wiringPiI2CWriteReg8(this->fd, MMA8652FCR1_CTRL_REG1, 0x18); //set data rate to 100Hz
     result = wiringPiI2CWriteReg8(this->fd, MMA8652FCR1_CTRL_REG2, 0x00); //set power mode to auto sleep off
     result = wiringPiI2CWriteReg8(this->fd, MMA8652FCR1_CTRL_REG3, 0x00); //set interrupt to be active high
@@ -104,7 +105,7 @@ void MMA8652FCR1::getData(accValues_t *data)
 
 /*
     Performs the twos complement of a single byte of data
-    and scales to 8G
+    and scales to max range
 */
 double MMA8652FCR1::twosComp(uint8_t MSB)
 {
@@ -121,8 +122,8 @@ double MMA8652FCR1::twosComp(uint8_t MSB)
         twosCompVal = twosCompVal;
     }
         
-    //scale to 8G
-    returnVal = ((twosCompVal & 0xFF) * 8 * sign)/(pow(2,7));
+    //scale to max range
+    returnVal = ((twosCompVal & 0xFF) * m_accRange * sign)/(pow(2,7));
     
     return returnVal;
 }
@@ -130,7 +131,7 @@ double MMA8652FCR1::twosComp(uint8_t MSB)
 
 /*
     Performs the twos complement on 12-bit of data
-    and scales to 8G
+    and scales to max range
 */
 double MMA8652FCR1::twosComp(uint8_t MSB, uint8_t LSB)
 {
@@ -147,8 +148,8 @@ double MMA8652FCR1::twosComp(uint8_t MSB, uint8_t LSB)
         twosCompVal = twosCompVal;
     }
         
-    //scale to 8G
-    returnVal = ((twosCompVal & 0xFFF) * 8 * sign)/(pow(2,11));
+    //scale to max range
+    returnVal = ((twosCompVal & 0xFFF) * m_accRange * sign)/(pow(2,11));
     
     return returnVal;
 }

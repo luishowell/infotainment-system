@@ -128,6 +128,9 @@ class MMA8652FCR1
         //i2c port
         int fd;
 
+        //acceleration range
+        int m_accRange;
+
 };
 
 #endif
