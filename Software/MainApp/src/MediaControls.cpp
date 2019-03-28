@@ -51,10 +51,10 @@ MediaControls::MediaControls(QWidget *parent) : QWidget(parent)
 
     /* setup the layout */
     QPointer<QBoxLayout> layout = new QHBoxLayout;
+    layout->addWidget(m_backButton);
     layout->addWidget(m_playButton);
     layout->addWidget(m_stopButton);
     layout->addWidget(m_fwdButton);
-    layout->addWidget(m_backButton);
     layout->addWidget(m_muteButton);
 
     setLayout(layout);

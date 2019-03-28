@@ -15,6 +15,7 @@
 //#include <QGroupBox>
 //#include <QMetaType>
 #include <string>
+#include <QString>
 
 /**
  * @brief GUI view states
@@ -39,6 +40,19 @@ typedef struct diagMsg {
     std::string requestA;
     std::string requestB;
 } diagMsg_t;
+
+/**
+ * @brief 
+ * 
+ */
+typedef struct audioMetaData
+{
+    QString title;
+    QString artist;
+    QString album;
+    QString genre;
+    QString year;
+} audioMetaData_t;
 
 /**
  * @brief parameters that can be requested from the OBD2 thread
