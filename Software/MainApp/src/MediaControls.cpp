@@ -50,14 +50,18 @@ MediaControls::MediaControls(QWidget *parent) : QWidget(parent)
     connect(m_volumeSlider, SIGNAL(valueChanged(int)), this, SLOT(onVolumeChanged(int)));
 
     /* setup the layout */
-    QPointer<QBoxLayout> layout = new QHBoxLayout;
-    layout->addWidget(m_backButton);
-    layout->addWidget(m_playButton);
-    layout->addWidget(m_stopButton);
-    layout->addWidget(m_fwdButton);
-    layout->addWidget(m_muteButton);
+    QPointer<QBoxLayout> layoutButtons = new QHBoxLayout;
+    layoutButtons->addWidget(m_backButton);
+    layoutButtons->addWidget(m_playButton);
+    layoutButtons->addWidget(m_stopButton);
+    layoutButtons->addWidget(m_fwdButton);
+    layoutButtons->addWidget(m_muteButton);
 
-    setLayout(layout);
+    QPointer<QBoxLayout> vLayout = new QVBoxLayout;
+    vLayout->addLayout(layoutButtons);
+    vLayout->addWidget(m_volumeSlider);
+
+    setLayout(vLayout);
 }
 
 /* public */
@@ -170,4 +174,9 @@ void MediaControls::onStopClicked()
 void MediaControls::onBackClicked()
 {
     emit backRequest();
+}
+
+void MediaControls:: onFwdClicked()
+{
+    emit fwdRequest();
 }

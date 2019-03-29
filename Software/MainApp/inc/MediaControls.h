@@ -56,6 +56,7 @@ private slots:
     void onMuteClicked();
     void onStopClicked();
     void onBackClicked();
+    void onFwdClicked();
 
 private:
     QPointer<QAbstractButton> m_playButton;

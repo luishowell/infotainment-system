@@ -24,11 +24,16 @@
 #include <QFileDialog>
 #include <QStandardPaths>
 #include <QHeaderView>
+#include <QLabel>
 #include <string>
 #include <algorithm>
 
 #include <taglib/tag.h>
 #include <fileref.h>
+#include <frames/attachedpictureframe.h>
+#include <tlist.h>
+#include <id3v2tag.h>
+#include <mpegfile.h>
 
 /**
  * @brief Construct a new Media:: Media object
@@ -84,8 +89,13 @@ void Media::CreateLayout()
       qDebug() << "MEDIA PLAYER: supported roles  " << role;
    }
 
-   m_openButton = new QPushButton("Open");
+   m_openButton = new QPushButton("Load");
+   m_openButton->setFixedSize(75, 50);
    connect(m_openButton, SIGNAL(clicked()), this, SLOT(Open()));
+
+   m_removeButton = new QPushButton("Remove");
+   m_removeButton->setFixedSize(75, 50);
+   connect(m_removeButton, SIGNAL(clicked()), this, SLOT(onRemoveClicked()));
 
    m_playlist = new QMediaPlaylist();
    m_player->setPlaylist(m_playlist);
@@ -102,7 +112,8 @@ void Media::CreateLayout()
    connect(m_controls, SIGNAL(playRequest()), this, SLOT(onPlayClicked()));
    connect(m_controls, SIGNAL(pauseRequest()), m_player, SLOT(pause()));
    connect(m_controls, SIGNAL(stopRequest()), m_player, SLOT(stop()));
-   connect(m_controls, SIGNAL(fwdRequest()), m_playlist, SLOT(next()));
+   //connect(m_controls, SIGNAL(fwdRequest()), m_playlist, SLOT(next()));
+   connect(m_controls, SIGNAL(fwdRequest()), this, SLOT(onFwdClicked()));
    connect(m_controls, SIGNAL(backRequest()), this, SLOT(onBackClicked()));
    connect(m_controls, SIGNAL(volumeRequest(int)), m_player, SLOT(setVolume(int)));
    connect(m_controls, SIGNAL(onMuteRequest(bool)), m_player, SLOT(setMuted()));
@@ -110,6 +121,8 @@ void Media::CreateLayout()
    connect(m_player, SIGNAL(StateChanged(QMediaPlayer::State)), m_controls, SLOT(setState(QMediaPlayer::State)));
    connect(m_player, SIGNAL(volumeRequest(int)), m_controls, SLOT(setVolume(int)));
    connect(m_player, SIGNAL(mutedRequest(bool)), m_controls, SLOT(setMuted(bool)));
+
+   connect(m_playlist, SIGNAL(currentIndexChanged(int)), this, SLOT(songChanged(int)));
 
    if (!m_player->isAvailable()) 
    {
@@ -130,18 +143,35 @@ void Media::CreateLayout()
    m_table->setHorizontalHeaderLabels(headers);
    connect(m_table, SIGNAL(cellPressed(int,int)), this, SLOT(songClicked(int,int)));
    m_tableCount = 0;
+   //m_table->setFixedSize(500, 500);
    
+   m_slider = new QSlider(Qt::Horizontal, this);
+   m_slider->setRange(0, m_player->duration() / 1000);
+   connect(m_player, SIGNAL(durationChanged()), this, SLOT(durationChanged()));
+   connect(m_slider, SIGNAL(positionChanged()), this, SLOT(positionChanged()));
+   connect(m_slider, SIGNAL(valueChanged(int)), this, SLOT(onSeekChanged(int)));
 
    QPointer<QHBoxLayout> hLayout = new QHBoxLayout;
    hLayout->addWidget(m_openButton);
+   hLayout->addWidget(m_removeButton);
    hLayout->addWidget(m_controls);
+   
 
    //mainLayout->addLayout(hLayout);
    //mainLayout->addWidget(m_table);
 
-   boxLayout->addWidget(m_openButton);
-   boxLayout->addWidget(m_controls);
-   boxLayout->addWidget(m_table);
+   //boxLayout->addWidget(m_openButton);
+   //boxLayout->addWidget(m_controls);
+   boxLayout->addLayout(hLayout, 0, 0);
+   boxLayout->addWidget(m_slider, 2, 0);
+   boxLayout->addWidget(m_table, 1, 0);
+
+   /* album artwork */
+   //QPointer<QGroupBox> albumBox = new QGroupBox(titleBox);
+   m_artHandle = new QLabel(titleBox);
+   //m_artHandle->setFixedSize(100, 100);
+   boxLayout->addWidget(m_artHandle, 1, 1);
+   //boxLayout->addWidget(m_albumArt, 1, 1);
 
  
    m_homeButton = new QPushButton("Home");
@@ -160,30 +190,37 @@ void Media::AddToPlaylist(const QList<QUrl> &urls)
       if (IsPlaylist(url))
       {
          m_playlist->load(url);
-         AddToTable(url);
       }
       else
       {
          m_playlist->addMedia(url);
-         AddToTable(url);
-             
+         AddToTable(url);    
+      }
+
+      /* show album art if no other songs loaded */
+      if (m_playlistMetaData.size() == 1) 
+      {
+         m_selectedSong = 0;
+         ShowAlbumArt(m_selectedSong);
       }
       
-}
+   }
+   
   
 }
 
 void Media::AddToTable(QUrl url)
 {
    audioMetaData_t metaData;
-   const char* filePath;
    QByteArray ba;
    
    /* convert file path to const char* */
    ba = url.path().toLocal8Bit();
-   filePath = ba.data();
+   metaData.filePath = ba.data();
 
-   GetMetaData(filePath, &metaData);
+   GetMetaData(&metaData);
+   DurationChanged(metaData.duration);
+   m_playlistMetaData.push_back(metaData);
 
    m_table->setRowCount(m_tableCount + 1);
    m_table->setItem(m_tableCount, 0, new QTableWidgetItem(metaData.title));
@@ -192,36 +229,73 @@ void Media::AddToTable(QUrl url)
    m_table->setItem(m_tableCount, 3, new QTableWidgetItem(metaData.genre));
    m_table->setItem(m_tableCount, 4, new QTableWidgetItem(metaData.year));
    m_tableCount++;
+
+   
 }
 
-void Media::GetMetaData(const char* filePath, audioMetaData_t* metaData)
+void Media::GetMetaData(audioMetaData_t* metaData)
 {
    TagLib::String title;
    TagLib::String artist;
    TagLib::String album;
    TagLib::String genre;
    unsigned int year;
-   TagLib::FileRef f(filePath);
+   TagLib::MPEG::File file(metaData->filePath);
+   TagLib::ID3v2::Tag *tag = file.ID3v2Tag(true);
 
    /* get song title */
-   title = f.tag()->title();
+   title = tag->title();
    metaData->title = QString::fromUtf8(title.toCString());
 
    /* get artist name */
-   artist = f.tag()->artist();
+   artist = tag->artist();
    metaData->artist = QString::fromUtf8(artist.toCString());
 
    /* get album title */
-   album = f.tag()->album();
+   album = tag->album();
    metaData->album = QString::fromUtf8(album.toCString());
 
    /* get genre */
-   genre = f.tag()->genre();
+   genre = tag->genre();
    metaData->genre = QString::fromUtf8(genre.toCString());
 
    /* get year */
-   year = f.tag()->year();
+   year = tag->year();
    metaData->year = QString::number(year);
+
+   /* get album-art */
+   metaData->albumArt = GetAlbumArt(tag);
+
+   /* get duration */
+   metaData->duration = file.audioProperties()->lengthInSeconds();
+}
+
+QImage Media::GetAlbumArt(TagLib::ID3v2::Tag *tag)
+{
+   TagLib::ID3v2::FrameList l = tag->frameList("APIC");
+
+    QImage image;
+
+    if(l.isEmpty()) return image;
+        
+    TagLib::ID3v2::AttachedPictureFrame *f =
+        static_cast<TagLib::ID3v2::AttachedPictureFrame *>(l.front());
+
+    image.loadFromData((const uchar *) f->picture().data(), f->picture().size());
+
+    return image;
+}
+
+void Media::ShowAlbumArt(int index)
+{
+   /* get the meta-data of the currently selected song */
+   audioMetaData_t metaData = m_playlistMetaData[index];
+
+   m_albumArt.convertFromImage(metaData.albumArt);
+   m_albumArt = m_albumArt.scaledToWidth(165);
+   m_artHandle->hide();
+   m_artHandle->setPixmap(m_albumArt);
+   m_artHandle->show();
 }
 
 void Media::Open()
@@ -257,6 +331,7 @@ void Media::songClicked(int row, int cell)
 {
    qDebug() << "MEDIA: song clicked (row " << row << ", cell " << cell << ")";
    m_selectedSong = row;
+   m_songClicked = true;
 
    //GetMetaData(m_player, row);
 }
@@ -266,13 +341,26 @@ void Media::onBackClicked()
    qDebug() << "MEDIA: back button clicked";
    if(m_player->position() <= 5000)
    {
-      m_playlist->previous();
+      if (m_playlist->currentIndex() > 0) m_playlist->previous();
+      //if (m_playlist->currentIndex() >= 0) ShowAlbumArt(m_playlist->currentIndex());
    }
    else
    {
       m_player->setPosition(0);
    }
    
+}
+
+void Media::onFwdClicked()
+{
+   qDebug() << "MEDIA: fwd clicked";
+   if ((m_playlist->currentIndex() + 1) < m_playlistMetaData.size()) m_playlist->next();
+
+   if ((m_playlist->currentIndex() < m_playlistMetaData.size()) && (m_playlist->currentIndex() >= 0))
+   {
+      qDebug() << m_playlist->currentIndex() << " < " << m_playlistMetaData.size();
+      //ShowAlbumArt(m_playlist->currentIndex());
+   }    
 }
 
 void Media::onPlayClicked()
@@ -283,7 +371,46 @@ void Media::onPlayClicked()
    /* load selected song */
    m_player->stop();
    m_playlist->setCurrentIndex(m_selectedSong);
+   ShowAlbumArt(m_selectedSong);
    m_player->play();
 
 
+}
+
+void Media::onRemoveClicked()
+{
+   qDebug() << "MEDIA: remove clicked";
+   if (m_songClicked)
+   {
+      m_playlistMetaData.remove(m_selectedSong);
+      m_table->removeRow(m_selectedSong);
+      m_tableCount--;
+      if (m_tableCount < 0) m_tableCount = 0;
+      m_artHandle->hide();
+   }
+
+}
+
+void Media::onSeekChanged(int secs)
+{
+   m_player->setPosition(secs * 1000);
+   qDebug() << "MEDIA: seek " << secs;
+}
+
+void Media::DurationChanged(int duration)
+{
+   m_duration = duration;
+   m_slider->setMaximum(m_duration);
+}
+
+void Media::positionChanged(qint64 progress)
+{
+   if (!m_slider->isSliderDown()) m_slider->setValue(progress / 1000);
+
+}
+
+void Media::songChanged(int currentSong)
+{
+   qDebug() << "MEDIA: song changed";
+   ShowAlbumArt(currentSong);
 }

@@ -26,6 +26,10 @@
 #include <QAudioProbe>
 #include <QTableWidget>
 #include <QUrl>
+#include <QImage>
+#include <QLabel>
+#include <taglib/tag.h>
+#include <id3v2frame.h>
 
 
 class Media : public QWidget
@@ -41,21 +45,31 @@ public:
 public slots:
     void StateChangeMainMenu();
     void Open();
-    
+    void DurationChanged(int duration);
+
 signals:
     void DisplayChange(state_t req_state, QWidget* currentView);
 
 private slots:
     void onBackClicked();
+    void onFwdClicked();
     void songClicked(int row, int cell);
     void onPlayClicked();
+    void onRemoveClicked();
+    void onSeekChanged(int secs);
+    void positionChanged(qint64 progress);
+    void songChanged(int currentSong);
 
 private:  
     void CreateLayout();
     void AddToTable(QUrl url);
     int m_tableCount;
-    void GetMetaData(const char* filePath, audioMetaData_t* metaData);
-
+    void GetMetaData(audioMetaData_t* metaData);
+    QImage GetAlbumArt(TagLib::ID3v2::Tag *tag);
+    void ShowAlbumArt(int index);
+    
+    QPointer<QLabel> m_artHandle;
+    QVector<audioMetaData_t> m_playlistMetaData;
     QPointer<PlaylistModel> m_playlistModel;
     QPointer<QTableWidget> m_table;
     QPointer<MediaControls> m_controls;
@@ -63,7 +77,12 @@ private:
     QPointer<QMediaPlayer> m_player;
     QPointer<QMediaPlaylist> m_playlist;
     QPointer<QPushButton> m_openButton;
+    QPointer<QPushButton> m_removeButton;
+    QPointer<QSlider> m_slider;
+    QPixmap m_albumArt;
     int m_selectedSong;
+    bool m_songClicked = false;
+    qint64 m_duration = 0;
 
 };
 

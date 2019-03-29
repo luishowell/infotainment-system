@@ -16,6 +16,8 @@
 //#include <QMetaType>
 #include <string>
 #include <QString>
+#include <QImage>
+#include <QPointer>
 
 /**
  * @brief GUI view states
@@ -52,6 +54,9 @@ typedef struct audioMetaData
     QString album;
     QString genre;
     QString year;
+    QImage albumArt;
+    int duration;
+    const char* filePath;
 } audioMetaData_t;
 
 /**

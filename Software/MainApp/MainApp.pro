@@ -39,6 +39,9 @@ LIBS        += -L../lib/taglib/taglib -ltag
 INCLUDEPATH += ../lib/taglib/
 INCLUDEPATH += ../lib/taglib/taglib
 INCLUDEPATH += ../lib/taglib/taglib/toolkit
+INCLUDEPATH += ../lib/taglib/taglib/mpeg
+INCLUDEPATH += ../lib/taglib/taglib/mpeg/id3v2
+
 
 
 
