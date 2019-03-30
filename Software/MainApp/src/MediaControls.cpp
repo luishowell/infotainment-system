@@ -26,8 +26,13 @@ MediaControls::MediaControls(QWidget *parent) : QWidget(parent)
 
     m_playButton = new QToolButton(this);
     m_playButton->setIcon(style()->standardIcon(QStyle::SP_MediaPlay));
-    connect(m_playButton, SIGNAL(clicked()), this, SLOT(onPlayClicked()));        
+    connect(m_playButton, SIGNAL(clicked()), this, SLOT(onPlayClicked())); 
 
+    m_pauseButton = new QToolButton(this);
+    m_pauseButton->setIcon(style()->standardIcon(QStyle::SP_MediaPause)); 
+    m_pauseButton->setEnabled(false);
+    connect(m_pauseButton, SIGNAL(clicked()), this, SLOT(onPauseClicked())); 
+    
     m_stopButton = new QToolButton(this);
     m_stopButton->setIcon(style()->standardIcon(QStyle::SP_MediaStop));
     m_stopButton->setEnabled(false);
@@ -50,14 +55,21 @@ MediaControls::MediaControls(QWidget *parent) : QWidget(parent)
     connect(m_volumeSlider, SIGNAL(valueChanged(int)), this, SLOT(onVolumeChanged(int)));
 
     /* setup the layout */
-    QPointer<QBoxLayout> layout = new QHBoxLayout;
-    layout->addWidget(m_playButton);
-    layout->addWidget(m_stopButton);
-    layout->addWidget(m_fwdButton);
-    layout->addWidget(m_backButton);
-    layout->addWidget(m_muteButton);
+    QPointer<QBoxLayout> layoutButtons = new QHBoxLayout;
+    layoutButtons->addWidget(m_backButton);
+    layoutButtons->addWidget(m_playButton);
+    layoutButtons->addWidget(m_pauseButton);
+    layoutButtons->addWidget(m_stopButton);
+    layoutButtons->addWidget(m_fwdButton);
+    layoutButtons->addWidget(m_muteButton);
 
-    setLayout(layout);
+    QPointer<QBoxLayout> vLayout = new QVBoxLayout;
+    vLayout->addLayout(layoutButtons);
+    vLayout->addWidget(m_volumeSlider);
+
+    setLayout(vLayout);
+
+    
 }
 
 /* public */
@@ -143,16 +155,35 @@ void MediaControls::onPlayClicked()
 {
     qDebug() << "MEDIA CONTROLS: play clicked";
 
+/*
     switch(m_playerState)
     {
         case QMediaPlayer::StoppedState:
         case QMediaPlayer::PausedState:
             emit playRequest();
+            m_playButton->setEnabled(false);
+            m_pauseButton->setEnabled(true);
+        
             break;
         case QMediaPlayer::PlayingState:
             emit pauseRequest();
             break;
     }
+    */
+
+   emit playRequest();
+   //m_playButton->setEnabled(false);
+   m_pauseButton->setEnabled(true);
+   m_stopButton->setEnabled(false);
+}
+
+void MediaControls::onPauseClicked()
+{
+    qDebug() << "MEDIA CONTROLS: pause clicked";
+    emit pauseRequest();
+    m_pauseButton->setEnabled(false);
+    m_playButton->setEnabled(true);
+    m_stopButton->setEnabled(true);
 }
 
 void MediaControls::onMuteClicked()
@@ -164,10 +195,16 @@ void MediaControls::onMuteClicked()
 void MediaControls::onStopClicked()
 {
     qDebug() << "MEDIA CONTROLS: stop clicked";
+    emit stopRequest();
 
 }
 
 void MediaControls::onBackClicked()
 {
     emit backRequest();
+}
+
+void MediaControls:: onFwdClicked()
+{
+    emit fwdRequest();
 }

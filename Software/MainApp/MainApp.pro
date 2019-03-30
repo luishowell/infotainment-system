@@ -3,7 +3,7 @@
 #-----------------------------------#
 TEMPLATE    = app 
 TARGET      = MainApp
-QT          += widgets qml quick quickwidgets multimedia multimediawidgets testlib 
+QT          += widgets qml quick quickwidgets multimedia multimediawidgets testlib  
 
 #-----------------------------------#
 #-------------INCLUDES--------------#
@@ -35,6 +35,15 @@ PRE_TARGETDEPS += ../Sensors/bin/libSENSORS.a
 LIBS        +=  -L../OBD2/bin/ -lOBD2
 LIBS        +=  -L../Sensors/bin/ -lSENSORS
 #LIBS += -L/usr/local/lib -lwiringPi
+LIBS        += -L../lib/taglib/taglib -ltag
+INCLUDEPATH += ../lib/taglib/
+INCLUDEPATH += ../lib/taglib/taglib
+INCLUDEPATH += ../lib/taglib/taglib/toolkit
+INCLUDEPATH += ../lib/taglib/taglib/mpeg
+INCLUDEPATH += ../lib/taglib/taglib/mpeg/id3v2
+
+
+
 
 #-----------------------------------#
 #--------------OUTPUTS--------------#
@@ -61,6 +70,7 @@ SOURCES     += src/Media.cpp
 SOURCES     += src/MediaControls.cpp
 SOURCES     += src/Mutex.cpp
 SOURCES     += src/Parking.cpp
+SOURCES     += src/PlaylistModel.cpp
 SOURCES     += src/SensorThread.cpp
 SOURCES     += src/SensorWorker.cpp
 SOURCES     += src/StateManager.cpp

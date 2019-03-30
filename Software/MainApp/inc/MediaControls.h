@@ -48,6 +48,7 @@ signals:
     void muteRequest(bool muted);
     void playRequest();
     void pauseRequest();
+    void stopRequest();
     void fwdRequest();
     void backRequest();
 
@@ -56,9 +57,12 @@ private slots:
     void onMuteClicked();
     void onStopClicked();
     void onBackClicked();
+    void onFwdClicked();
+    void onPauseClicked();
 
 private:
     QPointer<QAbstractButton> m_playButton;
+    QPointer<QAbstractButton> m_pauseButton;
     QPointer<QAbstractButton> m_stopButton;
     QPointer<QAbstractButton> m_fwdButton;
     QPointer<QAbstractButton> m_backButton;

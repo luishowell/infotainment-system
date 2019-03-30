@@ -5,10 +5,10 @@
 echo GENERATING MAKEFILES...
 qmake
 #cd ./GUI && qmake 
-cd ./OBD2 && qmake
-cd ../Sensors && qmake
-cd ../Tests && qmake
-cd ../MainApp && qmake
+cd ./OBD2 && qmake -d
+cd ../Sensors && qmake -d
+cd ../Tests && qmake -d
+cd ../MainApp && qmake -d
 cd .. 
 
 echo BUILDING...
