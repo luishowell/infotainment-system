@@ -28,6 +28,8 @@
 #include <QUrl>
 #include <QImage>
 #include <QLabel>
+#include <QTimer>
+
 #include <taglib/tag.h>
 #include <id3v2frame.h>
 
@@ -59,6 +61,7 @@ private slots:
     void onSeekChanged(int secs);
     void positionChanged(qint64 progress);
     void songChanged(int currentSong);
+    void timeout();
 
 private:  
     void CreateLayout();
@@ -68,7 +71,9 @@ private:
     QImage GetAlbumArt(TagLib::ID3v2::Tag *tag);
     void ShowAlbumArt(int index);
     
+    
     QPointer<QLabel> m_artHandle;
+    QPointer<QLabel> m_timeLabel;
     QVector<audioMetaData_t> m_playlistMetaData;
     QPointer<PlaylistModel> m_playlistModel;
     QPointer<QTableWidget> m_table;
@@ -79,8 +84,10 @@ private:
     QPointer<QPushButton> m_openButton;
     QPointer<QPushButton> m_removeButton;
     QPointer<QSlider> m_slider;
+    QPointer<QTimer> m_tableTimer;
+
     QPixmap m_albumArt;
-    int m_selectedSong;
+    int m_selectedSong = 0;
     bool m_songClicked = false;
     qint64 m_duration = 0;
 

@@ -7,7 +7,7 @@ This can be done using the following commands:
 
   cmake -DCMAKE_INSTALL_PREFIX=/usr/local -DCMAKE_BUILD_TYPE=Release .
   make
-  sudo make install
+  sudo make install 
 
 In order to build the included examples, use the BUILD_EXAMPLES option:
 

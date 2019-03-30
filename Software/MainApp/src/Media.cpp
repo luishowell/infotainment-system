@@ -25,6 +25,7 @@
 #include <QStandardPaths>
 #include <QHeaderView>
 #include <QLabel>
+#include <QTime>
 #include <string>
 #include <algorithm>
 
@@ -48,6 +49,9 @@ Media::Media(QWidget *parent) : QWidget(parent)
     CreateLayout();    
 
     connect(m_homeButton, SIGNAL (clicked()), this, SLOT (StateChangeMainMenu()));
+
+    m_tableTimer = new QTimer(this);
+    connect(m_tableTimer, SIGNAL(timeout()), this, SLOT(timeout()));
     
  }
 
@@ -90,11 +94,11 @@ void Media::CreateLayout()
    }
 
    m_openButton = new QPushButton("Load");
-   m_openButton->setFixedSize(75, 50);
+   m_openButton->setFixedSize(125, 50);
    connect(m_openButton, SIGNAL(clicked()), this, SLOT(Open()));
 
    m_removeButton = new QPushButton("Remove");
-   m_removeButton->setFixedSize(75, 50);
+   m_removeButton->setFixedSize(125, 50);
    connect(m_removeButton, SIGNAL(clicked()), this, SLOT(onRemoveClicked()));
 
    m_playlist = new QMediaPlaylist();
@@ -108,11 +112,9 @@ void Media::CreateLayout()
    m_controls->onVolumeChanged(m_player->volume());
    m_controls->onMuteRequest(m_controls->isMuted());
 
-   //connect(m_controls, SIGNAL(playRequest()), m_player, SLOT(play()));
    connect(m_controls, SIGNAL(playRequest()), this, SLOT(onPlayClicked()));
    connect(m_controls, SIGNAL(pauseRequest()), m_player, SLOT(pause()));
    connect(m_controls, SIGNAL(stopRequest()), m_player, SLOT(stop()));
-   //connect(m_controls, SIGNAL(fwdRequest()), m_playlist, SLOT(next()));
    connect(m_controls, SIGNAL(fwdRequest()), this, SLOT(onFwdClicked()));
    connect(m_controls, SIGNAL(backRequest()), this, SLOT(onBackClicked()));
    connect(m_controls, SIGNAL(volumeRequest(int)), m_player, SLOT(setVolume(int)));
@@ -121,6 +123,7 @@ void Media::CreateLayout()
    connect(m_player, SIGNAL(StateChanged(QMediaPlayer::State)), m_controls, SLOT(setState(QMediaPlayer::State)));
    connect(m_player, SIGNAL(volumeRequest(int)), m_controls, SLOT(setVolume(int)));
    connect(m_player, SIGNAL(mutedRequest(bool)), m_controls, SLOT(setMuted(bool)));
+   connect(m_player, SIGNAL(positionChanged(qint64)), this, SLOT(positionChanged(qint64)));
 
    connect(m_playlist, SIGNAL(currentIndexChanged(int)), this, SLOT(songChanged(int)));
 
@@ -144,13 +147,18 @@ void Media::CreateLayout()
    connect(m_table, SIGNAL(cellPressed(int,int)), this, SLOT(songClicked(int,int)));
    m_tableCount = 0;
    //m_table->setFixedSize(500, 500);
+   m_songClicked = false;
    
    m_slider = new QSlider(Qt::Horizontal, this);
    m_slider->setRange(0, m_player->duration() / 1000);
    connect(m_player, SIGNAL(durationChanged()), this, SLOT(durationChanged()));
    connect(m_slider, SIGNAL(positionChanged()), this, SLOT(positionChanged()));
-   connect(m_slider, SIGNAL(valueChanged(int)), this, SLOT(onSeekChanged(int)));
+   //connect(m_slider, SIGNAL(valueChanged(int)), this, SLOT(onSeekChanged(int)));
+   connect(m_slider, SIGNAL(sliderMoved(int)), this, SLOT(onSeekChanged(int)));
+   m_slider->setTracking(false);
 
+   m_timeLabel = new QLabel(this);
+   
    QPointer<QHBoxLayout> hLayout = new QHBoxLayout;
    hLayout->addWidget(m_openButton);
    hLayout->addWidget(m_removeButton);
@@ -165,6 +173,8 @@ void Media::CreateLayout()
    boxLayout->addLayout(hLayout, 0, 0);
    boxLayout->addWidget(m_slider, 2, 0);
    boxLayout->addWidget(m_table, 1, 0);
+   boxLayout->addWidget(m_timeLabel, 2, 1);
+   
 
    /* album artwork */
    //QPointer<QGroupBox> albumBox = new QGroupBox(titleBox);
@@ -219,7 +229,7 @@ void Media::AddToTable(QUrl url)
    metaData.filePath = ba.data();
 
    GetMetaData(&metaData);
-   DurationChanged(metaData.duration);
+   //DurationChanged(metaData.duration);
    m_playlistMetaData.push_back(metaData);
 
    m_table->setRowCount(m_tableCount + 1);
@@ -333,6 +343,8 @@ void Media::songClicked(int row, int cell)
    m_selectedSong = row;
    m_songClicked = true;
 
+   m_tableTimer->start(5000);
+
    //GetMetaData(m_player, row);
 }
 
@@ -341,11 +353,19 @@ void Media::onBackClicked()
    qDebug() << "MEDIA: back button clicked";
    if(m_player->position() <= 5000)
    {
-      if (m_playlist->currentIndex() > 0) m_playlist->previous();
-      //if (m_playlist->currentIndex() >= 0) ShowAlbumArt(m_playlist->currentIndex());
+      if (m_playlist->currentIndex() > 0) 
+      {
+         m_playlist->previous();
+      }
+      else
+      {
+         m_player->setPosition(0);
+      }
+      
    }
    else
    {
+
       m_player->setPosition(0);
    }
    
@@ -368,21 +388,28 @@ void Media::onPlayClicked()
    qDebug() << "MEDIA: play clicked";
    //qDebug() << m_playlist->media(0).canonicalUrl().fileName();
 
-   /* load selected song */
-   m_player->stop();
-   m_playlist->setCurrentIndex(m_selectedSong);
-   ShowAlbumArt(m_selectedSong);
-   m_player->play();
-
+   if(m_selectedSong != m_playlist->currentIndex())
+   {
+      /* load selected song */
+      m_player->stop();
+      m_playlist->setCurrentIndex(m_selectedSong);
+      ShowAlbumArt(m_selectedSong);
+      m_player->play();
+   }
+   else
+   {
+      m_player->play();
+   }
 
 }
 
 void Media::onRemoveClicked()
 {
    qDebug() << "MEDIA: remove clicked";
-   if (m_songClicked)
+   if (m_songClicked && (m_playlistMetaData.size() >= 0))
    {
       m_playlistMetaData.remove(m_selectedSong);
+      m_playlist->removeMedia(m_selectedSong);
       m_table->removeRow(m_selectedSong);
       m_tableCount--;
       if (m_tableCount < 0) m_tableCount = 0;
@@ -407,10 +434,34 @@ void Media::positionChanged(qint64 progress)
 {
    if (!m_slider->isSliderDown()) m_slider->setValue(progress / 1000);
 
+   QString tStr;
+   int seconds = progress / 1000;
+   if (seconds || m_duration) 
+   {
+      QTime currentTime((seconds / 3600) % 60, (seconds / 60) % 60,
+         seconds % 60, (seconds * 1000) % 1000);
+      QTime totalTime((m_duration / 3600) % 60, (m_duration / 60) % 60,
+         m_duration % 60, (m_duration * 1000) % 1000);
+      QString format = "mm:ss";
+      if (m_duration > 3600) format = "hh:mm:ss";
+      tStr = currentTime.toString(format) + " / " + totalTime.toString(format);
+   }
+    m_timeLabel->setText(tStr);
+
 }
 
 void Media::songChanged(int currentSong)
 {
    qDebug() << "MEDIA: song changed";
    ShowAlbumArt(currentSong);
+   m_table->selectRow(currentSong);
+   DurationChanged(m_playlistMetaData[currentSong].duration);
+
+}
+
+void Media::timeout()
+{
+   m_selectedSong = m_playlist->currentIndex();
+   m_table->selectRow(m_selectedSong);
+   
 }
