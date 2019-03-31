@@ -48,6 +48,8 @@ public slots:
     void StateChangeMainMenu();
     void Open();
     void DurationChanged(int duration);
+    void SetMute(bool muted);
+    void SetVolume(int vol);
 
 signals:
     void DisplayChange(state_t req_state, QWidget* currentView);
@@ -70,6 +72,7 @@ private:
     void GetMetaData(audioMetaData_t* metaData);
     QImage GetAlbumArt(TagLib::ID3v2::Tag *tag);
     void ShowAlbumArt(int index);
+    void SelectRow();
     
     
     QPointer<QLabel> m_artHandle;

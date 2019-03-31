@@ -52,6 +52,8 @@ Media::Media(QWidget *parent) : QWidget(parent)
 
     m_tableTimer = new QTimer(this);
     connect(m_tableTimer, SIGNAL(timeout()), this, SLOT(timeout()));
+
+    m_player->setVolume(0);
     
  }
 
@@ -117,12 +119,13 @@ void Media::CreateLayout()
    connect(m_controls, SIGNAL(stopRequest()), m_player, SLOT(stop()));
    connect(m_controls, SIGNAL(fwdRequest()), this, SLOT(onFwdClicked()));
    connect(m_controls, SIGNAL(backRequest()), this, SLOT(onBackClicked()));
-   connect(m_controls, SIGNAL(volumeRequest(int)), m_player, SLOT(setVolume(int)));
-   connect(m_controls, SIGNAL(onMuteRequest(bool)), m_player, SLOT(setMuted()));
+   //connect(m_controls, SIGNAL(volumeRequest(int)), m_player, SLOT(setVolume(int)));
+   connect(m_controls, SIGNAL(volumeRequest(int)), this, SLOT(SetVolume(int)));
+   connect(m_controls, SIGNAL(muteRequest(bool)), m_player, SLOT(setMuted(bool)));
 
    connect(m_player, SIGNAL(StateChanged(QMediaPlayer::State)), m_controls, SLOT(setState(QMediaPlayer::State)));
    connect(m_player, SIGNAL(volumeRequest(int)), m_controls, SLOT(setVolume(int)));
-   connect(m_player, SIGNAL(mutedRequest(bool)), m_controls, SLOT(setMuted(bool)));
+   connect(m_player, SIGNAL(mutedChanged(bool)), m_controls, SLOT(onMuteRequest(bool)));
    connect(m_player, SIGNAL(positionChanged(qint64)), this, SLOT(positionChanged(qint64)));
 
    connect(m_playlist, SIGNAL(currentIndexChanged(int)), this, SLOT(songChanged(int)));
@@ -145,6 +148,7 @@ void Media::CreateLayout()
    headers << tr("Title") << tr("Artist") << tr("Album") << tr("Genre") << tr("Year");
    m_table->setHorizontalHeaderLabels(headers);
    connect(m_table, SIGNAL(cellPressed(int,int)), this, SLOT(songClicked(int,int)));
+   //connect(m_table, SIGNAL(cellChanged(int,int)), this, SLOT(songClicked(int,int)));
    m_tableCount = 0;
    //m_table->setFixedSize(500, 500);
    m_songClicked = false;
@@ -192,6 +196,11 @@ void Media::CreateLayout()
    vLayout->addWidget(m_homeButton, Qt::AlignBottom);
 }
 
+void Media::SetMute(bool muted)
+{
+    m_player->setMuted(m_player->isMuted());
+}
+
 void Media::AddToPlaylist(const QList<QUrl> &urls)
 {
    
@@ -219,8 +228,16 @@ void Media::AddToPlaylist(const QList<QUrl> &urls)
   
 }
 
+void Media::SetVolume(int vol)
+{
+   m_player->setMuted(false);
+   m_controls->onMuteRequest(false);
+   m_player->setVolume(vol);
+}
+
 void Media::AddToTable(QUrl url)
 {
+   qDebug() << "ADD TO TABLE";
    audioMetaData_t metaData;
    QByteArray ba;
    
@@ -385,10 +402,10 @@ void Media::onFwdClicked()
 
 void Media::onPlayClicked()
 {
-   qDebug() << "MEDIA: play clicked";
+   qDebug() << "MEDIA: play clicked" << m_selectedSong << m_tableCount << m_playlist->currentIndex();
    //qDebug() << m_playlist->media(0).canonicalUrl().fileName();
 
-   if(m_selectedSong != m_playlist->currentIndex())
+   if((m_selectedSong == m_playlist->currentIndex()) && (m_selectedSong != -1))
    {
       /* load selected song */
       m_player->stop();
@@ -396,8 +413,11 @@ void Media::onPlayClicked()
       ShowAlbumArt(m_selectedSong);
       m_player->play();
    }
-   else
+   else if (m_tableCount > 0)
    {
+      m_player->stop();
+      m_playlist->setCurrentIndex(m_selectedSong);
+      ShowAlbumArt(m_selectedSong);
       m_player->play();
    }
 
@@ -405,11 +425,26 @@ void Media::onPlayClicked()
 
 void Media::onRemoveClicked()
 {
-   qDebug() << "MEDIA: remove clicked";
+   qDebug() << "MEDIA: remove clicked ";
+   qDebug() << "MEDIA: index (" << m_playlist->currentIndex() << ") m_selectedSong (" << m_selectedSong;
+   
    if (m_songClicked && (m_playlistMetaData.size() >= 0))
    {
       m_playlistMetaData.remove(m_selectedSong);
-      m_playlist->removeMedia(m_selectedSong);
+      if ( m_selectedSong > m_playlist->currentIndex() ) 
+      {
+         m_playlist->removeMedia(m_selectedSong);
+      }
+      else if ( m_playlist->currentIndex() == m_selectedSong )
+      {
+         m_player->stop();
+         m_playlist->removeMedia(m_selectedSong);
+      }
+      else if ( (m_playlist->currentIndex() == -1) && (m_selectedSong == 0) )
+      {
+         m_player->stop();
+         m_playlist->removeMedia(m_selectedSong);
+      }
       m_table->removeRow(m_selectedSong);
       m_tableCount--;
       if (m_tableCount < 0) m_tableCount = 0;
@@ -452,16 +487,26 @@ void Media::positionChanged(qint64 progress)
 
 void Media::songChanged(int currentSong)
 {
-   qDebug() << "MEDIA: song changed";
-   ShowAlbumArt(currentSong);
-   m_table->selectRow(currentSong);
-   DurationChanged(m_playlistMetaData[currentSong].duration);
+   qDebug() << "MEDIA: song changed" << m_playlist->currentIndex() << m_playlist->mediaCount();
+   if (!m_player->isAudioAvailable());
+   if (m_playlist->currentIndex() != -1)
+   {
+      ShowAlbumArt(currentSong);
+      SelectRow();
+      DurationChanged(m_playlistMetaData[currentSong].duration);
+      //m_table->removeRow(currentSong - 1);
+   }
+  
 
 }
 
 void Media::timeout()
 {
+   SelectRow();
+}
+
+void Media::SelectRow()
+{
    m_selectedSong = m_playlist->currentIndex();
    m_table->selectRow(m_selectedSong);
-   
 }

@@ -24,30 +24,38 @@ MediaControls::MediaControls(QWidget *parent) : QWidget(parent)
 {
     qDebug() << "MEDIA CONTROLS: creating...";
 
+    QSize btnSize(50, 50);
+
     m_playButton = new QToolButton(this);
     m_playButton->setIcon(style()->standardIcon(QStyle::SP_MediaPlay));
+    m_playButton->setFixedSize(btnSize);
     connect(m_playButton, SIGNAL(clicked()), this, SLOT(onPlayClicked())); 
 
     m_pauseButton = new QToolButton(this);
     m_pauseButton->setIcon(style()->standardIcon(QStyle::SP_MediaPause)); 
+    m_pauseButton->setFixedSize(btnSize);
     m_pauseButton->setEnabled(false);
     connect(m_pauseButton, SIGNAL(clicked()), this, SLOT(onPauseClicked())); 
     
     m_stopButton = new QToolButton(this);
     m_stopButton->setIcon(style()->standardIcon(QStyle::SP_MediaStop));
+    m_stopButton->setFixedSize(btnSize);
     m_stopButton->setEnabled(false);
     connect(m_stopButton, SIGNAL(clicked()), this, SLOT(onStopClicked()));        
 
     m_fwdButton = new QToolButton(this);
     m_fwdButton->setIcon(style()->standardIcon(QStyle::SP_MediaSkipForward));
+    m_fwdButton->setFixedSize(btnSize);
     connect(m_fwdButton, SIGNAL(clicked()), this, SLOT(onFwdClicked()));    
 
     m_backButton = new QToolButton(this);
     m_backButton->setIcon(style()->standardIcon(QStyle::SP_MediaSkipBackward));
+    m_backButton->setFixedSize(btnSize);
     connect(m_backButton, SIGNAL(clicked()), this, SLOT(onBackClicked()));    
 
     m_muteButton = new QToolButton(this);
     m_muteButton->setIcon(style()->standardIcon(QStyle::SP_MediaVolume));
+    m_muteButton->setFixedSize(btnSize);
     connect(m_muteButton, SIGNAL(clicked()), this, SLOT(onMuteClicked()));
 
     m_volumeSlider = new QSlider(Qt::Horizontal, this);
@@ -73,6 +81,8 @@ MediaControls::MediaControls(QWidget *parent) : QWidget(parent)
 }
 
 /* public */
+
+
 
 QMediaPlayer::State MediaControls::state() const
 {
@@ -123,6 +133,8 @@ bool MediaControls::isMuted() const
 }
 
 /* PUBLIC SLOTS */
+
+
 void MediaControls::onVolumeChanged(int vol)
 {
     qDebug() << "MEDIA CONTROLS: volume = " << vol;
@@ -133,6 +145,7 @@ void MediaControls::onVolumeChanged(int vol)
 
 void MediaControls::onMuteRequest(bool muted)
 {
+    //if ((muted == false) && (m_isMuted == true)) 
     if (muted != m_isMuted) 
     {
         m_isMuted = muted;
@@ -155,24 +168,7 @@ void MediaControls::onPlayClicked()
 {
     qDebug() << "MEDIA CONTROLS: play clicked";
 
-/*
-    switch(m_playerState)
-    {
-        case QMediaPlayer::StoppedState:
-        case QMediaPlayer::PausedState:
-            emit playRequest();
-            m_playButton->setEnabled(false);
-            m_pauseButton->setEnabled(true);
-        
-            break;
-        case QMediaPlayer::PlayingState:
-            emit pauseRequest();
-            break;
-    }
-    */
-
    emit playRequest();
-   //m_playButton->setEnabled(false);
    m_pauseButton->setEnabled(true);
    m_stopButton->setEnabled(false);
 }
