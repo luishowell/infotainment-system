@@ -58,8 +58,20 @@ class ultrasonic_sensor
          */
         bool setTimeout(double maxDistance);
 
+
+        /**
+         * @brief Calculates the distance for a given length of pulse
+         * 
+         * @param pulseLen The length of the echo pulse
+         * @return Double indicating the measured distance
+         */
+        double calculateDistance(double pulseLen);
+
         //timeout length
         double timeoutLen;
+
+        //speed of sound
+        double speedOfSound = 340;
 
     private:
 

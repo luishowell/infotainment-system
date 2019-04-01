@@ -94,7 +94,7 @@ bool ultrasonic_sensor::GetDistance(double *distance)
 
      //calculate the distance and return
      time_diff = difftime(end_time, start_time);
-     *distance = (time_diff * 340)/2000000;                //d = v*t where v is the speed of sound at 340 m/s, div by two for there and back
+     *distance = this->calculateDistance(time_diff)/; //calculate the distance
      
      return true;
 #endif
@@ -111,13 +111,24 @@ bool ultrasonic_sensor::GetDistance(double *distance)
           return false;
       }else{
           double d = maxDistance * 2; //double the distance for there and back
-          double v = 340; //speed of sound
-          this->timeoutLen = d/v; //d=vt
+          this->timeoutLen = d/this->speedOfSound; //d=vt
           this->timeoutLen *= 1000000; //convert to microseconds
           this->timeoutLen = round(this->timeoutLen); //round it
 
-          cout << "timeout length is: " << this->timeoutLen << endl;
-
           return true;
+      }
+ }
+
+ /*Function that calculates the distance for a given pulse length*/
+ double ultrasonic_sensor::calculateDistance(double pulseLen)
+ {
+      //check the pulse length is valid
+      if(pulseLen < 0){
+          return -999;
+      }else{
+          double returnVal = pulseLen * this->speedOfSound; //d=vt
+          returnVal /= 2;                    //account for travel to and from
+          returnVal /= 1000000;              //convert to metres
+          return returnVal;
       }
  }

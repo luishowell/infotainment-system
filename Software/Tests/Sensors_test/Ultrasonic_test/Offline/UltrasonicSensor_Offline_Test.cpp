@@ -27,6 +27,7 @@ private slots:
     void init_Test();
     void GetDistance_Test();
     void setTimeout_Test();
+    void calculateDistance_Test();
     
     /* hooks */
     void initTestCase();
@@ -132,6 +133,24 @@ void UltrasonicSensorOfflineTest::setTimeout_Test()
     //check it works correctly for a valid value
     QVERIFY2(m_sensor->setTimeout(1)==true, "Function misses valid value");
     QVERIFY2(m_sensor->timeoutLen == 5882, "Timeout length is incorrect");
+}
+
+/**
+ * @brief Tests the calculateDistance function
+ * 
+ */
+void UltrasonicSensorOfflineTest::calculateDistance_Test()
+{
+    qDebug() << "Testing the calculateDistance function";
+
+    //test the calculate distance function
+    QVERIFY2(m_sensor->calculateDistance(5882) == 0.99994, 
+    "Distance calculated incorrectly");
+
+    //test with an invalid timeout value
+    QVERIFY2(m_sensor->calculateDistance(-1) == -999, 
+    "Invalid pulse length not recognised");
+
 }
 
 /* run tests */
