@@ -1,9 +1,9 @@
 /**
- * @file UltrasonicSensor_test.cpp
+ * @file UltrasonicSensor_Online_Test.cpp
  * @author Jamie Brown/Joe Walker
- * @brief Contains unit tests for the ultrasonic_sensor class
- * @version 0.1
- * @date 2019-02-17
+ * @brief Contains online unit tests for the ultrasonic_sensor class
+ * @version 0.2
+ * @date 2019-04-01
  * 
  * @copyright Copyright (c) 2019
  * 

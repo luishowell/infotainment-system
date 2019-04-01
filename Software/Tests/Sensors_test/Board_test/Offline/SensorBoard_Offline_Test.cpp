@@ -1,9 +1,9 @@
 /**
- * @file SensorBoard_test.cpp
+ * @file SensorBoard_Offline_Test.cpp
  * @author Jamie Brown/Joe Walker
- * @brief 
- * @version 0.1
- * @date 2019-02-17
+ * @brief Offline tests for the sensor board class
+ * @version 0.2
+ * @date 2019-04-01
  * 
  * @copyright Copyright (c) 2019
  * 

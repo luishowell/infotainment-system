@@ -1,9 +1,9 @@
 /**
- * @file Multiplexor_test.cpp
+ * @file Multiplexor_Online_Test.cpp
  * @author Jamie Brown/Joe Walker
- * @brief 
- * @version 0.1
- * @date 2019-02-17
+ * @brief Online tests for the multiplexor class
+ * @version 0.2
+ * @date 2019-04-01
  * 
  * @copyright Copyright (c) 2019
  * 

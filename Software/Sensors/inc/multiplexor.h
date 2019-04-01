@@ -2,8 +2,8 @@
  * @file multiplexor.h
  * @author Joe Walker
  * @brief The class multiplexor provides methods for controlling the operation of a multiplexor from the raspberry pi.
- * @version 0.1
- * @date 2019-02-18
+ * @version 0.2
+ * @date 2019-04-01
  * 
  * @copyright Copyright (c) 2019
  * 

@@ -2,8 +2,8 @@
  * @file sensor_board.h
  * @author Joe Walker
  * @brief The class sensor_board provides methods for controlling the sensor board, containing the multiplexor and ultrasonic sensors.
- * @version 0.1
- * @date 2019-02-18
+ * @version 0.2
+ * @date 2019-04-01
  * 
  * @copyright Copyright (c) 2019
  * 
