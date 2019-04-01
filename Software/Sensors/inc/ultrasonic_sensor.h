@@ -16,6 +16,7 @@
 
 #include <stdio.h>
 #include <time.h>
+#include <math.h> 
 
 #ifdef RPI
 #include <wiringPi.h>
@@ -35,8 +36,9 @@ class ultrasonic_sensor
          * 
          * @param trigger_pin The wiringPi pin number of the pin connected to the trigger of the ultransonic sensor.
          * @param echo_pin The wiringPi pin number of the pin connected to the trigger of the ultrasonic sensor.
+         * @return bool Flag to report if on RPI or not
          */
-        void init(int trigger_pin, int echo_pin);
+        bool init(int trigger_pin, int echo_pin);
 
 
         /**
@@ -46,6 +48,18 @@ class ultrasonic_sensor
          * @return bool Flag that reports if the command has been successful or not.
          */
         bool GetDistance(double *distance);
+
+
+        /**
+         * @brief Sets the timeout length for a given max distance
+         * 
+         * @param maxDistance The maximum distance to be sensed
+         * @return Bool indicating if the given distance is valid
+         */
+        bool setTimeout(double maxDistance);
+
+        //timeout length
+        double timeoutLen;
 
     private:
 
@@ -60,6 +74,8 @@ class ultrasonic_sensor
         //calculated variables
         double time_diff;
         double m_distance;
+
+        
 
 
 };

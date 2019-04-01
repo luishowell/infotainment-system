@@ -5,13 +5,16 @@
 using namespace std;
 
 //constructor
-ultrasonic_sensor::ultrasonic_sensor(){}
+ultrasonic_sensor::ultrasonic_sensor(){
+     //default the timeout to 2m
+      this->setTimeout(2);
+}
 
 
 /*
     Function used to setup the pins on the pi that connect to the trigger and echo pins on the sensor
 */
-void ultrasonic_sensor::init(int trigger_pin, int echo_pin)
+bool ultrasonic_sensor::init(int trigger_pin, int echo_pin)
  {
 #ifdef RPI
 
@@ -26,7 +29,12 @@ void ultrasonic_sensor::init(int trigger_pin, int echo_pin)
      //write a 0 to trigger pin
      digitalWrite (trigger_pin, LOW);
     
+     //return true to indicate it is on a RPI
+     return true;
 #endif
+
+     //if not on a RPI, return false
+     return false;
  }
 
 /*
@@ -41,9 +49,9 @@ bool ultrasonic_sensor::GetDistance(double *distance)
      delayMicroseconds(10);
      digitalWrite(m_trigger_pin, LOW);
 
-     //timeout of 12 ms on both rising and falling edge of echo pin
-     double timeout_len = 12000;
-     double time_left = timeout_len;
+     //timeout on both rising and falling edge of echo pin
+     //timeoutLen = 12000;
+     double time_left = timeoutLen;
 
      //time at which the while loop starts
      time_t while_start = micros();
@@ -53,9 +61,9 @@ bool ultrasonic_sensor::GetDistance(double *distance)
      //look for the rising edge of the echo pulse or timeout
      while((digitalRead(m_echo_pin) == LOW) && (time_left > 0))
      {
-	    while_end = micros();
-        time_taken = while_end - while_start;
-        time_left = timeout_len - time_taken;
+	     while_end = micros();
+          time_taken = while_end - while_start;
+          time_left = timeoutLen - time_taken;
      }
 
 
@@ -69,10 +77,8 @@ bool ultrasonic_sensor::GetDistance(double *distance)
         start_time = micros();
      }
 
-
-
      //reset timeout values
-     time_left = timeout_len;
+     time_left = timeoutLen;
      while_start = micros();
 
      //look for the falling edge of the echo pulse or timeout
@@ -80,7 +86,7 @@ bool ultrasonic_sensor::GetDistance(double *distance)
      {
         while_end = micros();
         time_taken = while_end - while_start;
-        time_left = timeout_len - time_taken;
+        time_left = timeoutLen - time_taken;
      }
      //record end time
      end_time = micros();
@@ -90,6 +96,28 @@ bool ultrasonic_sensor::GetDistance(double *distance)
      time_diff = difftime(end_time, start_time);
      *distance = (time_diff * 340)/2000000;                //d = v*t where v is the speed of sound at 340 m/s, div by two for there and back
      
+     return true;
 #endif
-     return true; 
+     return false; 
+ }
+
+/* Function to set the timeout length for a given maximum distance */
+ bool ultrasonic_sensor::setTimeout(double maxDistance)
+ {
+      //check the given distance is valid
+      if((maxDistance < 0)||(maxDistance > 5)){
+          cout << "invalid maximum distance" << endl
+          << "valid values are 0-5m" << endl;
+          return false;
+      }else{
+          double d = maxDistance * 2; //double the distance for there and back
+          double v = 340; //speed of sound
+          this->timeoutLen = d/v; //d=vt
+          this->timeoutLen *= 1000000; //convert to microseconds
+          this->timeoutLen = round(this->timeoutLen); //round it
+
+          cout << "timeout length is: " << this->timeoutLen << endl;
+
+          return true;
+      }
  }
