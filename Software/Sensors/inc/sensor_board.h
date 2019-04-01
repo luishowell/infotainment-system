@@ -2,8 +2,8 @@
  * @file sensor_board.h
  * @author Joe Walker
  * @brief The class sensor_board provides methods for controlling the sensor board, containing the multiplexor and ultrasonic sensors.
- * @version 0.1
- * @date 2019-02-18
+ * @version 0.2
+ * @date 2019-04-01
  * 
  * @copyright Copyright (c) 2019
  * 
@@ -15,9 +15,11 @@
 #include "config.h"
 
 #include <stdio.h>
+#include <time.h>
 #include "ultrasonic_sensor.h"
 #include "multiplexor.h"
 #include "types.h"
+
 
 #ifdef RPI
 #include <wiringPi.h>
@@ -37,8 +39,9 @@ class sensor_board
          * @brief Initialises the sensor board by initialising the multiplexor and ultrasonic sensor classes.
          * 
          * @param pins Struct of type sensorPins_t that contains all of the pin connections from the pi to the board.
+         * @return Bool to indicate if init was successful
          */
-        void init(sensorPins_t pins);
+        bool init(sensorPins_t pins);
 
         /**
          * @brief Reads the distance reported by a specified ultrasonic sensor.

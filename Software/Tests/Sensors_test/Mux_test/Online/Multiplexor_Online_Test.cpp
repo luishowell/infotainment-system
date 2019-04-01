@@ -1,9 +1,9 @@
 /**
- * @file Multiplexor_test.cpp
+ * @file Multiplexor_Online_Test.cpp
  * @author Jamie Brown/Joe Walker
- * @brief 
- * @version 0.1
- * @date 2019-02-17
+ * @brief Online tests for the multiplexor class
+ * @version 0.2
+ * @date 2019-04-01
  * 
  * @copyright Copyright (c) 2019
  * 
@@ -16,7 +16,7 @@
 
 using namespace std;
 
-class MultiplexorTest: public QObject
+class MultiplexorOnlineTest: public QObject
 {
     Q_OBJECT
 private slots:
@@ -42,36 +42,38 @@ private:
  * @brief 
  * 
  */
-void MultiplexorTest::initTestCase()
+void MultiplexorOnlineTest::initTestCase()
 {
-
+    qDebug() << "initTestCase";
 }
 
 /**
  * @brief 
  * 
  */
-void MultiplexorTest::cleanupTestCase()
+void MultiplexorOnlineTest::cleanupTestCase()
 {
-
+    qDebug() << "cleanupTestCase";
 }
 
 /**
  * @brief This method is called before each test case, creates a new multiplexor object
  * 
  */
-void MultiplexorTest::init()
+void MultiplexorOnlineTest::init()
 {
-
+    qDebug() << "init";
+    m_mux = new multiplexor();
 }
 
 /**
  * @brief This method is called after each test case, deletes the multiplexor object used in the previous test case
  * 
  */
-void MultiplexorTest::cleanup()
+void MultiplexorOnlineTest::cleanup()
 {
-    
+    qDebug() << "cleanup";
+    delete m_mux;
 }
 
 /*----------------------------------------*/
@@ -82,33 +84,38 @@ void MultiplexorTest::cleanup()
  * @brief Tests the multiplexor constructor
  * 
  */
-void MultiplexorTest::Multiplexor_Test()
+void MultiplexorOnlineTest::Multiplexor_Test()
 {
-    int a;
-    a=5;
-    QCOMPARE(a,5);
+    
 }
 
 /**
- * @brief 
+ * @brief Tests the init function when not on RPI
  * 
  */
-void MultiplexorTest::Init_Test()
+void MultiplexorOnlineTest::Init_Test()
 {
-
+    qDebug() << "Testing the init function";
+    QVERIFY2(m_mux->init(23, 22, 21)==true, "Check RPI define in config file");
 }
 
 /**
- * @brief 
+ * @brief Tests the set_mux function when not on RPI
  * 
  */
-void MultiplexorTest::SetMux_Test()
+void MultiplexorOnlineTest::SetMux_Test()
 {
+    qDebug() << "Testing the set_mux function";
 
+    //check with a valid value
+    QVERIFY2(m_mux->set_mux(1)==true, "Check RPI define in config file");
+
+    //check with a invalid value
+    QVERIFY2(m_mux->set_mux(12)==false, "Should report multiplexor error");
 }
 
 /* run tests */
-//QTEST_MAIN(MultiplexorTest);
+//QTEST_MAIN(MultiplexorOnlineTest);
 QT_BEGIN_NAMESPACE
 QTEST_ADD_GPU_BLACKLIST_SUPPORT_DEFS
 QT_END_NAMESPACE
@@ -117,8 +124,8 @@ int main(int argc, char **argv)
     QCoreApplication app(argc, argv);
     app.setAttribute(Qt::AA_Use96Dpi, true);
 
-    MultiplexorTest tc;
+    MultiplexorOnlineTest tc;
     QTEST_SET_MAIN_SOURCE_PATH
     return QTest::qExec(&tc, argc, argv);
 }
-#include "Multiplexor_test.moc"
+#include "Multiplexor_Online_Test.moc"
