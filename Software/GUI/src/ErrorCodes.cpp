@@ -146,10 +146,7 @@ void ErrorCodes::GetErrorCodes()
          /* unblock the executive while waiting */
          qApp->processEvents();
       }
-   } 
-
-
-   
+   }    
 }
 
 

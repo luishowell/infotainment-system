@@ -38,18 +38,78 @@ private:
     glm::vec3 z_axis;
     bool resize_widget = true;
 
-    
+    /**
+     * @brief Converts an angle in radians to degrees
+     * 
+     * @param rad an angle in radians
+     * @return float an angle in degrees
+     */
     float degrees(float rad);
+
+    /**
+     * @brief Converts an angle in degrees to an angle in radians
+     * 
+     * @param deg an angle in degrees
+     * @return float an angle in radians 
+     */
     float radians(float deg);
+
+    /**
+     * @brief Calculates the clockwise angle of a vector in the xy plane
+     * 
+     * @param v a glm::vec3 vector
+     * @return float the angle in radians
+     */
     float xy_angle(const glm::vec3& v);
+
+    /**
+     * @brief Calculates the clockwise angle of a vector in the yz plane
+     * 
+     * @param v a glm::vec3 vector
+     * @return float the angle in radians
+     */
     float yz_angle(const glm::vec3& v);
+
+    /**
+     * @brief Calculates the clockwise angle of a vector in the xz plane
+     * 
+     * @param v a glm::vec3 vector
+     * @return float the angle in radians
+     */
     float xz_angle(const glm::vec3& v);
+
+    /**
+     * @brief rotates a vector around an axis
+     * 
+     * @param v a glm::vec3 vector to be rotated
+     * @param k a glm::vec3 representing the axis of rotation eg x: (1, 0, 0)
+     * @param theta the angle to be rotated in radians
+     * @return glm::vec3 The rotated vector
+     */
     glm::vec3 rotate(const glm::vec3& v, const glm::vec3& k, float theta);
+
+    /**
+     * @brief Converts a G value from the accelerometer into pixels
+     * 
+     * @param input_G An accelerometer reading in G
+     * @return int The G value in pixels
+     */
     int G2pix(float input_G);
 
 protected:
+
+    /**
+     * @brief Updates the gauge label with a new pixmap conating the viz drawing
+     * 
+     * @param event QPaintEvent
+     */
     void paintEvent(QPaintEvent *event);
 
+    /**
+     * @brief Resizes the widget
+     * 
+     * @param event QResizeEvent
+     */
     void resizeEvent(QResizeEvent * event);
 
     /**

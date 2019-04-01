@@ -81,13 +81,13 @@ private:
 private slots:
 
     /**
-     * @brief 
+     * @brief Gets the currently stored diagnostic trouble codes (DTCs) and updates the table
      * 
      */
     void GetErrorCodes();
 
     /**
-     * @brief 
+     * @brief Sends a clear error codes command to the OBD2 module, if successful clears the table
      * 
      */
     void ClearErrorCodes();

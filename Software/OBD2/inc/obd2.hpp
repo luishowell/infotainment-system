@@ -33,6 +33,7 @@ class obd2{
          * 
          * @param cmd The command to send in the format of a hex string
          * @param parse A bool flag which sets whether the response should be parsed to remove all non-data in the response e.g spaces, new lines
+         * @param fast_send Appends a one to the cmd string indicting to the OBD2 chip that only one response is expected, removing the OBD2 internal delay
          * @return string The reponse from the OBD2 module
          */
         string send_cmd(string cmd, bool parse = false, bool fast_send = false);
@@ -110,8 +111,13 @@ class obd2{
     
     private:
 
+        /**
+         * @brief Set the up obd object
+         * 
+         * @param comm_port the file address of the bluetooth module, normall "/dev/rfcomm0"
+         * @return int Returns a file descriptor of serial port if successful, otherwise -1
+         */
         int setup_obd(string comm_port);   
-
 };
 
 #endif
