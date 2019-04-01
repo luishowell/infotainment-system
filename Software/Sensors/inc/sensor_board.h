@@ -15,9 +15,11 @@
 #include "config.h"
 
 #include <stdio.h>
+#include <time.h>
 #include "ultrasonic_sensor.h"
 #include "multiplexor.h"
 #include "types.h"
+
 
 #ifdef RPI
 #include <wiringPi.h>
@@ -37,8 +39,9 @@ class sensor_board
          * @brief Initialises the sensor board by initialising the multiplexor and ultrasonic sensor classes.
          * 
          * @param pins Struct of type sensorPins_t that contains all of the pin connections from the pi to the board.
+         * @return Bool to indicate if init was successful
          */
-        void init(sensorPins_t pins);
+        bool init(sensorPins_t pins);
 
         /**
          * @brief Reads the distance reported by a specified ultrasonic sensor.
