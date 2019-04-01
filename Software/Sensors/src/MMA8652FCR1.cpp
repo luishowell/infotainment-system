@@ -39,6 +39,7 @@ bool MMA8652FCR1::init(int devID, int intPin1, int intPin2)
     if(result != MMA8652FCR1_DEVICE_ID)
     {
         cout << "Who am i register mistmatch." << endl << "Expecting: 0x4A Received: " << hex << result << endl; 
+        return false;
     }
     
     //set the configuration registers
@@ -46,7 +47,6 @@ bool MMA8652FCR1::init(int devID, int intPin1, int intPin2)
     
     result = wiringPiI2CWriteReg8(this->fd, MMA8652FCR1_F_SETUP_REG, 0x00); //turn off the FIFO
     result = wiringPiI2CWriteReg8(this->fd, MMA8652FCR1_XYZ_DATA_CFG_REG, 0x02); //set the range to 8G
-    m_accRange = 8;
     result = wiringPiI2CWriteReg8(this->fd, MMA8652FCR1_CTRL_REG1, 0x18); //set data rate to 100Hz
     result = wiringPiI2CWriteReg8(this->fd, MMA8652FCR1_CTRL_REG2, 0x00); //set power mode to auto sleep off
     result = wiringPiI2CWriteReg8(this->fd, MMA8652FCR1_CTRL_REG3, 0x00); //set interrupt to be active high
@@ -59,9 +59,10 @@ bool MMA8652FCR1::init(int devID, int intPin1, int intPin2)
     staticVals = new accValues_t;
     this->recordStatic();   
 
+    return true;
     
 #endif
-    return true; 
+    return false; 
 
 }
 
@@ -69,9 +70,9 @@ bool MMA8652FCR1::init(int devID, int intPin1, int intPin2)
 /*
     Records current readings in staticVals
 */
-void MMA8652FCR1::recordStatic()
+bool MMA8652FCR1::recordStatic()
 {
-    this->getData(staticVals);
+    return this->getData(staticVals);
 }
 
 
@@ -79,7 +80,7 @@ void MMA8652FCR1::recordStatic()
     Function used to get and record data from the accelerometer
     Converts using 2's complement
 */
-void MMA8652FCR1::getData(accValues_t *data)
+bool MMA8652FCR1::getData(accValues_t *data)
 {
 #ifdef RPI
 
@@ -97,8 +98,9 @@ void MMA8652FCR1::getData(accValues_t *data)
     data->yAxis = this->twosComp(yMSB, yLSB);
     data->zAxis = this->twosComp(zMSB, zLSB);
     
+    return true;
 #endif
-    return;
+    return false;
 }
 
 

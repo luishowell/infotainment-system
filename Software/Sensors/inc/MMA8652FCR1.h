@@ -99,8 +99,9 @@ class MMA8652FCR1
          * @brief Gets the acceleration value from each of the three axis.
          *
          * @param data Pointer to a accValues_t struct that contains the x, y and z accelerations.
+         * @return Bool to indicate if the read has been succesful
          */
-        void getData(accValues_t *data);
+        bool getData(accValues_t *data);
         
         //recording of the accelerometer values when static
         accValues_t *staticVals;
@@ -108,14 +109,15 @@ class MMA8652FCR1
         /**
          * @brief Records the current accelerometer reading in staticVals.
          *
+         * @return Bool to indicate if the recording has been successful
          */
-        void recordStatic();
-        
-    private:
+        bool recordStatic();
     
         //2's complement data conversion functions
         double twosComp(uint8_t MSB);
         double twosComp(uint8_t MSB, uint8_t LSB);
+
+    private:
     
         //interrupt pin connections
         int m_intPin1;
@@ -128,8 +130,8 @@ class MMA8652FCR1
         //i2c port
         int fd;
 
-        //acceleration range
-        int m_accRange;
+        //acceleration range, default to 8g
+        int m_accRange = 8;
 
 };
 
