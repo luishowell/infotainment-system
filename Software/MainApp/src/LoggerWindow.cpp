@@ -15,6 +15,7 @@
 #include <QStyle>
 #include <QDesktopWidget>
 #include <QApplication>
+#include <QFile>
 #include <iostream>
 #include <string>
 #include <vector>
@@ -27,7 +28,7 @@
  */
 LoggerWindow::LoggerWindow(std::vector<std::string> supportedPids)
 {
-    qDebug() << "log";
+    qDebug() << "LOGGER WINDOW: ";
     uint16_t count;
     QVBoxLayout* selectLeft = new QVBoxLayout;
     QVBoxLayout* selectRight = new QVBoxLayout;
@@ -38,7 +39,9 @@ LoggerWindow::LoggerWindow(std::vector<std::string> supportedPids)
     setFixedSize(400, 200);
 
     m_startButton           = new QPushButton("Start Logging");
+    m_startButton->setStyleSheet("QPushButton{color: green}");
     m_stopButton            = new QPushButton("Stop Logging");
+    m_stopButton->setStyleSheet("QPushButton{color: red}");
     m_speedButton           = new QCheckBox("Speed");
     m_rpmButton             = new QCheckBox("RPM");
     m_fuelPressureButton    = new QCheckBox("Fuel Pressure");
@@ -47,6 +50,24 @@ LoggerWindow::LoggerWindow(std::vector<std::string> supportedPids)
     m_engineRuntimeButton   = new QCheckBox("Engine Runtime");
     m_engineLoadButton      = new QCheckBox("Engine Load");
     m_throttleButton        = new QCheckBox("Throttle Position");
+
+    /* open style for checkboxes */
+    QFile styleFile("./MainApp/src/CustomCheckBox.qss");
+    styleFile.open(QIODevice::ReadOnly);
+    QTextStream textStream(&styleFile);
+    QString styleSheet = textStream.readAll();
+    qDebug() << "LOGGER WINDOW: " << styleSheet;
+    styleFile.close();
+
+    /* set green/amber/red style for checkbuttons */
+    m_speedButton->setStyleSheet(styleSheet);
+    m_rpmButton->setStyleSheet(styleSheet);
+    m_fuelPressureButton->setStyleSheet(styleSheet);
+    m_gearButton->setStyleSheet(styleSheet);
+    m_intakeAirTempButton->setStyleSheet(styleSheet);
+    m_engineRuntimeButton->setStyleSheet(styleSheet);
+    m_engineLoadButton->setStyleSheet(styleSheet);
+    m_throttleButton->setStyleSheet(styleSheet);
 
     m_startButton->setObjectName("Start");
     m_stopButton->setObjectName("Stop");

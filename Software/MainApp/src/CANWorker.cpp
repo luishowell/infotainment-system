@@ -116,6 +116,7 @@ void CANWorker::GetDiagData()
 void CANWorker::LogRequestRx(QVector<QString> logParams, bool start)
 {
   qDebug() << "CAN WORKER: logging requested" << start;
+  std::string paramName;
 
   if (start)
   {
@@ -141,15 +142,21 @@ void CANWorker::LogRequestRx(QVector<QString> logParams, bool start)
     
     /* column titles for csv file */
     m_logFile << "Time,";
+    
     for (int idx = 0; idx < paramSize; idx++)
     {
       m_logFile << Hash::PID2Name(logParams[idx]);
+      //qDebug() << "CAN WORKER: log params " << logParams[idx];
+      //paramName = Hash::PID2Name(logParams[idx]);
+      //m_logFile << paramName;
       if (idx == paramSize - 1)
       {
+        
         m_logFile << endl << endl;
       }
       else
       {
+        
         m_logFile << ",";
       }
     }
@@ -157,9 +164,11 @@ void CANWorker::LogRequestRx(QVector<QString> logParams, bool start)
     while(m_running) //placeholder
     {
       qDebug() << "CAN WORKER: logging";
+      
       sleep(1);
 
       /* get current time */
+      
       auto endTime = std::chrono::system_clock::now();
       std::chrono::duration<double> currentTime = endTime - startTime;
       m_logFile << currentTime.count() << ",";

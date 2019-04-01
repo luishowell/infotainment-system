@@ -56,8 +56,8 @@ Diagnostics::Diagnostics(QWidget *parent, obd2* myObd, MMA8652FCR1* acc) : QWidg
    testVec.push_back("0A");
 
    obd = myObd;
-   //m_logWindow = new LoggerWindow(testVec);
-   m_logWindow = new LoggerWindow(obd->supported_pids);
+   m_logWindow = new LoggerWindow(testVec);
+   //m_logWindow = new LoggerWindow(obd->supported_pids);
  
    setFixedSize(widgetSize);
    CreateComponents();
@@ -670,6 +670,7 @@ void Diagnostics::JourneyLogRequest()
    //m_logWindow = new LoggerWindow(obd->supported_pids);
 
    m_logWindow->show();
+   m_logButton->setEnabled(false);
 
    /* TODO: implement log request signal*/
    /* send log request to state machine */
@@ -692,6 +693,7 @@ void Diagnostics::LogRequestRx(QVector<QString> logParams, bool start)
    if (start == false)
    {
       m_logWindow->hide();
+      m_logButton->setEnabled(true);
    }
    
    emit StartLogging(logParams, start);

@@ -1,4 +1,5 @@
 #include "Hash.h"
+#include "QtCore"
 
 /**
  * @brief Converts a parameter name from a string to an enum
@@ -44,14 +45,18 @@ diagParams_t Hash::HashPID(std::string pidString)
  */
 std::string Hash::PID2Name(QString pidString)
 {
-   if (pidString == "0C") return "RPM";
-   if (pidString == "0D") return "Speed";
-   if (pidString == "0F") return "Air-Temperature";
-   if (pidString == "11") return "Throttle";
-   if (pidString == "1F") return "Engine-Runtime";
-   if (pidString == "04") return "Engine-Load";
-   if (pidString == "A4") return "Gear";
-   if (pidString == "0A") return "Fuel-Pressure";
+   if (pidString == "010C")
+   {
+      //qDebug() << "rniwniwniwne"; 
+      return "RPM";
+   } 
+   if (pidString == "010D") return "Speed";
+   if (pidString == "010F") return "Air-Temperature";
+   if (pidString == "0111") return "Throttle";
+   if (pidString == "011F") return "Engine-Runtime";
+   if (pidString == "0104") return "Engine-Load";
+   if (pidString == "01A4") return "Gear";
+   if (pidString == "010A") return "Fuel-Pressure";
 }
 
 
