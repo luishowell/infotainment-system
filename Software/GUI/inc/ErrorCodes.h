@@ -1,6 +1,6 @@
 /**
  * @file ErrorCodes.h
- * @author Jamie Brown
+ * @author Luis Howell
  * @brief 
  * @version 0.1
  * @date 2019-02-17
@@ -24,7 +24,7 @@
 #include "types.h"
 
 /**
- * @brief 
+ * @brief A GUI screen showing diagnostic trouble codes
  * 
  */
 class ErrorCodes : public QWidget
@@ -35,8 +35,8 @@ public:
     /**
      * @brief Construct a new Error Codes object
      * 
-     * @param parent 
-     * @param myObd 
+     * @param parent Optional, QWidget parent
+     * @param myObd Optional, Pointer to the obd2 class
      */
     explicit ErrorCodes(QWidget *parent = 0, obd2* myObd = 0);
 
@@ -73,7 +73,7 @@ private:
     QTableWidget *errorTable;
     
     /**
-     * @brief 
+     * @brief Create the initial screen layout
      * 
      */
     void CreateLayout();

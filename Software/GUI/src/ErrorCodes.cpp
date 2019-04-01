@@ -1,14 +1,3 @@
-/**
- * @file ErrorCodes.cpp
- * @author Luis Howell
- * @brief 
- * @version 0.1
- * @date 2019-02-17
- * 
- * @copyright Copyright (c) 2019
- * 
- */
-
 #include "ErrorCodes.h" 
 #include "config.h"
 #include "Mutex.h"
@@ -25,11 +14,7 @@
 #include <iostream>
 #include <unistd.h>
 
-/**
- * @brief Construct a new Error Codes:: Error Codes object
- * 
- * @param parent 
- */
+
 ErrorCodes::ErrorCodes(QWidget *parent, obd2* myObd) : QWidget(parent) 
 {
    obd = myObd;
@@ -43,19 +28,11 @@ ErrorCodes::ErrorCodes(QWidget *parent, obd2* myObd) : QWidget(parent)
    connect(clearButton, SIGNAL (clicked()), this, SLOT (ClearErrorCodes()));
 }
 
-/**
- * @brief 
- * 
- */
 void ErrorCodes::StateChangeMainMenu()
 {
    emit DisplayChange(MAIN_MENU, this);
 }
 
-/**
- * @brief 
- * 
- */
 void ErrorCodes::CreateLayout()
 {
    QVBoxLayout* vLayout = new QVBoxLayout(this);
@@ -148,7 +125,6 @@ void ErrorCodes::GetErrorCodes()
       }
    }    
 }
-
 
 void ErrorCodes::ClearErrorCodes()
 {   

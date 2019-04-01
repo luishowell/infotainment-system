@@ -13,6 +13,11 @@
 #include <vector>
 using namespace std;
 
+/**
+ * @brief OBD2 vehicle communication over Bluetooth
+ * 
+ */
+
 class obd2{
     public:
 

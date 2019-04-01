@@ -1,14 +1,3 @@
- /**
- * @file Parking.cpp
- * @author Jamie Brown
- * @brief 
- * @version 0.1
- * @date 2019-02-17
- * 
- * @copyright Copyright (c) 2019
- * 
- */
- 
 #include <QApplication>
 #include <QGridLayout>
 #include <QGroupBox>
@@ -95,11 +84,6 @@ vector<int> Parking::calc_line_coor(int centre_x, int centre_y, int bar_width, i
   return coords;
 }
 
-/**
- * @brief Construct a new Parking:: Parking object
- * 
- * @param parent 
- */
 Parking::Parking(QWidget *parent) : QWidget(parent) 
 {
      
@@ -111,19 +95,11 @@ Parking::Parking(QWidget *parent) : QWidget(parent)
     
 }
 
-/**
- * @brief 
- * 
- */
 void Parking::StateChangeMainMenu()
 {
   emit DisplayChange(MAIN_MENU, this);
 }
 
-/**
- * @brief 
- * 
- */
 void Parking::CreateLayout()
 {
   QVBoxLayout* vLayout = new QVBoxLayout(this);

@@ -1,7 +1,7 @@
 /**
  * @file acc_gauge.h
- * @author your name (you@domain.com)
- * @brief 
+ * @author Luis Howell
+ * @brief An accelerometer gauge QWidget
  * @version 0.1
  * @date 2019-03-20
  * 
@@ -17,13 +17,33 @@
 #include <glm/glm.hpp>
 #include "types.h"
 
+/**
+ * @brief An accelerometer gauge QWidget
+ * 
+ */
+
 class AccGauge : public QWidget {
 
 public:
+
+    /**
+     * @brief Construct a new Acc Gauge object
+     * 
+     * @param max_G The maximum G for the gauge
+     * @param acc_cal A set of accelerometer readings while the car is still and level
+     * @param size Optional, set a constant size for the gauge in pixels
+     * @param parent Optional, QWidget parent
+     */
     AccGauge(float max_G, accValues_t* acc_cal, int size=0, QWidget *parent = 0);
 
     int _size;
     float _max_G;
+
+    /**
+     * @brief Update accelerometer gauge
+     * 
+     * @param acc_value An accValues_t type containing a set of acc readings
+     */
     void update_gauge(accValues_t* acc_value);
 
 private:

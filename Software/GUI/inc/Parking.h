@@ -1,6 +1,6 @@
 /**
  * @file Parking.h
- * @author Jamie Brown
+ * @author Jamie Brown/Luis Howell
  * @brief 
  * @version 0.1
  * @date 2019-02-17
@@ -19,10 +19,21 @@
 #include "types.h"
 #include <vector>
 
+/**
+ * @brief Qt GUI screen for displaying parking sensors and reversing camera
+ * 
+ */
+
 class Parking : public QWidget
 {
     Q_OBJECT
 public:
+
+    /**
+     * @brief Construct a new Parking object
+     * 
+     * @param parent 
+     */
     explicit Parking(QWidget *parent = 0);
     
 public slots:
@@ -40,14 +51,19 @@ signals:
 
 private:
     QPushButton *m_homeButton;
-    QLabel *viz_label;
-    void CreateLayout ();
+    QLabel *viz_label;    
     double rearLeft=0;
     double rearRight=0;
     double rearCentre=0;
     double frontLeft=0;
     double frontRight=0;
     double frontCentre=0;
+
+    /**
+     * @brief Create initial screen GUI layout
+     * 
+     */
+    void CreateLayout ();
 
     /**
      * @brief Round a float up or down to the nearest integer
