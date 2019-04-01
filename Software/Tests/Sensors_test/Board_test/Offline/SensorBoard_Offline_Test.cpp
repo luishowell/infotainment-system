@@ -16,7 +16,7 @@
 
 using namespace std;
 
-class SensorBoardTest: public QObject
+class SensorBoardOfflineTest: public QObject
 {
     Q_OBJECT
 
@@ -32,7 +32,7 @@ private slots:
     void init();
     void cleanup();
 private:
-    //sensor_board *m_board;
+    sensor_board *m_board;
 };
 
 /*----------------------------------------*/
@@ -43,26 +43,27 @@ private:
  * @brief 
  * 
  */
-void SensorBoardTest::initTestCase()
+void SensorBoardOfflineTest::initTestCase()
 {
-    //cout << "STARTING UNIT TESTS FOR SENSOR BOARD" << endl;
+    qDebug() << "initTestCase";
 }
 
 /**
  * @brief 
  * 
  */
-void SensorBoardTest::cleanupTestCase()
+void SensorBoardOfflineTest::cleanupTestCase()
 {
-    //cout << "FINISHED UNIT TESTS FOR SENSOR BOARD" << endl;
+    qDebug() << "cleanupTestCase";
 }
 
 /**
  * @brief 
  * 
  */
-void SensorBoardTest::init()
+void SensorBoardOfflineTest::init()
 {
+    qDebug() << "init";
     m_board = new sensor_board();
 }
 
@@ -70,8 +71,9 @@ void SensorBoardTest::init()
  * @brief 
  * 
  */
-void SensorBoardTest::cleanup()
+void SensorBoardOfflineTest::cleanup()
 {
+    qDebug() << "cleanup";
     delete m_board;
 }
 
@@ -80,34 +82,41 @@ void SensorBoardTest::cleanup()
 /*----------------------------------------*/
 
 /**
- * @brief 
+ * @brief Test the constructor
  * 
  */
-void SensorBoardTest::SensorBoard_Test()
-{
-    //QCOMPARE(3, 7);
-}
-
-/**
- * @brief 
- * 
- */
-void SensorBoardTest::init_Test()
-{
-
-}
-
-/**
- * @brief 
- * 
- */
-void SensorBoardTest::GetDistance_Test()
+void SensorBoardOfflineTest::SensorBoard_Test()
 {
     
 }
 
+/**
+ * @brief Test the init function
+ * 
+ */
+void SensorBoardOfflineTest::init_Test()
+{
+    qDebug() << "Testing the init function";
+
+    sensorPins_t testPins;
+    QVERIFY2(m_board->init(testPins)==false, "Check RPI define in config file");
+}
+
+/**
+ * @brief Test the getDistance function
+ * 
+ */
+void SensorBoardOfflineTest::GetDistance_Test()
+{
+    qDebug() << "Testing the getDistance function";
+
+    double testDistance;
+    QVERIFY2(m_board->GetDistance(1, &testDistance)==false, "Check RPI define in config file");
+    QVERIFY2(m_board->GetDistance(-1, &testDistance)==false, "Check RPI define in config file");
+}
+
 /* run tests */
-//QTEST_MAIN(SensorBoardTest);
+//QTEST_MAIN(SensorBoardOfflineTest);
 QT_BEGIN_NAMESPACE
 QTEST_ADD_GPU_BLACKLIST_SUPPORT_DEFS
 QT_END_NAMESPACE
@@ -116,8 +125,8 @@ int main(int argc, char **argv)
     QCoreApplication app(argc, argv);
     app.setAttribute(Qt::AA_Use96Dpi, true);
 
-    SensorBoardTest tc;
+    SensorBoardOfflineTest tc;
     QTEST_SET_MAIN_SOURCE_PATH
     return QTest::qExec(&tc, argc, argv);
 }
-#include "SensorBoard_test.moc"
+#include "SensorBoard_Offline_Test.moc"
