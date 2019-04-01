@@ -37,8 +37,9 @@ class multiplexor
          * @param sel_0 The wiringPi pin number that is connected to pin sel[0] on the multiplexor
          * @param sel_1 The wiringPi pin number that is connected to pin sel[1] on the multiplexor
          * @param sel_2 The wiringPi pin number that is connected to pin sel[2] on the multiplexor
+         * @return Bool indicating if on RPI or not
          */
-        void init(int sel_0, int sel_1, int sel_2);
+        bool init(int sel_0, int sel_1, int sel_2);
 
         /**
          * @brief Sets the multiplexor to the given value.
