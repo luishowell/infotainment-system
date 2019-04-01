@@ -48,16 +48,15 @@ Diagnostics::Diagnostics(QWidget *parent, obd2* myObd, MMA8652FCR1* acc) : QWidg
    std::vector<std::string> testVec;
    testVec.push_back("0C");
    testVec.push_back("0D");
-   testVec.push_back("0F");
-   testVec.push_back("11");
    testVec.push_back("1F");
    testVec.push_back("04");
    testVec.push_back("A4");
    testVec.push_back("0A");
 
    obd = myObd;
-   m_logWindow = new LoggerWindow(testVec);
-   //m_logWindow = new LoggerWindow(obd->supported_pids);
+   //m_logWindow = new LoggerWindow(testVec);
+   m_logWindow = new LoggerWindow(obd->supported_pids);
+   m_logWindow->setFixedSize(400, 300);
  
    setFixedSize(widgetSize);
    CreateComponents();
@@ -179,7 +178,7 @@ void Diagnostics::CreateComponents()
    m_fuelPressureButton->setFixedSize(btnSize);
    m_accButton->setFixedSize(btnSize);
    
-   m_logButton = new QPushButton("Log Journey");
+   m_logButton = new QPushButton("Journey Logger");
    m_logButton->setFixedSize(400, 50);
 }
 
@@ -490,6 +489,7 @@ void Diagnostics::ConnectButtons()
    
    connect(m_logButton, SIGNAL (clicked()), this, SLOT (JourneyLogRequest()));
    connect(m_logWindow, SIGNAL (LogRequestTx(QVector<QString>, bool)), this, SLOT (LogRequestRx(QVector<QString>, bool)));
+   connect(m_logWindow, SIGNAL (CloseRequest()), this, SLOT (CloseLogWindow()));
 
    //connect(m_logButton, &QPushButton::clicked, this, &Diagnostics::JourneyLogRequest);
 
@@ -668,10 +668,16 @@ void Diagnostics::JourneyLogRequest()
 
    
    //m_logWindow = new LoggerWindow(obd->supported_pids);
-
-   m_logWindow->show();
-   m_logButton->setEnabled(false);
-
+   if(!m_logWindow->isHidden())
+   {
+      m_logWindow->raise();
+   }
+   else
+   {
+      m_logWindow->reset();
+      m_logWindow->show();
+      ButtonState(false);
+   }
    /* TODO: implement log request signal*/
    /* send log request to state machine */
    //emit StartLogging();
@@ -692,13 +698,19 @@ void Diagnostics::LogRequestRx(QVector<QString> logParams, bool start)
 
    if (start == false)
    {
-      m_logWindow->hide();
+      //m_logWindow->hide();
       m_logButton->setEnabled(true);
    }
    
    emit StartLogging(logParams, start);
 }
-
+void Diagnostics::CloseLogWindow()
+{
+   m_logWindow->hide();
+   m_logButton->setEnabled(true);
+   m_logWindow->reset();
+   ButtonState(true);
+}
 
 /**
  * @brief 
@@ -708,4 +720,41 @@ void Diagnostics::StateChangeMainMenu()
 {
    qDebug() << "clicked home button";
    emit DisplayChange(MAIN_MENU, this);
+}
+
+void Diagnostics::ShowMe()
+{
+   this->show();
+   if (m_logWindow->isLogging()) m_logWindow->raise();
+}
+
+void Diagnostics::ButtonState(bool state)
+{
+   for (int count = 0; count < obd->supported_pids.size(); count++)
+   {
+      //QPid = QString::fromUtf8(obd->supported_pids[pidNum].c_str());
+      switch (Hash::HashPID(obd->supported_pids[count])) // JB: fixed bug here (13/03/19)
+      {
+         /* fast channel buttons */
+         case ENGINE_LOAD :      m_engineLoadButton->setEnabled(state);
+                                 break;
+         case RPM :              m_rpmButton->setEnabled(state);
+                                 break;
+         case SPEED :            m_speedButton->setEnabled(state);
+                                 break;
+         case THROTTLE :         m_throttleButton->setEnabled(state);
+                                 break;
+         case ENGINE_RUNTIME :   m_engineRuntimeButton->setEnabled(state);
+                                 break;
+         /* slow channel buttons */
+         case FUEL_PRESSURE :    m_fuelPressureButton->setEnabled(state);
+                                 break;
+         case AIR_TEMP :         m_intakeAirTempButton->setEnabled(state);
+                                 break;
+         case GEAR :             m_gearButton->setEnabled(state);
+                                 break;
+         default :               break;
+      }
+   }
+   m_accButton->setEnabled(state);
 }

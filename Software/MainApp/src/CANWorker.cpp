@@ -165,7 +165,7 @@ void CANWorker::LogRequestRx(QVector<QString> logParams, bool start)
     {
       qDebug() << "CAN WORKER: logging";
       
-      sleep(1);
+      //sleep(1);
 
       /* get current time */
       

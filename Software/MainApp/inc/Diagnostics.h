@@ -36,6 +36,7 @@ class Diagnostics : public QWidget
 public:
     explicit Diagnostics(QWidget *parent = 0, obd2* myObd = 0, MMA8652FCR1* acc = 0);
     void CreateLayout();
+    
     #ifndef GUI_TEST
     obd2* obd;
     #endif
@@ -48,6 +49,7 @@ public slots:
     //void JourneyLogRequest(std::vector<std::string>);
     void JourneyLogRequest();
     void LogRequestRx(QVector<QString>  logParams, bool start);
+    void CloseLogWindow();
     void ShowRpmGauge();
     void ShowSpeedGauge();
     void ShowAirTempGauge();
@@ -57,6 +59,7 @@ public slots:
     void ShowEngineRuntimeGauge();
     void ShowEngineLoadGauge();
     void ShowAccGauge();
+    void ShowMe();
 
 signals:
     void DisplayChange(state_t req_state, QWidget* currentView);
@@ -150,15 +153,13 @@ private:
 
 
     QPushButton *m_logButton;
-
-    
     
     QQuickItem *speedo;
 
     
     void CreateComponents();
     void ConnectButtons();
-    
+    void ButtonState(bool state);
     
     bool canConnectionFlag;
 };

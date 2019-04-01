@@ -17,3 +17,8 @@ QCheckBox::indicator:unchecked:pressed
 {
     image: url(./MainApp/images/amberPressed.jpg);
 }
+
+QCheckBox:indicator:unchecked:disabled
+{
+    image: url(./MainApp/images/red.jpg);
+}

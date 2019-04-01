@@ -106,7 +106,8 @@ void StateManager::ChangeRequested(state_t req_state, QWidget* currentView)
             if (currentView != m_diags)
             {
                currentView->hide();
-               m_diags->show(); 
+               //m_diags->show(); 
+               m_diags->ShowMe();
             }
             break;    
         }
