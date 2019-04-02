@@ -45,6 +45,8 @@ private:
 void MultiplexorOnlineTest::initTestCase()
 {
     qDebug() << "initTestCase";
+    //setup wiringpi
+    wiringPiSetup();
 }
 
 /**

@@ -47,6 +47,8 @@ private:
 void UltrasonicSensorOnlineTest::initTestCase()
 {
     qDebug() << "initTestCase";
+    //setup wiringpi
+    wiringPiSetup();
 }
 
 /**

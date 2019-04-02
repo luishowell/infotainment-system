@@ -42,12 +42,13 @@ bool ultrasonic_sensor::init(int trigger_pin, int echo_pin)
 */
 bool ultrasonic_sensor::GetDistance(double *distance)
 {
+
 #ifdef RPI
 
      //pulse the trigger pin for 10us
-     digitalWrite(m_trigger_pin, HIGH);
+     digitalWrite(this->m_trigger_pin, HIGH);
      delayMicroseconds(10);
-     digitalWrite(m_trigger_pin, LOW);
+     digitalWrite(this->m_trigger_pin, LOW);
 
      //timeout on both rising and falling edge of echo pin
      //timeoutLen = 12000;
@@ -61,7 +62,7 @@ bool ultrasonic_sensor::GetDistance(double *distance)
      //look for the rising edge of the echo pulse or timeout
      while((digitalRead(m_echo_pin) == LOW) && (time_left > 0))
      {
-	     while_end = micros();
+	  while_end = micros();
           time_taken = while_end - while_start;
           time_left = timeoutLen - time_taken;
      }
@@ -94,7 +95,7 @@ bool ultrasonic_sensor::GetDistance(double *distance)
 
      //calculate the distance and return
      time_diff = difftime(end_time, start_time);
-     *distance = this->calculateDistance(time_diff)/; //calculate the distance
+     *distance = this->calculateDistance(time_diff); //calculate the distance
      
      return true;
 #endif

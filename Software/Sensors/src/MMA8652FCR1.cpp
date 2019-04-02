@@ -5,7 +5,9 @@
 using namespace std;
 
 //constructor
-MMA8652FCR1::MMA8652FCR1(){}
+MMA8652FCR1::MMA8652FCR1(){
+    staticVals = new accValues_t;
+}
 
 
 
@@ -56,7 +58,6 @@ bool MMA8652FCR1::init(int devID, int intPin1, int intPin2)
     result = wiringPiI2CWriteReg8(this->fd, MMA8652FCR1_CTRL_REG1, 0x19); //set to active mode
     
     //get static values
-    staticVals = new accValues_t;
     this->recordStatic();   
 
     return true;

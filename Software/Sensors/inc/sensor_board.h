@@ -15,6 +15,7 @@
 #include "config.h"
 
 #include <stdio.h>
+#include <iostream>
 #include <time.h>
 #include "ultrasonic_sensor.h"
 #include "multiplexor.h"

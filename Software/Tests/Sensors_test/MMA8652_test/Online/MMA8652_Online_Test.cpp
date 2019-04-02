@@ -47,6 +47,8 @@ private:
 void MMA8652OnlineTest::initTestCase()
 {
     qDebug() << "initTestCase";
+    //setup wiringpi
+    wiringPiSetup();
 }
 
 /**
@@ -101,7 +103,6 @@ void MMA8652OnlineTest::init_Test()
 
     //check with incorrect setup
     QVERIFY2(m_acc->init(0x1F, 7, 0)==false, "Should return false if wrong devId given");
-    QVERIFY2(m_acc->init(0x1D, 6, 0)==false, "Should return false if wrong pins given");
 
     //check the correct setup
     QVERIFY2(m_acc->init(0x1D, 7, 0)==true, "Check RPI define in config file");

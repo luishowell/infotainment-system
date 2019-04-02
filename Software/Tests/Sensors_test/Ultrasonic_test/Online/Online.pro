@@ -12,6 +12,9 @@ INCLUDEPATH     += ../../../../MainApp/inc
 DEPENDPATH  += . ../../../../Sensors/
 LIBS        +=  ../../../../Sensors/bin/libSENSORS.a
 
+#comment out if not on the pi
+LIBS        += -L/usr/local/lib -lwiringPi
+
 #inputs
 SOURCES         += ./UltrasonicSensor_Online_Test.cpp  
 

@@ -46,6 +46,8 @@ private:
 void SensorBoardOnlineTest::initTestCase()
 {
     qDebug() << "initTestCase";
+    //setup wiringpi
+    wiringPiSetup();
 }
 
 /**
@@ -64,7 +66,7 @@ void SensorBoardOnlineTest::cleanupTestCase()
 void SensorBoardOnlineTest::init()
 {
     qDebug() << "init";
-    m_board = new sensor_board();
+    this->m_board = new sensor_board();
 }
 
 /**
@@ -74,7 +76,7 @@ void SensorBoardOnlineTest::init()
 void SensorBoardOnlineTest::cleanup()
 {
     qDebug() << "cleanup";
-    delete m_board;
+    delete this->m_board;
 }
 
 /*----------------------------------------*/
@@ -100,13 +102,13 @@ void SensorBoardOnlineTest::init_Test()
 
     sensorPins_t testPins;
     testPins.en = 13;
-	testPins.echoPin = 12;
-	testPins.triggerPin = 14;
-	testPins.sel[0] = 23;
-	testPins.sel[1] = 22;
-	testPins.sel[2] = 21;
+    testPins.echoPin = 12;
+    testPins.triggerPin = 14;
+    testPins.sel[0] = 23;
+    testPins.sel[1] = 22;
+    testPins.sel[2] = 21;
 
-    QVERIFY2(m_board->init(testPins)==true, "Check RPI define in config file");
+    QVERIFY2(this->m_board->init(testPins)==true, "Check RPI define in config file");
 }
 
 /**
@@ -118,10 +120,9 @@ void SensorBoardOnlineTest::GetDistance_Test()
     qDebug() << "Testing the getDistance function";
 
     double testDistance;
-
-    QVERIFY2(m_board->GetDistance(1, &testDistance)==true, "Should give a distance value");
-    QVERIFY2(m_board->GetDistance(-1, &testDistance)==false, "Should report mux value as invalid");
-    QVERIFY2(m_board->GetDistance(12, &testDistance)==false, "Should report mux value as invalid");
+    QVERIFY2(this->m_board->GetDistance(1, &testDistance)==true, "Should give a distance value");
+    QVERIFY2(this->m_board->GetDistance(-1, &testDistance)==false, "Should report mux value as invalid");
+    QVERIFY2(this->m_board->GetDistance(12, &testDistance)==false, "Should report mux value as invalid");
 }
 
 /* run tests */
