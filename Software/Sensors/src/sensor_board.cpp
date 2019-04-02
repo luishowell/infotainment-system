@@ -3,7 +3,10 @@
 
 
 //constructor
-sensor_board::sensor_board(){}
+sensor_board::sensor_board(){
+    this->sensor = new ultrasonic_sensor();
+    this->mux = new multiplexor();    
+}
 
 
 //initialisation function
@@ -11,12 +14,10 @@ bool sensor_board::init(sensorPins_t pins)
 {
 
     //initialise the sensor
-    sensor = new ultrasonic_sensor();
-    bool sensInit = sensor->init(pins.triggerPin, pins.echoPin);
+    bool sensInit = this->sensor->init(pins.triggerPin, pins.echoPin);
 
     //initialise the mux
-    mux = new multiplexor();
-    bool muxInit = mux->init(pins.sel[0], pins.sel[1], pins.sel[2]);
+    bool muxInit = this->mux->init(pins.sel[0], pins.sel[1], pins.sel[2]);
 
 #ifdef RPI  
     //control enable pin
@@ -38,8 +39,9 @@ bool sensor_board::init(sensorPins_t pins)
 //main get distance function
 bool sensor_board::GetDistance(unsigned int sensor_num, double *distance)
 {
+
     //set the mux to the correct value and check response
-    if(mux->set_mux(sensor_num) == false)
+    if(this->mux->set_mux(sensor_num) == false)
     {
         return false;
     }
@@ -49,5 +51,5 @@ bool sensor_board::GetDistance(unsigned int sensor_num, double *distance)
 #endif
 
     //get the distance and return success
-    return sensor->GetDistance(distance);
+    return this->sensor->GetDistance(distance);
 }

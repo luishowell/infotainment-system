@@ -2,6 +2,14 @@ Software/GUI/bin/
 Software/MainApp/bin/
 Software/Tests/OBD2_test/Offline/bin/
 Software/Tests/OBD2_test/Online/bin/
+Software/Tests/Sensors_test/Board_test/Offline/bin/
+Software/Tests/Sensors_test/Board_test/Online/bin/
+Software/Tests/Sensors_test/MMA8652_test/Offline/bin/
+Software/Tests/Sensors_test/MMA8652_test/Online/bin/
+Software/Tests/Sensors_test/Mux_test/Offline/bin/
+Software/Tests/Sensors_test/Mux_test/Online/bin/
+Software/Tests/Sensors_test/Ultrasonic_test/Offline/bin/
+Software/Tests/Sensors_test/Ultrasonic_test/Online/bin/
 .vscode
 *.out
 *.o

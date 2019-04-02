@@ -13,7 +13,7 @@
 #include <iostream>
 #include "ultrasonic_sensor.h"
 #include "types.h"
-//#include "UltrasonicSensor_test.h"
+#include "config.h"
 
 
 using namespace std;
@@ -47,6 +47,10 @@ private:
 void UltrasonicSensorOnlineTest::initTestCase()
 {
     qDebug() << "initTestCase";
+#ifdef RPI
+    //setup wiringpi
+    wiringPiSetup();
+#endif
 }
 
 /**

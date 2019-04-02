@@ -11,3 +11,4 @@ Sensors_test.depends           +=  ../Sensors
 Mux_test.depends               +=  ../Sensors
 Board_test.depends             +=  ../Sensors
 MMA8652_test.depends           +=  ../Sensors
+
