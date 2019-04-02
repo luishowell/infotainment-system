@@ -106,7 +106,7 @@ Parking::Parking(QWidget *parent) : QWidget(parent)
   setFixedSize(widgetSize);
 
   beep_effect = new QSoundEffect;
-  beep_effect->setSource(QUrl::fromLocalFile("/home/luis/Documents/Temp/qt_effect_test/beep.wav"));
+  beep_effect->setSource(QUrl::fromLocalFile("./MainApp/src/beep.wav"));
   beep_effect->setLoopCount(1);
   beep_effect->setVolume(1.0f); 
 
