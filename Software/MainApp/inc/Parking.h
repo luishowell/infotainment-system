@@ -23,9 +23,18 @@ class Parking : public QWidget
 {
     Q_OBJECT
 public:
+    /**
+     * @brief Construct a new Parking object
+     * 
+     * @param parent 
+     */
     explicit Parking(QWidget *parent = 0);
     
 public slots:
+    /**
+     * @brief 
+     * 
+     */
     void StateChangeMainMenu();
 
     /**
@@ -36,12 +45,23 @@ public slots:
     void SensorRx(sensorDist_t* msg);
 
 signals:
+    /**
+     * @brief 
+     * 
+     * @param req_state 
+     * @param currentView 
+     */
     void DisplayChange(state_t req_state, QWidget* currentView);
 
 private:
+    /**
+     * @brief Create a Layout object
+     * 
+     */
+    void CreateLayout ();
+
     QPushButton *m_homeButton;
     QLabel *viz_label;
-    void CreateLayout ();
     double rearLeft=0;
     double rearRight=0;
     double rearCentre=0;

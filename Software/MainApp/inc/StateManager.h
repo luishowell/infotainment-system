@@ -31,23 +31,106 @@ class StateManager : public QWidget
     Q_OBJECT
 
 public:
+    /**
+     * @brief Construct a new State Manager object
+     * 
+     * @param parent 
+     * @param myObd 
+     * @param acc 
+     */
     explicit StateManager(QWidget *parent = 0, obd2* myObd = 0, MMA8652FCR1* acc = 0);
     QPointer<Diagnostics> m_diags;
 
 public slots:
+    /**
+     * @brief 
+     * 
+     * @param req_state 
+     * @param self 
+     */
     void ChangeRequested(state_t req_state, QWidget* self);
+
+    /**
+     * @brief 
+     * 
+     * @param msg 
+     */
     void CANPublishDiagRx(diagMsg_t* msg);
+
+    /**
+     * @brief 
+     * 
+     * @param dataRequested 
+     * @param channel 
+     */
     void OnNewChannelRequest(diagParams_t dataRequested, obd2Channel_t channel);
+
+    /**
+     * @brief 
+     * 
+     * @param logParams 
+     * @param start 
+     */
     void LogRequestRx(QVector<QString> logParams, bool start);
+
+    /**
+     * @brief 
+     * 
+     * @param sensorData 
+     */
     void SensorPublishDiagRx(sensorDist_t* sensorData);
+
+    /**
+     * @brief 
+     * 
+     * @param msg 
+     */
     void AccDataRx(accValues_t* msg);
 
 signals:
+    /**
+     * @brief 
+     * 
+     * @param req_state 
+     * @param currentView 
+     */
     void DisplayChange(state_t req_state, QWidget* currentView);
+
+    /**
+     * @brief 
+     * 
+     * @param msg 
+     */
     void DiagDataTx(diagMsg_t* msg);
+
+    /**
+     * @brief 
+     * 
+     * @param dataRequested 
+     * @param channel 
+     */
     void NewChannelRequest(diagParams_t dataRequested, obd2Channel_t channel);
+
+    /**
+     * @brief 
+     * 
+     * @param logParams 
+     * @param start 
+     */
     void LogRequestTx(QVector<QString> logParams, bool start);
+
+    /**
+     * @brief 
+     * 
+     * @param msg 
+     */
     void SensorTx(sensorDist_t* msg);
+
+    /**
+     * @brief 
+     * 
+     * @param msg 
+     */
     void AccDataTx(accValues_t* msg);
 
 private:

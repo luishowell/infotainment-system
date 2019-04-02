@@ -31,31 +31,114 @@ class LoggerWindow : public QWidget
 {
     Q_OBJECT
 public:
+    /**
+     * @brief Construct a new Logger Window object
+     * 
+     * @param supportedPids 
+     */
     explicit LoggerWindow(std::vector<std::string> supportedPids);
+
+    /**
+     * @brief 
+     * 
+     */
     void reset();
+
+    /**
+     * @brief 
+     * 
+     * @return true 
+     * @return false 
+     */
     bool isLogging() const;
+
+    /**
+     * @brief 
+     * 
+     */
     void ShowMe();
+
     QVector<QString> supportedPids;
     QVector<QString> selectedParams;
 
 public slots:
+    /**
+     * @brief 
+     * 
+     */
     void StartLogging();
+
+    /**
+     * @brief 
+     * 
+     */
     void StopLogging();
+
+    /**
+     * @brief 
+     * 
+     */
     void OnClicked();
+
+    /**
+     * @brief 
+     * 
+     */
     void CloseWindow();
 
 private slots:
+    /**
+     * @brief 
+     * 
+     */
     void UpdateLogMsg();
 
 signals:
+    /**
+     * @brief 
+     * 
+     * @param start 
+     */
     void LogRequestTx(QVector<QString>logParams, bool start);
+
+    /**
+     * @brief 
+     * 
+     */
     void CloseRequest();
 
 private:
+    /**
+     * @brief 
+     * 
+     * @param param 
+     */
     void RemoveParameter(QString param);
+
+    /**
+     * @brief 
+     * 
+     */
     void ConnectButtons();
+
+    /**
+     * @brief 
+     * 
+     * @param name 
+     * @return diagParams_t 
+     */
     diagParams_t HashButtonName(QString name);
+
+    /**
+     * @brief 
+     * 
+     */
     void DisableButtons();
+
+    /**
+     * @brief 
+     * 
+     */
     void EnableButtons();
 
     QCheckBox *m_speedButton;

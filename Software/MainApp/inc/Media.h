@@ -38,43 +38,168 @@ class Media : public QWidget
 {
     Q_OBJECT
 public:
+    /**
+     * @brief Construct a new Media object
+     * 
+     * @param parent 
+     */
     explicit Media(QWidget *parent = 0);
 
+    /**
+     * @brief 
+     * 
+     * @param urls 
+     */
     void AddToPlaylist(const QList<QUrl> &urls);
     
     
     
 public slots:
+    /**
+     * @brief 
+     * 
+     */
     void StateChangeMainMenu();
+
+    /**
+     * @brief 
+     * 
+     */
     void Open();
+
+    /**
+     * @brief 
+     * 
+     * @param duration 
+     */
     void DurationChanged(int duration);
+
+    /**
+     * @brief Set the Mute object
+     * 
+     * @param muted 
+     */
     void SetMute(bool muted);
+
+    /**
+     * @brief Set the Volume object
+     * 
+     * @param vol 
+     */
     void SetVolume(int vol);
 
 signals:
+    /**
+     * @brief 
+     * 
+     * @param req_state 
+     * @param currentView 
+     */
     void DisplayChange(state_t req_state, QWidget* currentView);
 
 private slots:
+    /**
+     * @brief 
+     * 
+     */
     void onBackClicked();
+
+    /**
+     * @brief 
+     * 
+     */
     void onFwdClicked();
+
+    /**
+     * @brief 
+     * 
+     * @param row 
+     * @param cell 
+     */
     void songClicked(int row, int cell);
+
+    /**
+     * @brief 
+     * 
+     */
     void onPlayClicked();
+
+    /**
+     * @brief 
+     * 
+     */
     void onRemoveClicked();
+
+    /**
+     * @brief 
+     * 
+     * @param secs 
+     */
     void onSeekChanged(int secs);
+
+    /**
+     * @brief 
+     * 
+     * @param progress 
+     */
     void positionChanged(qint64 progress);
+
+    /**
+     * @brief 
+     * 
+     * @param currentSong 
+     */
     void songChanged(int currentSong);
+
+    /**
+     * @brief 
+     * 
+     */
     void timeout();
 
 private:  
+    /**
+     * @brief Create a Layout object
+     * 
+     */
     void CreateLayout();
+
+    /**
+     * @brief 
+     * 
+     * @param url 
+     */
     void AddToTable(QUrl url);
-    int m_tableCount;
+
+    /**
+     * @brief Get the Meta Data object
+     * 
+     * @param metaData 
+     */
     void GetMetaData(audioMetaData_t* metaData);
+
+    /**
+     * @brief Get the Album Art object
+     * 
+     * @param tag 
+     * @return QImage 
+     */
     QImage GetAlbumArt(TagLib::ID3v2::Tag *tag);
+
+    /**
+     * @brief 
+     * 
+     * @param index 
+     */
     void ShowAlbumArt(int index);
+
+    /**
+     * @brief 
+     * 
+     */
     void SelectRow();
     
-    
+    int m_tableCount;
     QPointer<QLabel> m_artHandle;
     QPointer<QLabel> m_timeLabel;
     QVector<audioMetaData_t> m_playlistMetaData;

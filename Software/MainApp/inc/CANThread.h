@@ -1,11 +1,11 @@
-#ifndef CANTHREAD_H
-#define CANTHREAD_H
-
 /** @brief Thread that obtains data from the OBD2 bus on a periodic basis
  * 
  * @author Jamie Brown
  * @date February 2019
  * */
+
+#ifndef CANTHREAD_H
+#define CANTHREAD_H
 
 #include <QThread>
 #include <string>
@@ -27,8 +27,6 @@ public:
 
 private slots:
     void PublishDiagData();
-    //void PublishLogData();
-    //void OnNewChannelRequest(diagParams_t dataRequested, obd2Channel_t channel);
 
 signals:
     void CANPublishDiagTx(diagMsg_t* msg);
