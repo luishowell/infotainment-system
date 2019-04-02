@@ -13,6 +13,7 @@
 #include <iostream>
 #include "multiplexor.h"
 #include "types.h"
+#include "config.h"
 
 using namespace std;
 
@@ -45,8 +46,10 @@ private:
 void MultiplexorOnlineTest::initTestCase()
 {
     qDebug() << "initTestCase";
+#ifdef RPI
     //setup wiringpi
     wiringPiSetup();
+#endif
 }
 
 /**

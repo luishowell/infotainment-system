@@ -13,6 +13,7 @@
 #include <iostream>
 #include "sensor_board.h"
 #include "types.h"
+#include "config.h"
 
 using namespace std;
 
@@ -46,8 +47,10 @@ private:
 void SensorBoardOnlineTest::initTestCase()
 {
     qDebug() << "initTestCase";
+#ifdef RPI
     //setup wiringpi
     wiringPiSetup();
+#endif
 }
 
 /**

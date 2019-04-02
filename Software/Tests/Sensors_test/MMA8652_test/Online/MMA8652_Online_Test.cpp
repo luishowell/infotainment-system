@@ -13,6 +13,7 @@
 #include <iostream>
 #include "MMA8652FCR1.h"
 #include "types.h"
+#include "config.h"
 
 using namespace std;
 
@@ -47,8 +48,10 @@ private:
 void MMA8652OnlineTest::initTestCase()
 {
     qDebug() << "initTestCase";
+#ifdef RPI
     //setup wiringpi
     wiringPiSetup();
+#endif
 }
 
 /**
