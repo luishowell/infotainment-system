@@ -15,6 +15,9 @@
 #include <QWidget>
 #include <QPushButton>
 #include <QLabel>
+#include <QTimer>
+#include <QElapsedTimer>
+#include <QSoundEffect>
 #include <QObject>
 #include "types.h"
 #include <vector>
@@ -35,19 +38,32 @@ public slots:
      */
     void SensorRx(sensorDist_t* msg);
 
+private slots:
+
+    void parking_beep();
+
 signals:
     void DisplayChange(state_t req_state, QWidget* currentView);
 
 private:
     QPushButton *m_homeButton;
     QLabel *viz_label;
+    QSoundEffect *beep_effect;
+    QTimer* m_timer;
+    QElapsedTimer *beep_timer;
+    int beep_delay=0;
     void CreateLayout ();
+    double smallest_dist=0;
     double rearLeft=0;
     double rearRight=0;
     double rearCentre=0;
     double frontLeft=0;
     double frontRight=0;
     double frontCentre=0;
+
+    void calc_smallest_dist();
+
+    void calc_beep_delay();
 
     /**
      * @brief Round a float up or down to the nearest integer

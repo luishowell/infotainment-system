@@ -105,10 +105,69 @@ Parking::Parking(QWidget *parent) : QWidget(parent)
      
   setFixedSize(widgetSize);
 
-  CreateLayout();    
+  beep_effect = new QSoundEffect;
+  beep_effect->setSource(QUrl::fromLocalFile("/home/luis/Documents/Temp/qt_effect_test/beep.wav"));
+  beep_effect->setLoopCount(1);
+  beep_effect->setVolume(1.0f); 
 
-  connect(m_homeButton, SIGNAL (clicked()), this, SLOT (StateChangeMainMenu()));
-    
+  m_timer = new QTimer;
+  beep_timer = new QElapsedTimer;
+  connect(m_timer, SIGNAL(timeout()), this, SLOT(parking_beep()));
+
+  CreateLayout();   
+
+  m_timer->start(1);
+  beep_timer->start();
+
+  connect(m_homeButton, SIGNAL (clicked()), this, SLOT (StateChangeMainMenu()));    
+}
+
+void Parking::parking_beep()
+{
+  if (!beep_effect->isPlaying())
+  {
+    if ((int(beep_timer->elapsed())>=beep_delay)&&(viz_label->isVisible())&&(beep_delay>0))
+    {
+      //cout<<"Time elapsed: "<<int(beep_timer->elapsed())<<endl;
+      beep_effect->play();
+      beep_timer->start();
+    }   
+  }
+}
+
+void Parking::calc_beep_delay()
+{
+  float input_start = 0.0;
+  float input_end = 2.0;
+  int output_start = 100;
+  int output_end = 2000;
+
+  if (smallest_dist>input_end)
+  {
+    smallest_dist = input_end;
+  }
+  else if (smallest_dist<input_start)
+  {
+    smallest_dist = input_start;
+  }
+
+  beep_delay = int(output_start + ((output_end - output_start) / (input_end - input_start)) * (smallest_dist - input_start)); 
+}
+
+void Parking::calc_smallest_dist()
+{
+  double dist_array[6] = {rearLeft, rearRight, rearCentre, frontLeft, frontRight, frontCentre};
+  double min_dist = dist_array[0];
+
+  for (int i=1; i<6; i++)
+  {
+    if (dist_array[i]<min_dist)
+    {
+      min_dist = dist_array[i];
+    }
+  }
+
+  smallest_dist = min_dist;
 }
 
 /**
@@ -168,6 +227,8 @@ void Parking::SensorRx(sensorDist_t* msg)
   rearCentre = msg->rearCentre;
   rearRight = msg->rearRight;
   rearLeft = msg->rearLeft;
+  calc_smallest_dist();
+  calc_beep_delay();
   update();
 }
 
