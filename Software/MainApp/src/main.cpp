@@ -64,7 +64,7 @@ int main(int argc, char** argv)
     /* move workers into appropriate threads */
     canW.moveToThread(&canT);
     accW.moveToThread(&accT);
-    //sensorW.moveToThread(&sensorT);	
+    sensorW.moveToThread(&sensorT);	
 
 
     qRegisterMetaType<QVector<QString>>("<QVector<QString>>");
@@ -73,7 +73,7 @@ int main(int argc, char** argv)
     
 
     QObject::connect(&canT, SIGNAL(started()), &canW, SLOT(GetDiagData()));
-    //QObject::connect(&sensorT, SIGNAL(started()), &sensorW, SLOT(Work()));
+    QObject::connect(&sensorT, SIGNAL(started()), &sensorW, SLOT(Work()));
     QObject::connect(&accT, SIGNAL(started()), &accW, SLOT(Work()));
 
     /* connect CAN thread data to GUI */

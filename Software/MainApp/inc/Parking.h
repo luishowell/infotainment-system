@@ -73,7 +73,6 @@ private:
     QTimer* m_timer;
     QElapsedTimer *beep_timer;
     int beep_delay=0;
-    void CreateLayout ();
     double smallest_dist=0;
     double rearLeft=0;
     double rearRight=0;

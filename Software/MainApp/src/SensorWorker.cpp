@@ -56,15 +56,42 @@ SensorWorker::SensorWorker()
 #endif //RPI
 
     /* setup periodic data publishing callback */
-    m_timer = new QTimer;
+    m_timer = new QTimer(this);
     connect(m_timer, SIGNAL(timeout()), this, SLOT(PublishSensorData()), Qt::DirectConnection);
+    //connect(m_timer, SIGNAL(timeout()), this, SLOT(PublishSensorData()));
+
 }
 
 void SensorWorker::Work()
 {
+    qDebug() << "SENSOR WORKER: started...";
     m_timer->start(100); //msecs
     while(true)
     {
+        qDebug() << "SENSOR WORKER: getting data";
+#ifdef RPI
+        if ((m_mux->GetDistance(FRONT_LEFT, &m_msg->frontLeft)
+        && m_mux->GetDistance(REAR_LEFT, &m_msg->rearLeft)
+        && m_mux->GetDistance(FRONT_RIGHT, &m_msg->frontRight)
+        && m_mux->GetDistance(REAR_RIGHT, &m_msg->rearRight))	
+        == true)          
+        {
+            //GetDistance() was successful 
+    
+            m_msg->connectionFault = false;
+        }
+        else 
+        {
+            //GetDistance() failed so assume connection to sensors in lost/compromised
+        //qDebug() << "Sensor connection compromised" << endl;
+            m_msg->connectionFault = true;
+        }
+#else
+        sleep(1);
+#endif  
+        
+
+
         qApp->processEvents();
     }
 }
@@ -76,24 +103,10 @@ void SensorWorker::Work()
  */
 void SensorWorker::PublishSensorData()
 {
-         if ((m_mux->GetDistance(FRONT_LEFT, &m_msg->frontLeft)
-         && m_mux->GetDistance(REAR_LEFT, &m_msg->rearLeft)
-         && m_mux->GetDistance(FRONT_RIGHT, &m_msg->frontRight)
-         && m_mux->GetDistance(REAR_RIGHT, &m_msg->rearRight))	
-         == true)          
-         {
-             //GetDistance() was successful 
-        
-             m_msg->connectionFault = false;
-         }
-         else 
-         {
-             //GetDistance() failed so assume connection to sensors in lost/compromised
-         //qDebug() << "Sensor connection compromised" << endl;
-             m_msg->connectionFault = true;
-         }
- 
+    qDebug() << "SENSOR WORKER: publishing";
+#ifdef RPI
+
     /* send data to the GUI's diagnostics viewer */
     emit SensorPublishDiagTx(m_msg);
-//#endif
+#endif
 }
