@@ -1,7 +1,7 @@
 /**
  * @file SensorThread.h
  * @author Jamie Brown
- * @brief 
+ * @brief Dedicated thread for interfacing with the ultrasonic parking sensors. Functionality is contained in SensorWorker and is moved to this thread.
  * @version 0.1
  * @date 2019-04-02
  * 
@@ -28,7 +28,7 @@ public:
 
 private:
     /**
-     * @brief 
+     * @brief Starts the SensorThread's executive. Actual functional implementation is done in worker classes which are moved to this thread. 
      * 
      */
     void run();

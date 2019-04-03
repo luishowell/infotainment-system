@@ -1,7 +1,7 @@
 /**
  * @file Media.h
  * @author Jamie Brown
- * @brief 
+ * @brief The main widget class for the main menu.
  * @version 0.1
  * @date 2019-02-17
  * 
@@ -46,7 +46,7 @@ public:
     explicit Media(QWidget *parent = 0);
 
     /**
-     * @brief 
+     * @brief Path to audio mp3 file. 
      * 
      * @param urls 
      */
@@ -56,62 +56,62 @@ public:
     
 public slots:
     /**
-     * @brief 
+     * @brief Emits a request to StateManager to change to the MainMenu.
      * 
      */
     void StateChangeMainMenu();
 
     /**
-     * @brief 
+     * @brief Callback when the open button clicked. Opens file dialog window to select mp3 files. 
      * 
      */
     void Open();
 
     /**
-     * @brief 
+     * @brief Called back when the song duration changes, changes the duration slider range to match.
      * 
-     * @param duration 
+     * @param duration Song duration in seconds. 
      */
     void DurationChanged(int duration);
 
     /**
-     * @brief Set the Mute object
+     * @brief Mutes or un-mutes the audio.
      * 
-     * @param muted 
+     * @param muted Muted or not-muted. 
      */
     void SetMute(bool muted);
 
     /**
-     * @brief Set the Volume object
+     * @brief Called when when a new volume requested.
      * 
-     * @param vol 
+     * @param vol Volume level requested. 
      */
     void SetVolume(int vol);
 
 signals:
     /**
-     * @brief 
+     * @brief Transmits a request to change to a different window.
      * 
-     * @param req_state 
-     * @param currentView 
+     * @param req_state The requested window.
+     * @param currentView Pointer to the current QWidget, the sender.
      */
     void DisplayChange(state_t req_state, QWidget* currentView);
 
 private slots:
     /**
-     * @brief 
+     * @brief Called back when the back arrow clicked. Either plays previous song in the playlist or restarts the current song.
      * 
      */
     void onBackClicked();
 
     /**
-     * @brief 
+     * @brief Called back when the forward arrow clicked. Skips to the next song.
      * 
      */
     void onFwdClicked();
 
     /**
-     * @brief 
+     * @brief Called back when a song in the playlist table is clicked. The row indicates which song has been clicked.
      * 
      * @param row 
      * @param cell 
@@ -119,82 +119,82 @@ private slots:
     void songClicked(int row, int cell);
 
     /**
-     * @brief 
+     * @brief Called back when play clicked, plays either the requested song and/or unpauses the audio.
      * 
      */
     void onPlayClicked();
 
     /**
-     * @brief 
+     * @brief Called back when remove clicked. Removes the selected song from the playlist.
      * 
      */
     void onRemoveClicked();
 
     /**
-     * @brief 
+     * @brief Called back when the seek slider is changed, skips the audio to the time equal to the slider value in seconds.
      * 
      * @param secs 
      */
     void onSeekChanged(int secs);
 
     /**
-     * @brief 
+     * @brief Called back when the song position is changed, changes the seek slider position and the displayed time.
      * 
      * @param progress 
      */
     void positionChanged(qint64 progress);
 
     /**
-     * @brief 
+     * @brief Called back when the playlist changes to a new song. Shows new album art and selects the new row in the table.
      * 
      * @param currentSong 
      */
     void songChanged(int currentSong);
 
     /**
-     * @brief 
+     * @brief Called back when the timer expires, used to highlight the currently selected song after a song has been selected but no action taken after a timeout.
      * 
      */
     void timeout();
 
 private:  
     /**
-     * @brief Create a Layout object
+     * @brief Create the buttons and layout.
      * 
      */
     void CreateLayout();
 
     /**
-     * @brief 
+     * @brief Adds the meta data from an mp3 file to the playlist table.
      * 
-     * @param url 
+     * @param url Path to an mp3 file.
      */
     void AddToTable(QUrl url);
 
     /**
-     * @brief Get the Meta Data object
+     * @brief Get meta data from an mp3 file.
      * 
-     * @param metaData 
+     * @param metaData Pointer to a structure for meta-data, must contain the path to the file.
      */
     void GetMetaData(audioMetaData_t* metaData);
 
     /**
-     * @brief Get the Album Art object
+     * @brief Gets the album art from the meta data and converts to a Qt object.
      * 
-     * @param tag 
-     * @return QImage 
+     * @param tag An ID3v2 tag for an mp3 file.
+     * @return QImage The converted album art from the meta data.
      */
     QImage GetAlbumArt(TagLib::ID3v2::Tag *tag);
 
     /**
-     * @brief 
+     * @brief Show the album art for a song in the playlist.
      * 
-     * @param index 
+     * @param index The index of the requested song in the playlist. 
      */
     void ShowAlbumArt(int index);
 
     /**
-     * @brief 
+     * @brief Selects the row of the currently playing song.
      * 
      */
     void SelectRow();

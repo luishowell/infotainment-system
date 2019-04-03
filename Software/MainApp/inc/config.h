@@ -1,3 +1,14 @@
+/**
+ * @file config.h
+ * @author Jamie Brown
+ * @brief This file used for global configuration of the app. Resizing of widgets etc.
+ * @version 0.1
+ * @date 2019-04-03
+ * 
+ * @copyright Copyright (c) 2019
+ * 
+ */
+
 #ifndef CONFIG_H
 #define CONFIG_H
 

@@ -29,20 +29,18 @@ public:
      * 
      */
     explicit AccWorker();
-    /**
-     * @brief 
-     * 
-     */
+    
     MMA8652FCR1* acc;
 
 private slots:
     /**
-     * @brief 
+     * @brief Timer callback, sends accelerometer data using a signal. 
      * 
      */
     void Publish();
+
     /**
-     * @brief 
+     * @brief Obtains accelerometer data in an infinite loop. Actual transmission of data is done in Publish() on a timer.
      * 
      */
     void Work();
@@ -51,7 +49,7 @@ signals:
     /**
      * @brief 
      * 
-     * @param msg 
+     * @param msg A pointer to struct of accelerometer values (accValues_t).
      */
     void SendData(accValues_t* msg);
 

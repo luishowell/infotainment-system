@@ -1,7 +1,7 @@
 /**
  * @file LoggerWindow.h
  * @author Jamie Brown
- * @brief 
+ * @brief The main widget class for the logger window that is shown when the journey logger button is clicked.
  * @version 0.1
  * @date 2019-02-17
  * 
@@ -12,6 +12,8 @@
 #ifndef LOGGERWINDOW_H
 #define LOGGERWINDOW_H
 
+#include "types.h"
+
 #include <QWidget>
 #include <QCheckBox>
 #include <QPushButton>
@@ -21,11 +23,10 @@
 #include <QPointer>
 #include <QLabel>
 #include <QTimer>
-#include "types.h"
-#include <vector>
-#include <string>
 #include <QVector>
 #include <QString>
+#include <vector>
+#include <string>
 
 class LoggerWindow : public QWidget
 {
@@ -34,26 +35,27 @@ public:
     /**
      * @brief Construct a new Logger Window object
      * 
-     * @param supportedPids 
+     * @param supportedPids A vector of strings containing the supported pids for a given vehicle. 
+     * @param parent The parent widget.
      */
-    explicit LoggerWindow(std::vector<std::string> supportedPids);
+    explicit LoggerWindow(std::vector<std::string> supportedPids, QWidget* parent = 0);
 
     /**
-     * @brief 
+     * @brief Unchecks and enables relevant buttons. Should be called after the window is closed. 
      * 
      */
     void reset();
 
     /**
-     * @brief 
+     * @brief Informs caller whether or not logging is currently occuring.
      * 
-     * @return true 
-     * @return false 
+     * @return true Currently logging.
+     * @return false Not logging.
      */
     bool isLogging() const;
 
     /**
-     * @brief 
+     * @brief Shows this widget.
      * 
      */
     void ShowMe();
@@ -63,80 +65,73 @@ public:
 
 public slots:
     /**
-     * @brief 
+     * @brief Emits a logging request to CANWorker/CANThread and disables all buttons.
      * 
      */
     void StartLogging();
 
     /**
-     * @brief 
+     * @brief Emits a stop logging request to CANWorker/CANThread and enables all buttons. 
      * 
      */
     void StopLogging();
 
     /**
-     * @brief 
+     * @brief Callback when a logging parameter checkbox is clicked. Adds or removes the requested parameter to a list.
      * 
      */
     void OnClicked();
 
     /**
-     * @brief 
+     * @brief Callback for close button, emits a close signal to the Diagnostics widget.
      * 
      */
     void CloseWindow();
 
 private slots:
     /**
-     * @brief 
+     * @brief Changes the QLabel displayed while logging with a scrolling full-stop. (LOGGING...)
      * 
      */
     void UpdateLogMsg();
 
 signals:
     /**
-     * @brief 
+     * @brief Transmits a request to start or stop logging requested parameters.
      * 
-     * @param start 
+     * @param logParams A QVector of QStrings containing the requested parameters as pid codes. 
+     * @param start Boolean indicating whether to start or stop logging.
      */
-    void LogRequestTx(QVector<QString>logParams, bool start);
+    void LogRequestTx(QVector<QString> logParams, bool start);
 
     /**
-     * @brief 
+     * @brief Transmits a request to close the window. 
      * 
      */
     void CloseRequest();
 
 private:
     /**
-     * @brief 
+     * @brief Removes a requested parameter from the list. 
      * 
-     * @param param 
+     * @param param Parameter as a pid code. 
      */
     void RemoveParameter(QString param);
 
     /**
-     * @brief 
+     * @brief Connects all buttons to respective slot callbacks. 
      * 
      */
     void ConnectButtons();
 
     /**
-     * @brief 
-     * 
-     * @param name 
-     * @return diagParams_t 
-     */
-    diagParams_t HashButtonName(QString name);
-
-    /**
-     * @brief 
+     * @brief Disables all parameter checkboxes.
      * 
      */
     void DisableButtons();
 
     /**
-     * @brief 
+     * @brief Enables all parameter checkboxes.
      * 
      */
     void EnableButtons();

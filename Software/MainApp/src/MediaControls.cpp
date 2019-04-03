@@ -1,7 +1,7 @@
 /**
  * @file MediaControls.cpp
  * @author Jamie Brown
- * @brief 
+ * @brief Implementation of MediaControls.
  * @version 0.1
  * @date 2019-03-08
  * 
@@ -156,10 +156,6 @@ void MediaControls::onMuteRequest(bool muted)
     }
 }
 
-void MediaControls::stateChange(QMediaPlayer::State state)
-{
-
-}
 
 
 /* PRIVATE SLOTS */

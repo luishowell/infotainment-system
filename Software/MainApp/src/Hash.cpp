@@ -1,12 +1,16 @@
+/**
+ * @file Hash.cpp
+ * @author Jamie Brown
+ * @brief Contains implementations of hash functions.
+ * @version 0.1
+ * @date 2019-04-03
+ * 
+ * @copyright Copyright (c) 2019
+ * 
+ */
 #include "Hash.h"
 #include "QtCore"
 
-/**
- * @brief Converts a parameter name from a string to an enum
- * 
- * @param name 
- * @return diagParams_t 
- */
 diagParams_t Hash::HashParameterName(QString name)
 {
    if (name == "RPM")                       return RPM;
@@ -19,12 +23,6 @@ diagParams_t Hash::HashParameterName(QString name)
    if (name == "Fuel Pressure")             return FUEL_PRESSURE;
 }
 
-/**
- * @brief Converts a pid code from a string to an enum
- * 
- * @param inString 
- * @return diagParams_t 
- */
 diagParams_t Hash::HashPID(std::string pidString)
 {
    if (pidString == "0C") return RPM;
@@ -37,19 +35,9 @@ diagParams_t Hash::HashPID(std::string pidString)
    if (pidString == "0A") return FUEL_PRESSURE;
 }
 
-/**
- * @brief Converts a pid code to a parameter name
- * 
- * @param pidString 
- * @return std::string
- */
 std::string Hash::PID2Name(QString pidString)
 {
-   if (pidString == "010C")
-   {
-      //qDebug() << "rniwniwniwne"; 
-      return "RPM";
-   } 
+   if (pidString == "010C") return "RPM"; 
    if (pidString == "010D") return "Speed";
    if (pidString == "010F") return "Air-Temperature";
    if (pidString == "0111") return "Throttle";

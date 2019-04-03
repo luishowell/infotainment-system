@@ -1,7 +1,7 @@
 /**
  * @file Mutex.cpp
  * @author Jamie Brown
- * @brief 
+ * @brief Implementation of Mutex methods.
  * @version 0.1
  * @date 2019-03-12
  * 

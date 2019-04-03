@@ -1,46 +1,48 @@
-/** @brief Thread that obtains data from the OBD2 bus on a periodic basis
+/**
+ * @file CANThread.h
+ * @author your name (you@domain.com)
+ * @brief Dedicated thread for interfacing with the OBD2 bus. Functionality is contained in CANWorker and is moved to this thread.
+ * @version 0.1
+ * @date 2019-04-03
  * 
- * @author Jamie Brown
- * @date February 2019
- * */
+ * @copyright Copyright (c) 2019
+ * 
+ */
 
 #ifndef CANTHREAD_H
 #define CANTHREAD_H
 
-#include <QThread>
-#include <string>
 #include "config.h"
 #include "types.h"
-
-#ifndef GUI_TEST
 #include "obd2.hpp"
-#endif
+
+#include <QThread>
+#include <string>
 
 class CANThread : public QThread
 {
     Q_OBJECT
 
 public:
+    /**
+     * @brief Construct a new CANThread object
+     * 
+     */
     explicit CANThread();
+
+    /**
+     * @brief Destroy the CANThread object
+     * 
+     */
     ~CANThread();
     
-
-private slots:
-    void PublishDiagData();
-
-signals:
-    void CANPublishDiagTx(diagMsg_t* msg);
-    void CANPublishLogTx();
-
 private:
-    //string m_dataRequest;
-    void DummyData();
+    /**
+     * @brief Starts the CANThread's executive. Actual functional implementation is done in worker classes which are moved to this thread. 
+     * 
+     */
     void run();
-    diagMsg_t m_msg;
 
-#ifndef GUI_TEST
-    obd2 *m_obd;
-#endif
 };
 
 

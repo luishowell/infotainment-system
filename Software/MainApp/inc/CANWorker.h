@@ -1,7 +1,7 @@
 /**
  * @file CANWorker.h
  * @author Jamie Brown
- * @brief 
+ * @brief Contains functionality that interfaces with the OBD2 bus. This is moved to a dedicated thread, CANThread.
  * @version 0.1
  * @date 2019-04-02
  * 
@@ -60,47 +60,45 @@ private slots:
      * 
      */
     void PublishDiagData();
+
     /**
-     * @brief 
+     * @brief Receives a request to start logging user selected parameters.
      * 
-     * @param logParams 
-     * @param start 
+     * @param logParams QVector of QStrings containing requested pid codes.
+     * @param start Boolean indicating whether to start or stop logging.
      */
     void LogRequestRx(QVector<QString> logParams, bool start);
+
     /**
-     * @brief 
-     * 
-     */
+    * @brief Publishes diagnostics data to logger. Usually on a timer.
+    * 
+    */
     void PublishLogData();
+
     /**
-     * @brief 
+     * @brief Changes the requested data from the OBD2 bus based on request.
      * 
-     * @param dataRequested 
-     * @param channel 
+     * @param dataRequested The requested parameter (diagParams_t).
+     * @param channel The channel to assign the parameter to (obd2Channel_t).
      */
     void OnNewChannelRequest(diagParams_t dataRequested, obd2Channel_t channel);
 
 signals:
     /**
-     * @brief 
+     * @brief Transmits diagnostics data (diagMsg_t). 
      * 
      * @param msg 
      */
     void CANPublishDiagTx(diagMsg_t* msg);
     /**
-     * @brief 
+     * @brief Transmits logging data.
      * 
      */
     void CANPublishLogTx();
 
 private:
     /**
-     * @brief Get the Log Data object
-     * 
-     */
-    void GetLogData();
-    /**
-     * @brief 
+     * @brief Fills a diagMsg_t with dummy data. Can be used to test that the diagnostics dials are working.
      * 
      */
     void DummyData();

@@ -1,7 +1,7 @@
 /**
  * @file main.cpp
  * @author 
- * @brief 
+ * @brief Implementation of main entry point.
  * @version 0.1
  * @date 2019-03-13
  * 

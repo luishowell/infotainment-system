@@ -1,7 +1,7 @@
 /**
  * @file AccWorker.cpp
  * @author your name (you@domain.com)
- * @brief 
+ * @brief Implementation of AccWorker.
  * @version 0.1
  * @date 2019-03-13
  * 

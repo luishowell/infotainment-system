@@ -1,7 +1,7 @@
 /**
  * @file AccThread.h
  * @author Jamie Brown
- * @brief Skeleton thread for obtaining accelerometer data. 
+ * @brief Dedicated thread for obtaining accelerometer data. 
  *      Actual implementation is included in AccWorker which is moved to this thread.
  * @version 0.1
  * @date 2019-03-13
@@ -37,7 +37,7 @@ public:
 
 private:
     /**
-     * @brief 
+     * @brief Starts the AccThread's executive. Actual functional implementation is done in worker classes which are moved to this thread. 
      * 
      */
     void run();

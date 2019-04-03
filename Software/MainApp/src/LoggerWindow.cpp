@@ -1,7 +1,7 @@
 /**
  * @file LoggerWindow.cpp
  * @author Jamie Brown
- * @brief 
+ * @brief Implementation of LoggerWindow.
  * @version 0.1
  * @date 2019-02-22
  * 
@@ -21,13 +21,7 @@
 #include <string>
 #include <vector>
 
-/**
- * @brief Construct a new Logger Window:: Logger Window object
- * 
- * @param parent 
- * @param supportedPids 
- */
-LoggerWindow::LoggerWindow(std::vector<std::string> supportedPids)
+LoggerWindow::LoggerWindow(std::vector<std::string> supportedPids, QWidget* parent)
 {
     qDebug() << "LOGGER WINDOW: ";
 
@@ -191,10 +185,6 @@ void LoggerWindow::ShowMe()
     //m_selectMsg->show();
 }
 
-/**
- * @brief 
- * 
- */
 void LoggerWindow::ConnectButtons()
 {
     connect(m_startButton, SIGNAL (clicked()), this, SLOT (StartLogging()));
@@ -217,10 +207,6 @@ void LoggerWindow::CloseWindow()
     emit CloseRequest();
 }
 
-/**
- * @brief 
- * 
- */
 void LoggerWindow::StartLogging()
 {
     /* emit start signal */
@@ -240,10 +226,6 @@ void LoggerWindow::StartLogging()
     emit LogRequestTx(selectedParams, true);
 }
 
-/**
- * @brief 
- * 
- */
 void LoggerWindow::StopLogging()
 {
     /* emit stop signal */
@@ -276,11 +258,6 @@ void LoggerWindow::UpdateLogMsg()
     m_loggingMsg->setText(msg);
 }
 
-/**
- * @brief 
- * 
- * @param param 
- */
 void LoggerWindow::RemoveParameter(QString param)
 {
     int count;
@@ -293,10 +270,6 @@ void LoggerWindow::RemoveParameter(QString param)
     }
 }
 
-/**
- * @brief 
- * 
- */
 void LoggerWindow::OnClicked()
 {
     QObject *mySender = sender();

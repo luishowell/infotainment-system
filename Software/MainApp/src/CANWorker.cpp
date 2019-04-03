@@ -1,7 +1,7 @@
 /**
  * @file CANWorker.cpp
  * @author Jamie Brown
- * @brief 
+ * @brief Implementation of CANWorker.
  * @version 0.1
  * @date 2019-02-17
  * 
@@ -49,19 +49,11 @@ CANWorker::CANWorker(obd2* obd)
   //m_logFile = new ofstream;git
 }
 
-/**
- * @brief Destroy the CANWorker::CANWorker object
- * 
- */
 CANWorker::~CANWorker()
 {
   delete this;
 }
 
-/**
- * @brief 
- * 
- */
 void CANWorker::GetDiagData()
 {
   bool locked;
@@ -108,11 +100,6 @@ void CANWorker::GetDiagData()
   }
 }
 
-/**
- * @brief Receives a request from the diagnostics view to start logging user selected parameters
- * 
- * @param logParams 
- */
 void CANWorker::LogRequestRx(QVector<QString> logParams, bool start)
 {
   qDebug() << "CAN WORKER: logging requested" << start;
@@ -203,14 +190,9 @@ void CANWorker::LogRequestRx(QVector<QString> logParams, bool start)
   
 }
 
-
 /* if the timer elapses before data is ready, 
 	this signal is blocked until qApp->processEvents() is called 
 	in the GetDiagData() loop */
-/**
- * @brief Callback method invoked when diagnostics timer elapses. Publishes slow channel data (air temp, fuel etc)
- * 
- */
 void CANWorker::PublishDiagData()
 {
 	qDebug() << "CAN WORKER: get slow data";
@@ -229,22 +211,12 @@ void CANWorker::PublishDiagData()
   emit CANPublishDiagTx(&ObdMsg);
 }
 
-/**
- * @brief Callback method invoked when logging timer elapses. Publishes diagnostics data to logger.
- * 
- */
 void CANWorker::PublishLogData()
 {
   /* TODO: implement logging signal */
   emit CANPublishLogTx();
 }
 
-/**
- * @brief changes the current requested data from the OBD2 bus based on requests from the user
- * 
- * @param dataRequested 
- * @param channel 
- */
 void CANWorker::OnNewChannelRequest(diagParams_t dataRequested, obd2Channel_t channel)
 {
   switch(dataRequested)
@@ -309,10 +281,6 @@ void CANWorker::OnNewChannelRequest(diagParams_t dataRequested, obd2Channel_t ch
   }
 }
 
-/**
- * @brief 
- * 
- */
 void CANWorker::DummyData()
 {
   // dummy data 

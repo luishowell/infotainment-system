@@ -1,7 +1,7 @@
 /**
  * @file SensorWorker.cpp
  * @author Jamie Brown
- * @brief 
+ * @brief Implementation of SensorWorker
  * @version 0.1
  * @date 2019-02-17
  * 
@@ -23,10 +23,6 @@
 
 using namespace std;
 
-/**
- * @brief Construct a new Sensor Worker:: Sensor Worker object
- * 
- */
 SensorWorker::SensorWorker()
 {  
 	#ifdef RPI
@@ -96,11 +92,6 @@ void SensorWorker::Work()
     }
 }
 
-/**
- * @brief Periodic callback method that publishes aggregated sensor data 
-                           to the diagnostics viewer in the GUI thread
- * 
- */
 void SensorWorker::PublishSensorData()
 {
     qDebug() << "SENSOR WORKER: publishing";

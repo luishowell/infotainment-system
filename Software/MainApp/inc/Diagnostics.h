@@ -1,7 +1,7 @@
 /**
  * @file Diagnostics.h
  * @author Jamie Brown
- * @brief 
+ * @brief The main widget class for the diagnostics screen.
  * @version 0.1
  * @date 2019-02-17
  * 
@@ -53,103 +53,119 @@ public:
     
 public slots:
     /**
-     * @brief 
+     * @brief Sends request signal to change to the MainMenu.
      * 
      */
     void StateChangeMainMenu();
+
     /**
-     * @brief 
+     * @brief Callback when diagnostics data is received from the CANWorker / CANThread.
      * 
      * @param msg 
      */
     void DiagDataRx(diagMsg_t* msg);
+
     /**
-     * @brief 
+     * @brief Callback when accelerometer data is received from the AccWorker / AccThread.
      * 
      * @param msg 
      */
     void AccDataRx(accValues_t* msg);
+
     /**
-     * @brief 
+     * @brief Callback when the logging button is pressed. Opens the LoggerWindow, resets if previously closed. 
      * 
      */
     void JourneyLogRequest();
+
     /**
-     * @brief 
+     * @brief Callback when log parameters received from LoggingWindow. Emits signal to CANWorker to start logging. 
      * 
-     * @param logParams 
-     * @param start 
+     * @param logParams QVector of QStrings including user requested pid codes. 
+     * @param start Boolean indicating whether or not logging has started.
      */
     void LogRequestRx(QVector<QString>  logParams, bool start);
+
     /**
-     * @brief 
+     * @brief Hides the LoggingWindow and resets it for next use. 
      * 
      */
     void CloseLogWindow();
+
     /**
-     * @brief 
+     * @brief Displays the RPM gauge and requests its pid code to the CANWorker.
      * 
      */
     void ShowRpmGauge();
+
     /**
-     * @brief 
+     * @brief Displays the speed gauge and requests its pid code to the CANWorker.
      * 
      */
     void ShowSpeedGauge();
+
     /**
-     * @brief 
+     * @brief Displays the air temperature gauge and requests its pid code to the CANWorker.
      * 
      */
     void ShowAirTempGauge();
+
     /**
-     * @brief 
+     * @brief Displays the throttle gauge and requests its pid code to the CANWorker.
      * 
      */
     void ShowThrottleGauge();
+
     /**
-     * @brief 
+     * @brief Displays the current gear gauge and requests its pid code to the CANWorker.
      * 
      */
     void ShowGearGauge();
+
     /**
-     * @brief 
+     * @brief Displays the fuel pressure gauge and requests its pid code to the CANWorker.
      * 
      */
     void ShowFuelPressureGauge();
+
     /**
-     * @brief 
+     * @brief Displays the engine runtime gauge and requests its pid code to the CANWorker.
      * 
      */
     void ShowEngineRuntimeGauge();
+
     /**
-     * @brief 
+     * @brief Displays the engine load gauge and requests its pid code to the CANWorker.
      * 
      */
     void ShowEngineLoadGauge();
+
     /**
-     * @brief 
+     * @brief Displays the accelerometer gauge its data is acquired in a seperate thread to OBD2 data and is therefore not required to be requested.
      * 
      */
     void ShowAccGauge();
+
     /**
-     * @brief 
+     * @brief Shows the window and the LoggerWindow if it is currently logging. 
      * 
      */
     void ShowMe();
 
 signals:
     /**
-     * @brief 
+     * @brief Request to change the current view. 
      * 
-     * @param req_state 
-     * @param currentView 
+     * @param req_state state_t, The requested view. 
+     * @param currentView Pointer to this QWidget.
      */
     void DisplayChange(state_t req_state, QWidget* currentView);
+
     /**
-     * @brief 
+     * @brief Requests a new parameter for a given OBD2 channel. 
      * 
-     * @param dataRequested 
-     * @param channel 
+     * @param dataRequested Requested diagnostics data. 
+     * @param channel Channel to obtain data (A or B).
      */
     void NewChannelRequest(diagParams_t dataRequested, obd2Channel_t channel);
     /**
@@ -162,22 +178,28 @@ signals:
 
 private:
     /**
-     * @brief Create a Components object
+     * @brief Create the buttons, sliders etc. 
      * 
      */
     void CreateComponents();
+
     /**
-     * @brief 
+     * @brief Connects signals and slots for the buttons. 
      * 
      */
     void ConnectButtons();
+
     /**
-     * @brief 
+     * @brief Sets all buttons to a requested state (enabled/disabled). 
      * 
-     * @param state 
+     * @param state Boolean of the required state. 
      */
     void ButtonState(bool state);
 
+    /**
+     * @brief Structure containing objects for a displayed diagnostics parameter. 
+     * 
+     */
     typedef struct currentDisplay{
             QObject *obj;
             QGroupBox *box;

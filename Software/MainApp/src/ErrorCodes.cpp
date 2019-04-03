@@ -1,7 +1,7 @@
 /**
  * @file ErrorCodes.cpp
  * @author Luis Howell
- * @brief 
+ * @brief Implementation of ErrorCodes.
  * @version 0.1
  * @date 2019-02-17
  * 
@@ -25,11 +25,6 @@
 #include <iostream>
 #include <unistd.h>
 
-/**
- * @brief Construct a new Error Codes:: Error Codes object
- * 
- * @param parent 
- */
 ErrorCodes::ErrorCodes(QWidget *parent, obd2* myObd) : QWidget(parent) 
 {
    obd = myObd;
@@ -43,19 +38,11 @@ ErrorCodes::ErrorCodes(QWidget *parent, obd2* myObd) : QWidget(parent)
    connect(clearButton, SIGNAL (clicked()), this, SLOT (ClearErrorCodes()));
 }
 
-/**
- * @brief 
- * 
- */
 void ErrorCodes::StateChangeMainMenu()
 {
    emit DisplayChange(MAIN_MENU, this);
 }
 
-/**
- * @brief 
- * 
- */
 void ErrorCodes::CreateLayout()
 {
    QVBoxLayout* vLayout = new QVBoxLayout(this);

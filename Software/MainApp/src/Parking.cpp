@@ -1,7 +1,7 @@
  /**
  * @file Parking.cpp
- * @author Jamie Brown
- * @brief 
+ * @author Jamie Brown/Luis Howell
+ * @brief Implementation of Parking.
  * @version 0.1
  * @date 2019-02-17
  * 
@@ -95,11 +95,6 @@ vector<int> Parking::calc_line_coor(int centre_x, int centre_y, int bar_width, i
   return coords;
 }
 
-/**
- * @brief Construct a new Parking:: Parking object
- * 
- * @param parent 
- */
 Parking::Parking(QWidget *parent) : QWidget(parent) 
 {
      
@@ -170,19 +165,11 @@ void Parking::calc_smallest_dist()
   smallest_dist = min_dist;
 }
 
-/**
- * @brief 
- * 
- */
 void Parking::StateChangeMainMenu()
 {
   emit DisplayChange(MAIN_MENU, this);
 }
 
-/**
- * @brief 
- * 
- */
 void Parking::CreateLayout()
 {
   QVBoxLayout* vLayout = new QVBoxLayout(this);

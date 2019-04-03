@@ -1,7 +1,7 @@
 /**
  * @file StateManager.cpp
  * @author Jamie Brown
- * @brief Contains implementation of the StateManager class
+ * @brief Contains implementation of StateManager.
  * @version 0.1
  * @date 2019-02-17
  * 
@@ -17,11 +17,6 @@
 
 using namespace std;
 
-/**
- * @brief Construct a new State Manager:: State Manager object
- * 
- * @param parent The parent object of the state manager
- */
 StateManager::StateManager(QWidget *parent, obd2* myObd, MMA8652FCR1* acc) : QWidget(parent)
 {
     cout << "State manager started" << endl;
@@ -63,11 +58,6 @@ StateManager::StateManager(QWidget *parent, obd2* myObd, MMA8652FCR1* acc) : QWi
 
 }
 
-/**
- * @brief Receiving callback of diagnostics data from the CAN thread
- * 
- * @param msg 
- */
 void StateManager::CANPublishDiagRx(diagMsg_t* msg)
 {
     /* forward to diagnostics window */
@@ -82,12 +72,6 @@ void StateManager::AccDataRx(accValues_t* msg)
     emit AccDataTx(msg);
 }
 
-/**
- * @brief State machine that determines the currently displayed view/menu
- * 
- * @param req_state The requested view to be shown
- * @param currentView A pointer to the currently displayed view
- */
 void StateManager::ChangeRequested(state_t req_state, QWidget* currentView)
 {
     switch(req_state)
@@ -146,12 +130,6 @@ void StateManager::ChangeRequested(state_t req_state, QWidget* currentView)
     }
 }
 
-/**
- * @brief Forwards new data channel request information from the GUI to the CAN thread
- * 
- * @param dataRequested The data parameter that is requested (eg. speed, rpm etc)
- * @param channel The requested channel number (left or right)
- */
 void StateManager::OnNewChannelRequest(diagParams_t dataRequested, obd2Channel_t channel)
 {
     //cout<<"CHANNEL REQUESTED"<<endl;
@@ -159,11 +137,6 @@ void StateManager::OnNewChannelRequest(diagParams_t dataRequested, obd2Channel_t
     emit NewChannelRequest(dataRequested, channel);
 }
 
-/**
- * @brief 
- * 
- * @param logParams 
- */
 void StateManager::LogRequestRx(QVector<QString> logParams, bool start)
 {
     qDebug() << "STATE MANAGER: logging";

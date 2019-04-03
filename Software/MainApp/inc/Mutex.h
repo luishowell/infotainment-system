@@ -1,3 +1,8 @@
+/**
+ * @brief Mutexes for access to hardware. Used to keep classes thread safe.
+ * 
+ */
+
 #ifndef MUTEX_H
 #define MUTEX_H
 

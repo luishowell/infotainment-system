@@ -1,7 +1,7 @@
 /**
  * @file MainMenu.cpp
  * @author Jamie Brown
- * @brief 
+ * @brief Implementation of MainMenu.
  * @version 0.1
  * @date 2019-02-17
  * 
@@ -21,11 +21,6 @@
 #include <QSize>
 #include <QIcon>
 
-/**
- * @brief Construct a new Main Menu:: Main Menu object
- * 
- * @param parent 
- */
 MainMenu::MainMenu(QWidget *parent) : QWidget(parent) 
  {
    setFixedSize(widgetSize);
@@ -39,10 +34,6 @@ MainMenu::MainMenu(QWidget *parent) : QWidget(parent)
    connect(m_errorButton, SIGNAL (clicked()), this, SLOT (StateChangeErrorCodes()));
  }
 
-/**
- * @brief 
- * 
- */
 void MainMenu::CreateLayout()
 {
    QVBoxLayout* vLayout = new QVBoxLayout(this);
@@ -105,37 +96,21 @@ void MainMenu::CreateLayout()
    titleBox->setAlignment(Qt::AlignHCenter);
 }
 
-/**
- * @brief 
- * 
- */
 void MainMenu::StateChangeDiag()
 {
    emit DisplayChange(DIAGNOSTICS, this);
 }
 
-/**
- * @brief 
- * 
- */
 void MainMenu::StateChangeParking()
 {
    emit DisplayChange(PARKING, this);
 }
 
-/**
- * @brief 
- * 
- */
 void MainMenu::StateChangeErrorCodes()
 {
    emit DisplayChange(ERROR_CODES, this);
 }
 
-/**
- * @brief 
- * 
- */
 void MainMenu::StateChangeMedia()
 {
    emit DisplayChange(MEDIA, this);

@@ -1,7 +1,7 @@
 /**
  * @file SensorWorker.h
- * @author your name (you@domain.com)
- * @brief 
+ * @author Jamie Brown
+ * @brief Contains functionality that interfaces with the ultrasonic parking sensors. This is moved to a dedicated thread, SensorThread.
  * @version 0.1
  * @date 2019-04-02
  * 
@@ -32,20 +32,20 @@ public:
     
 private slots:
     /**
-     * @brief 
-     * 
+    * @brief Periodic callback method that publishes aggregated sensor data 
+                           to the diagnostics viewer in the GUI thread.
      */
     void PublishSensorData();
 
     /**
-     * @brief 
+     * @brief Requests sensor data from the interface. 
      * 
      */
     void Work();
 
 signals:
     /**
-     * @brief 
+     * @brief Transmits the aggregated sensor data to the parking mode GUI.
      * 
      * @param msg 
      */
@@ -53,7 +53,7 @@ signals:
 
 private:
     /**
-     * @brief 
+     * @brief Fill the sensor data structure with dummy values. Can be used to test the parking mode GUI.
      * 
      */
     void DummyData();

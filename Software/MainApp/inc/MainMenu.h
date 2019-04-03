@@ -1,7 +1,7 @@
 /**
  * @file MainMenu.h
  * @author Jamie Brown
- * @brief 
+ * @brief The main widget class for the main menu. 
  * @version 0.1
  * @date 2019-02-17
  * 
@@ -34,41 +34,41 @@ public:
     
 public slots:
     /**
-     * @brief 
+     * @brief Emits a request to the StateManager to change to the diagnostics screen.
      * 
      */
     void StateChangeDiag();
 
     /**
-     * @brief 
+     * @brief Emits a request to the StateManager to change to the media screen.
      * 
      */
     void StateChangeMedia();
 
     /**
-     * @brief 
+     * @brief Emits a request to the StateManager to change to the parking screen.
      * 
      */
     void StateChangeParking();
 
     /**
-     * @brief 
+     * @brief Emits a request to the StateManager to change to the fault codes screen.
      * 
      */
     void StateChangeErrorCodes();
 
 signals:
     /**
-     * @brief 
+     * @brief Transmits a request to change to a requested window view.
      * 
-     * @param req_state 
-     * @param currentView 
+     * @param req_state The requested window. 
+     * @param currentView A pointer to this QWidget, the sender.
      */
     void DisplayChange(state_t req_state, QWidget* currentView);
 
 private:
     /**
-     * @brief Create a Layout object
+     * @brief Creates the buttons and lays them out. 
      * 
      */
     void CreateLayout();

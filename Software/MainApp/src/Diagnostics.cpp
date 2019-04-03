@@ -1,7 +1,7 @@
 /**
  * @file Diagnostics.cpp
  * @author Jamie Brown
- * @brief 
+ * @brief Implementation of Diagnostics.
  * @version 0.1
  * @date 2019-02-17
  * 
@@ -36,11 +36,6 @@
 
 using namespace std;
 
-/**
- * @brief Construct a new Diagnostics:: Diagnostics object
- * 
- * @param parent 
- */
 Diagnostics::Diagnostics(QWidget *parent, obd2* myObd, MMA8652FCR1* acc) : QWidget(parent) 
  {   
    m_acc = acc;
@@ -55,7 +50,7 @@ Diagnostics::Diagnostics(QWidget *parent, obd2* myObd, MMA8652FCR1* acc) : QWidg
 
    obd = myObd;
    //m_logWindow = new LoggerWindow(testVec);
-   m_logWindow = new LoggerWindow(obd->supported_pids);
+   m_logWindow = new LoggerWindow(obd->supported_pids, this);
    m_logWindow->setFixedSize(400, 300);
  
    setFixedSize(widgetSize);
@@ -77,10 +72,6 @@ Diagnostics::Diagnostics(QWidget *parent, obd2* myObd, MMA8652FCR1* acc) : QWidg
 
  }
 
-/**
- * @brief 
- * 
- */
 void Diagnostics::CreateComponents()
 {
    qDebug() << "DIAGNOSTICS: creating components";
@@ -182,10 +173,6 @@ void Diagnostics::CreateComponents()
    m_logButton->setFixedSize(400, 50);
 }
 
-/**
- * @brief 
- * 
- */
 void Diagnostics::CreateLayout()
 {
    qDebug() << "DIAGNOSTICS: creating layout";
@@ -415,11 +402,6 @@ void Diagnostics::CreateLayout()
 
 }
 
-/**
- * @brief 
- * 
- * @param msg 
- */
 void Diagnostics::DiagDataRx(diagMsg_t* msg)
 {
    if (msg->connectionFault == true)
@@ -470,10 +452,6 @@ void Diagnostics::AccDataRx(accValues_t* msg)
    m_accGauge->update_gauge(msg);
 }
 
-/**
- * @brief 
- * 
- */
 void Diagnostics::ConnectButtons()
 {
    //connect(this, SIGNAL (DiagDataChange(diagData_t)), this, SLOT (ChangeDiagDisplay(diagData_t)));
@@ -512,10 +490,6 @@ void Diagnostics::ShowAccGauge()
    
 }
 
-/**
- * @brief 
- * 
- */
 void Diagnostics::ShowAirTempGauge()
 {
    if (currentRightGauge != airTempBox)
@@ -530,10 +504,6 @@ void Diagnostics::ShowAirTempGauge()
    }
 }
 
-/**
- * @brief 
- * 
- */
 void Diagnostics::ShowSpeedGauge()
 {
    if (currentRightGauge != speedBox)
@@ -549,10 +519,6 @@ void Diagnostics::ShowSpeedGauge()
    }
 }
 
-/**
- * @brief 
- * 
- */
 void Diagnostics::ShowRpmGauge()
 {
    if (currentLeftGauge != rpmBox)
@@ -567,10 +533,6 @@ void Diagnostics::ShowRpmGauge()
    }     
 }
 
-/**
- * @brief 
- * 
- */
 void Diagnostics::ShowThrottleGauge()
 {
    if (currentRightGauge != throttleBox)
@@ -585,10 +547,6 @@ void Diagnostics::ShowThrottleGauge()
    }  
 }
 
-/**
- * @brief 
- * 
- */
 void Diagnostics::ShowGearGauge()
 {
    if (currentRightGauge != gearBox)
@@ -603,10 +561,6 @@ void Diagnostics::ShowGearGauge()
    } 
 }
 
-/**
- * @brief 
- * 
- */
 void Diagnostics::ShowFuelPressureGauge()
 {
    if (currentRightGauge != fuelPressureBox)
@@ -622,10 +576,6 @@ void Diagnostics::ShowFuelPressureGauge()
 
 }
 
-/**
- * @brief 
- * 
- */
 void Diagnostics::ShowEngineRuntimeGauge()
 {
    if (currentRightGauge != engineRuntimeBox)
@@ -640,10 +590,6 @@ void Diagnostics::ShowEngineRuntimeGauge()
    } 
 }
 
-/**
- * @brief 
- * 
- */
 void Diagnostics::ShowEngineLoadGauge()
 {
    if (currentRightGauge != engineLoadBox)
@@ -658,10 +604,6 @@ void Diagnostics::ShowEngineLoadGauge()
    } 
 }
 
-/**
- * @brief 
- * 
- */
 void Diagnostics::JourneyLogRequest()
 {
    cout<<"LOG REQUESTED"<<endl;
@@ -683,11 +625,6 @@ void Diagnostics::JourneyLogRequest()
    //emit StartLogging();
 }
 
-/**
- * @brief 
- * 
- * @param logParams 
- */
 void Diagnostics::LogRequestRx(QVector<QString> logParams, bool start)
 {
    qDebug() << "DIAGNOSTICS: ";
@@ -712,10 +649,6 @@ void Diagnostics::CloseLogWindow()
    ButtonState(true);
 }
 
-/**
- * @brief 
- * 
- */
 void Diagnostics::StateChangeMainMenu()
 {
    qDebug() << "clicked home button";

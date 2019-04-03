@@ -1,7 +1,7 @@
 /**
  * @file types.h
  * @author Jamie Brown
- * @brief Contains all custom typedefs and structs used in the project
+ * @brief Contains all custom typedefs and structs used in the project.
  * @version 0.1
  * @date 2019-02-17
  * 
@@ -20,7 +20,7 @@
 #include <QPointer>
 
 /**
- * @brief GUI view states
+ * @brief Enumeration of GUI view states.
  * 
  */
 typedef enum{
@@ -32,7 +32,7 @@ typedef enum{
 } state_t;
 
 /**
- * @brief diagnostics messages
+ * @brief Structure containing requested OBD2 parameters for a given channel.
  * 
  */
 typedef struct diagMsg {
@@ -44,7 +44,7 @@ typedef struct diagMsg {
 } diagMsg_t;
 
 /**
- * @brief 
+ * @brief Structure containing audio meta-data for a given mp3 file.
  * 
  */
 typedef struct audioMetaData
@@ -60,7 +60,7 @@ typedef struct audioMetaData
 } audioMetaData_t;
 
 /**
- * @brief parameters that can be requested from the OBD2 thread
+ * @brief Enumeration of parameters that can be requested from the CANWorker/CANThread.
  * 
  */
 typedef enum {
@@ -76,7 +76,7 @@ typedef enum {
 //Q_DECLARE_METATYPE(diagParams_t)
 
 /**
- * @brief 
+ * @brief Enumeration of OBD2 chanels.
  * 
  */
 typedef enum {
@@ -85,7 +85,7 @@ typedef enum {
 } obd2Channel_t;
 
 /**
- * @brief parking sensor signals
+ * @brief Structure of parking sensor signals for each sensor.
  * 
  */
 typedef struct sensorDist {
@@ -100,7 +100,7 @@ typedef struct sensorDist {
 
 
 /**
- * @brief: Struct containing parking sensor pins 
+ * @brief: Structure of parking sensor pins .
  *
  */
 typedef struct sensorPins_t {
@@ -111,7 +111,7 @@ typedef struct sensorPins_t {
 } sensorPins_t;
 
 /**
- * @brief: Accelerometer data type. 
+ * @brief: Structure of accelerometer data types. 
  *
  */
 typedef struct accValues_t {
