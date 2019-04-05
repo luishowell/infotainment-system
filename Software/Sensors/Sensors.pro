@@ -8,7 +8,7 @@ INCLUDEPATH     += ../MainApp/inc
 INCLUDEPATH     += ../GUI/inc/
 
 #libraries
-#LIBS += -L/usr/local/lib -lwiringPi
+LIBS += -L/usr/local/lib -lwiringPi
 
 #inputs
 SOURCES         += ./src/multiplexor.cpp        

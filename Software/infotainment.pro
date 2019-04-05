@@ -2,8 +2,8 @@ TEMPLATE            = subdirs
 
 CONFIG              += ordered
 
-SUBDIRS             =   GUI        \
-                        OBD2       \
+  
+SUBDIRS             =   OBD2       \
                         Sensors    \
                         Tests      \
                         MainApp
@@ -13,7 +13,6 @@ GUI.depends         +=  Sensors
 Tests.depends       +=  OBD2  
 Tests.depends       +=  Sensors
 MainApp.depends		+=  OBD2
-MainApp.depends     +=  GUI
 MainApp.depends     +=  SENSORS
 
 #comment out the following line if building for non raspberry pi

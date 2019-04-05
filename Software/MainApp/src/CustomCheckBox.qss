@@ -1,0 +1,24 @@
+QCheckBox::indicator:checked
+{
+    image: url(./MainApp/images/green.jpg);
+}
+
+QCheckBox::indicator:checked:pressed
+{
+    image: url(./MainApp/images/greenPressed.jpg);
+}
+
+QCheckBox::indicator:unchecked
+{
+    image: url(./MainApp/images/amber.jpg);
+}
+
+QCheckBox::indicator:unchecked:pressed
+{
+    image: url(./MainApp/images/amberPressed.jpg);
+}
+
+QCheckBox:indicator:unchecked:disabled
+{
+    image: url(./MainApp/images/red.jpg);
+}

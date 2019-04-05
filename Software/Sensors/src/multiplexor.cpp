@@ -7,7 +7,7 @@ multiplexor::multiplexor(){}
 /*
     Function used to setup the pins on the pi that connect to the mux
 */
-void multiplexor::init(int sel_0, int sel_1, int sel_2)
+bool multiplexor::init(int sel_0, int sel_1, int sel_2)
 {
 #ifdef RPI
     //set the pins as outputs and save values
@@ -22,7 +22,12 @@ void multiplexor::init(int sel_0, int sel_1, int sel_2)
      digitalWrite(sel_0, LOW);
      digitalWrite(sel_1, LOW);
      digitalWrite(sel_2, LOW);
+
+     return true;
 #endif
+
+    return false;
+
 }
 
 /*
@@ -42,7 +47,9 @@ bool multiplexor::set_mux(unsigned int select_val)
     digitalWrite(m_sel_0,(select_val & 1));
     digitalWrite(m_sel_1,(select_val & 2) >> 1);
     digitalWrite(m_sel_2,(select_val & 4) >> 2);
-#endif
+
     return true;
+#endif
+    return false;
 
 }

@@ -2,8 +2,8 @@
  * @file ultrasonic_sensor.h
  * @author Joe Walker
  * @brief The class ultrasonic_sensor provides methods for controlling the operation of an ultrasonic sensor from the raspberry pi.
- * @version 0.1
- * @date 2019-02-18
+ * @version 0.2
+ * @date 2019-04-01
  * 
  * @copyright Copyright (c) 2019
  * 
@@ -16,6 +16,7 @@
 
 #include <stdio.h>
 #include <time.h>
+#include <math.h> 
 
 #ifdef RPI
 #include <wiringPi.h>
@@ -35,8 +36,9 @@ class ultrasonic_sensor
          * 
          * @param trigger_pin The wiringPi pin number of the pin connected to the trigger of the ultransonic sensor.
          * @param echo_pin The wiringPi pin number of the pin connected to the trigger of the ultrasonic sensor.
+         * @return bool Flag to report if on RPI or not
          */
-        void init(int trigger_pin, int echo_pin);
+        bool init(int trigger_pin, int echo_pin);
 
 
         /**
@@ -46,6 +48,30 @@ class ultrasonic_sensor
          * @return bool Flag that reports if the command has been successful or not.
          */
         bool GetDistance(double *distance);
+
+
+        /**
+         * @brief Sets the timeout length for a given max distance
+         * 
+         * @param maxDistance The maximum distance to be sensed
+         * @return Bool indicating if the given distance is valid
+         */
+        bool setTimeout(double maxDistance);
+
+
+        /**
+         * @brief Calculates the distance for a given length of pulse
+         * 
+         * @param pulseLen The length of the echo pulse
+         * @return Double indicating the measured distance
+         */
+        double calculateDistance(double pulseLen);
+
+        //timeout length
+        double timeoutLen;
+
+        //speed of sound
+        double speedOfSound = 340;
 
     private:
 
@@ -60,6 +86,8 @@ class ultrasonic_sensor
         //calculated variables
         double time_diff;
         double m_distance;
+
+        
 
 
 };
