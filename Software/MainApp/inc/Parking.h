@@ -99,12 +99,6 @@ private:
     void calc_beep_delay();
 
     /**
-     * @brief Create initial screen GUI layout
-     * 
-     */
-    void CreateLayout ();
-
-    /**
      * @brief Round a float up or down to the nearest integer
      * 
      * @param input Float value to round
