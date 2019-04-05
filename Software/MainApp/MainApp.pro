@@ -32,19 +32,13 @@ DEPENDPATH  += . ../OBD2/
 DEPENDPATH  += . ../Sensors/
 PRE_TARGETDEPS += ../OBD2/bin/libOBD2.a
 PRE_TARGETDEPS += ../Sensors/bin/libSENSORS.a
+# local libs
 LIBS        +=  -L../OBD2/bin/ -lOBD2
 LIBS        +=  -L../Sensors/bin/ -lSENSORS
+# system-wide libs
 #LIBS += -L/usr/local/lib -lwiringPi
-LIBS        += -L../usr/local/lib/taglib/taglib -ltag #-lz
+LIBS        += -L/usr/local/lib/taglib/taglib -ltag
 LIBS        += -lz
-INCLUDEPATH += ../lib/taglib/
-INCLUDEPATH += ../lib/taglib/taglib
-INCLUDEPATH += ../lib/taglib/taglib/toolkit
-INCLUDEPATH += ../lib/taglib/taglib/mpeg
-INCLUDEPATH += ../lib/taglib/taglib/mpeg/id3v2
-
-
-
 
 #-----------------------------------#
 #--------------OUTPUTS--------------#

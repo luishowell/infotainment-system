@@ -30,11 +30,11 @@
 #include <algorithm>
 
 #include <taglib/tag.h>
-#include <fileref.h>
-#include <frames/attachedpictureframe.h>
-#include <tlist.h>
-#include <id3v2tag.h>
-#include <mpegfile.h>
+#include <taglib/fileref.h>
+#include <taglib/attachedpictureframe.h>
+#include <taglib/tlist.h>
+#include <taglib/id3v2tag.h>
+#include <taglib/mpegfile.h>
 
 Media::Media(QWidget *parent) : QWidget(parent) 
  {

@@ -31,7 +31,7 @@
 #include <QTimer>
 
 #include <taglib/tag.h>
-#include <id3v2frame.h>
+#include <taglib/id3v2frame.h>
 
 
 class Media : public QWidget
