@@ -16,6 +16,7 @@ Software/Tests/Sensors_test/Ultrasonic_test/Online/bin/
 *.a
 moc_*
 *moc
-Makefile
+*.qmlc
 *.stash
+Makefile
 Software/OBD2/supported_pid_gen.txt
