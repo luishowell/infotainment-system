@@ -1,12 +1,28 @@
 language: cpp
 #compiler: gcc
-compiler: clang
+#compiler: clang
 #dist: trusty
 sudo: required
 dist: xenial
 
+compiler:
+  - gcc
+  - clang
+addons:
+  apt:
+    sources:
+    - ubuntu-toolchain-r-test
+    - llvm-toolchain-precise-3.8
+    packages:
+    - g++-6
+    - clang-3.8
 install:
+  - "[ $CXX = g++ ] && export CXX=g++-6 || true"
+  - "[ $CXX = clang++ ] && export CXX=clang++-3.8 || true"
   - ./infotainment-install.sh
+
+# install:
+#   - ./infotainment-install.sh
 
 # Start virtual X server, from https://docs.travis-ci.com/user/gui-and-headless-browsers/
 before_script:
