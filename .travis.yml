@@ -1,7 +1,8 @@
 language: cpp
-compiler: gcc
-#compiler: clang
+#compiler: gcc
+compiler: clang
 #dist: trusty
+sudo: required
 dist: xenial
 
 install:
