@@ -104,7 +104,7 @@ class obd2{
          * @param hex_string A hex string
          * @return unsigned long The int value of the hex string
          */
-        unsigned long hex2int(string hex_string);
+        long hex2int(string hex_string);
 
         /**
          * @brief Converts a positive integer to a hex string
