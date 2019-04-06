@@ -16,6 +16,7 @@
 #include "types.h"
 
 #include <stdio.h>
+#include <stdint.h>
 #include <iostream>
 #include <errno.h>
 #include <cmath>
