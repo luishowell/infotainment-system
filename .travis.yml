@@ -1,6 +1,6 @@
 language: cpp
-#compiler: gcc
-compiler: clang
+compiler: gcc
+#compiler: clang
 #dist: trusty
 dist: xenial
 
