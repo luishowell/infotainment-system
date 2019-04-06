@@ -498,7 +498,7 @@ string obd2::pid_desc(string pid_code){
 }
 
 
-unsigned long obd2::hex2int(string hex_string){
+long obd2::hex2int(string hex_string){
     try{
         return stoul(hex_string, nullptr, 16);
     }

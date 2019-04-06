@@ -89,15 +89,14 @@ void OBD2OfflineTest::cleanup()
  */
 void OBD2OfflineTest::DecodeResponse_Test()
 {
-    QVERIFY(m_obd->decode_response("41057B") == 83.0);    
-    QVERIFY(m_obd->decode_response("410C1AF8") == 1726.0);    
-    QVERIFY(m_obd->decode_response("test") == -999);  
-    QVERIFY(m_obd->decode_response("43013300210010") == -999);   
-    QVERIFY(m_obd->decode_response("4100") == -999);   
-    QVERIFY(m_obd->decode_response("41") == -999);  
-    QVERIFY(m_obd->decode_response("4105") == -999);  
-    QVERIFY(m_obd->decode_response("010D") == -999);  
-    QVERIFY(m_obd->decode_response("41057BC1") == -999); 
+    QCOMPARE(m_obd->decode_response("41057B"), 83.0);    
+    QCOMPARE(m_obd->decode_response("410C1AF8"), 1726.0);    
+    QCOMPARE(m_obd->decode_response("test"), -999.0);  
+    QCOMPARE(m_obd->decode_response("43013300210010"), -999.0);   
+    QCOMPARE(m_obd->decode_response("4100"), -999.0);   
+    QCOMPARE(m_obd->decode_response("41"), -999.0);  
+    QCOMPARE(m_obd->decode_response("4105"), -999.0);  
+    QCOMPARE(m_obd->decode_response("010D"), -999.0);    
 }
 
 /**
@@ -106,18 +105,18 @@ void OBD2OfflineTest::DecodeResponse_Test()
  */
 void OBD2OfflineTest::DtcDesc_Test()
 {
-    QVERIFY(m_obd->dtc_desc("P0010") ==  "A camshaft position actuator circuit (bank 1)");
-    QVERIFY(m_obd->dtc_desc("B1636") ==  "Mirror Driver Right Circuit Open");
-    QVERIFY(m_obd->dtc_desc("test") ==  "No DTC description");
-    QVERIFY(m_obd->dtc_desc("756412") ==  "No DTC description");    
+    QCOMPARE(m_obd->dtc_desc("P0010"), std::string("A camshaft position actuator circuit (bank 1)"));
+    QCOMPARE(m_obd->dtc_desc("B1636"), std::string("Mirror Driver Right Circuit Open"));
+    QCOMPARE(m_obd->dtc_desc("test"), std::string("No DTC description"));
+    QCOMPARE(m_obd->dtc_desc("756412"), std::string("No DTC description"));    
 }
 
 void OBD2OfflineTest::PidDesc_Test()
 {
-    QVERIFY(m_obd->pid_desc("00") ==  "PIDs supported [01 - 20]");
-    QVERIFY(m_obd->pid_desc("10") ==  "MAF air flow rate");
-    QVERIFY(m_obd->pid_desc("9D") ==  "Engine Fuel Rate");
-    QVERIFY(m_obd->pid_desc("test") ==  "No PID description"); 
+    QCOMPARE(m_obd->pid_desc("00"), std::string("PIDs supported [01 - 20]"));
+    QCOMPARE(m_obd->pid_desc("10"), std::string("MAF air flow rate"));
+    QCOMPARE(m_obd->pid_desc("9D"), std::string("Engine Fuel Rate"));
+    QCOMPARE(m_obd->pid_desc("test"), std::string("No PID description")); 
 }
 
 /**
@@ -126,10 +125,10 @@ void OBD2OfflineTest::PidDesc_Test()
  */
 void OBD2OfflineTest::Hex2int_Test()
 {
-    QVERIFY(m_obd->hex2int("010D") == 269);  
-    QVERIFY(m_obd->hex2int("0") == 0);  
-    QVERIFY(m_obd->hex2int("test") == 0);  
-    QVERIFY(m_obd->hex2int("-010D") == 0);  
+    QCOMPARE(m_obd->hex2int("010D"), long(269));  
+    QCOMPARE(m_obd->hex2int("0"), long(0));  
+    QCOMPARE(m_obd->hex2int("test"), long(0));  
+    QCOMPARE(m_obd->hex2int("-010D"), long(-269));  
 }
 
 /**
@@ -138,10 +137,10 @@ void OBD2OfflineTest::Hex2int_Test()
  */
 void OBD2OfflineTest::Int2hex_Test()
 {
-    QVERIFY(m_obd->int2hex(1)=="01");
-    QVERIFY(m_obd->int2hex(0)=="00");
-    QVERIFY(m_obd->int2hex(3697)=="E71");
-    QVERIFY(m_obd->int2hex(-10)=="0A");
+    QCOMPARE(m_obd->int2hex(1), std::string("01"));
+    QCOMPARE(m_obd->int2hex(0), std::string("00"));
+    QCOMPARE(m_obd->int2hex(3697), std::string("E71"));
+    QCOMPARE(m_obd->int2hex(-10), std::string("0A"));
 }
 
 /* run tests */
