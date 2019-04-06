@@ -1,5 +1,10 @@
 # Let Me Infotain You!
 
+Branch|Build Status
+---|---
+master|[![Build Status](https://travis-ci.com/luishowell/infotainment-system.svg?branch=master)](https://travis-ci.com/luishowell/infotainment-system)
+dev|[![Build Status](https://travis-ci.com/luishowell/infotainment-system.svg?branch=dev)](https://travis-ci.com/luishowell/infotainment-system)
+
 This project aims to create a drop-in infotainment system which can be used in any vehicle with an OBD2 port.
 
 ![Logo](https://i.imgur.com/GvyDmrq.png)
