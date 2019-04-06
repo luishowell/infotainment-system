@@ -1,6 +1,8 @@
 language: cpp
-compiler: gcc
-dist: trusty
+#compiler: gcc
+compiler: clang
+#dist: trusty
+dist: xenial
 
 install:
   - ./infotainment-install.sh
