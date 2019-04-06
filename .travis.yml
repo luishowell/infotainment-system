@@ -1,36 +1,19 @@
 language: cpp
-#compiler: gcc
-#compiler: clang
-#dist: trusty
 sudo: required
 dist: xenial
 
 compiler:
   - gcc
   - clang
-# addons:
-#   apt:
-#     sources:
-#     - ubuntu-toolchain-r-test
-#     - llvm-toolchain-precise-3.8
-#     packages:
-#     - g++-6
-#     - clang-3.8
-# install:
-#   - "[ $CXX = g++ ] && export CXX=g++-6 || true"
-#   - "[ $CXX = clang++ ] && export CXX=clang++-3.8 || true"
-#   - ./infotainment-install.sh
 
 install:
   - ./infotainment-install.sh
 
-# Start virtual X server, from https://docs.travis-ci.com/user/gui-and-headless-browsers/
-before_script:
-  #- "export DISPLAY=:99.0"
-  #- "sh -e /etc/init.d/xvfb start"
-  #- sleep 3 # give xvfb some time to start
-
 script: 
   - cd Software/
   - ./BuildAll.sh
-  #- ./MainApp/bin/MainApp
+  - ./Tests/OBD2_test/Offline/bin/OBD2OfflineTest
+  - ./Tests/Sensors_test/Board_test/Offline/bin/SensorBoardOfflineTest
+  - ./Tests/Sensors_test/MMA8652_test/Offline/bin/MMA8652OfflineTest
+  - ./Tests/Sensors_test/Mux_test/Offline/bin/MuxOfflineTest
+  - ./Tests/Sensors_test/Ultrasonic_test/Offline/bin/UltrasonicOfflineTest 
