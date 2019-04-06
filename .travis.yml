@@ -1,0 +1,16 @@
+language: cpp
+compiler: gcc
+dist: trusty
+
+install:
+  - ./infotainment-install.sh
+
+# Start virtual X server, from https://docs.travis-ci.com/user/gui-and-headless-browsers/
+before_script:
+  - "export DISPLAY=:99.0"
+  - "sh -e /etc/init.d/xvfb start"
+  - sleep 3 # give xvfb some time to start
+
+script: 
+  - ./Software/BuildAll.sh
+  - ./Software/MainApp/bin/MainApp
