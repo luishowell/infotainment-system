@@ -5,6 +5,9 @@ TEMPLATE    = app
 TARGET      = MainApp
 QT          += widgets qml quick quickwidgets multimedia multimediawidgets testlib  
 
+CONFIG              += c++11
+QMAKE_CXXFLAGS += -std=c++11
+
 #-----------------------------------#
 #-------------INCLUDES--------------#
 #-----------------------------------#

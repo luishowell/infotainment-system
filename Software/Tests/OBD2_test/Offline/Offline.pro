@@ -3,6 +3,9 @@ TEMPLATE    =   app
 TARGET      =   OBD2OfflineTest
 QT          +=  testlib
 
+CONFIG              += c++11
+QMAKE_CXXFLAGS += -std=c++11
+
 #includes
 INCLUDEPATH +=  inc/
 INCLUDEPATH +=  ../../../OBD2/inc

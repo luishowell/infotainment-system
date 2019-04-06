@@ -1,6 +1,8 @@
 #setup
 TEMPLATE        = lib
 CONFIG          += static
+CONFIG              += c++11
+QMAKE_CXXFLAGS += -std=c++11
 
 #includes
 INCLUDEPATH     += ./inc
