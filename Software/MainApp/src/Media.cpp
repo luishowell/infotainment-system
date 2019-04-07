@@ -65,6 +65,7 @@ void Media::CreateLayout()
    vLayout->setSpacing(25);
    
    QGroupBox* titleBox = new QGroupBox("Media", this);
+   titleBox->setFixedSize(500, 400);
    titleBox->setAlignment(Qt::AlignHCenter);
 
    /* main box */
@@ -127,6 +128,7 @@ void Media::CreateLayout()
 
    /* setup table */
    m_table = new QTableWidget(0, 5, this);
+   m_table->setFixedSize(550, 125);
    m_table->horizontalHeader()->setStretchLastSection(true);
    m_table->setSelectionMode(QAbstractItemView::SingleSelection);
    //m_table->setEditTriggers(QAbstractItemView::NoEditTriggers);
@@ -165,12 +167,11 @@ void Media::CreateLayout()
    boxLayout->addWidget(m_slider, 2, 0);
    boxLayout->addWidget(m_table, 1, 0);
    boxLayout->addWidget(m_timeLabel, 2, 1);
-   
 
    /* album artwork */
    //QPointer<QGroupBox> albumBox = new QGroupBox(titleBox);
    m_artHandle = new QLabel(titleBox);
-   //m_artHandle->setFixedSize(100, 100);
+   m_artHandle->setFixedSize(125, 125);
    boxLayout->addWidget(m_artHandle, 1, 1);
    //boxLayout->addWidget(m_albumArt, 1, 1);
 
@@ -244,7 +245,7 @@ void Media::AddToTable(QUrl url)
    m_table->setItem(m_tableCount, 4, new QTableWidgetItem(metaData.year));
    m_tableCount++;
 
-   
+   if(m_tableCount == 1) m_table->resizeColumnsToContents();
 }
 
 void Media::GetMetaData(audioMetaData_t* metaData)
@@ -306,7 +307,7 @@ void Media::ShowAlbumArt(int index)
    audioMetaData_t metaData = m_playlistMetaData[index];
 
    m_albumArt.convertFromImage(metaData.albumArt);
-   m_albumArt = m_albumArt.scaledToWidth(165);
+   m_albumArt = m_albumArt.scaledToWidth(125);
    m_artHandle->hide();
    m_artHandle->setPixmap(m_albumArt);
    m_artHandle->show();

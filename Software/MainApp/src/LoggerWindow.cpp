@@ -12,11 +12,14 @@
 #include "LoggerWindow.h"
 #include "Diagnostics.h"
 #include "Hash.h"
+
 #include <QStyle>
 #include <QDesktopWidget>
 #include <QApplication>
 #include <QFile>
 #include <QtCore>
+#include <QStorageInfo>
+
 #include <iostream>
 #include <string>
 #include <vector>
@@ -235,11 +238,23 @@ void LoggerWindow::StopLogging()
     m_stopButton->hide();
     m_startButton->show();
     m_closeButton->setEnabled(true);
+    m_closeButton->setText("Export and Close");
     m_msgTimer->stop();
     m_loggingMsg->hide();
     m_stoppedMsg->show();
     EnableButtons();
     emit LogRequestTx(selectedParams, false);
+
+    foreach (const QStorageInfo &storage, QStorageInfo::mountedVolumes()) 
+    {
+        if (storage.isValid() && storage.isReady()) 
+        {
+            if (!storage.isReadOnly()) 
+            {
+                qDebug() << "path:" << storage.rootPath();
+            }
+        }
+    }
 }
 
 void LoggerWindow::UpdateLogMsg()

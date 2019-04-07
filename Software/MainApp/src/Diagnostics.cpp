@@ -49,8 +49,8 @@ Diagnostics::Diagnostics(QWidget *parent, obd2* myObd, MMA8652FCR1* acc) : QWidg
    testVec.push_back("0A");
 
    obd = myObd;
-   //m_logWindow = new LoggerWindow(testVec);
-   m_logWindow = new LoggerWindow(obd->supported_pids, this);
+   m_logWindow = new LoggerWindow(testVec);
+   //m_logWindow = new LoggerWindow(obd->supported_pids, this);
    m_logWindow->setFixedSize(400, 300);
  
    setFixedSize(widgetSize);
@@ -76,7 +76,7 @@ void Diagnostics::CreateComponents()
 {
    qDebug() << "DIAGNOSTICS: creating components";
    const QSize gaugeSize = QSize(100, 175);
-   const QSize dialSize = QSize(170, 125);
+   const QSize dialSize = QSize(140, 140);
 
    /* create g-force meter */
    m_accGauge = new AccGauge(1, m_acc->staticVals);
@@ -157,7 +157,7 @@ void Diagnostics::CreateComponents()
    m_fuelPressureButton    = new QPushButton("Fuel \nPressure");
    m_accButton             = new QPushButton("G-Force");
 
-   const QSize btnSize = QSize(120, 50);
+   const QSize btnSize = QSize(100, 50);
    m_rpmButton->setFixedSize(btnSize);
    m_speedButton->setFixedSize(btnSize);
    m_intakeAirTempButton->setFixedSize(btnSize);
@@ -199,6 +199,7 @@ void Diagnostics::CreateLayout()
    accBox->setAlignment(Qt::AlignHCenter);
    QPointer<QVBoxLayout> accLayout = new QVBoxLayout(accBox);
    accLayout->addWidget(m_accGauge);
+   //accLayout->setAlignment(Qt::AlignHCenter);
 
    speedBox = new QGroupBox("Speed", titleBox);
    m_speedLCD = new QLCDNumber();
@@ -206,6 +207,7 @@ void Diagnostics::CreateLayout()
    QVBoxLayout *speedLayout = new QVBoxLayout(speedBox);
    speedLayout->addWidget(m_speedometer);
    speedLayout->addWidget(m_speedLCD);
+   speedLayout->setAlignment(Qt::AlignHCenter);
 
    rpmBox = new QGroupBox("RPM", titleBox);
    m_rpmLCD = new QLCDNumber();
@@ -213,13 +215,14 @@ void Diagnostics::CreateLayout()
    QVBoxLayout *rpmLayout = new QVBoxLayout(rpmBox);
    rpmLayout->addWidget(m_rpmGauge);
    rpmLayout->addWidget(m_rpmLCD);
+   rpmLayout->setAlignment(Qt::AlignHCenter);   
 
    airTempBox = new QGroupBox("Intake Air Temperature", titleBox);
    m_airTempLCD = new QLCDNumber();
    airTempBox->setAlignment(Qt::AlignHCenter);
    QHBoxLayout *airTempLayout = new QHBoxLayout(airTempBox);
    airTempLayout->addWidget(m_airTempGauge);
-   airTempLayout->addWidget(m_airTempLCD);
+   airTempLayout->setAlignment(Qt::AlignHCenter);   
 
    throttleBox = new QGroupBox("Throttle Position", titleBox);
    m_throttleLCD = new QLCDNumber();
@@ -227,6 +230,7 @@ void Diagnostics::CreateLayout()
    QHBoxLayout *throttleLayout = new QHBoxLayout(throttleBox);
    throttleLayout->addWidget(m_throttleGauge);
    throttleLayout->addWidget(m_throttleLCD);
+   throttleLayout->setAlignment(Qt::AlignHCenter);      
 
    gearBox = new QGroupBox("Current Gear", titleBox);
    m_gearLCD = new QLCDNumber();
@@ -234,7 +238,7 @@ void Diagnostics::CreateLayout()
    QStackedLayout *gearLayout = new QStackedLayout(gearBox);
    gearLayout->addWidget(m_gearLCD);
    gearLayout->addWidget(m_gearGauge);
-   
+   gearLayout->setAlignment(Qt::AlignHCenter);      
  
    fuelPressureBox = new QGroupBox("Fuel Pressure", titleBox);
    m_fuelPressureLCD = new QLCDNumber();
@@ -242,6 +246,7 @@ void Diagnostics::CreateLayout()
    QHBoxLayout *fuelPressureLayout = new QHBoxLayout(fuelPressureBox);
    fuelPressureLayout->addWidget(m_fuelPressureGauge);
    fuelPressureLayout->addWidget(m_fuelPressureLCD);
+   fuelPressureLayout->setAlignment(Qt::AlignHCenter);      
    
    engineRuntimeBox = new QGroupBox("Engine Runtime", titleBox);
    m_engineRuntimeLCD = new QLCDNumber(engineRuntimeBox);
@@ -249,24 +254,45 @@ void Diagnostics::CreateLayout()
    QStackedLayout *engineRuntimeLayout = new QStackedLayout(engineRuntimeBox);
    engineRuntimeLayout->addWidget(m_engineRuntimeLCD); 
    engineRuntimeLayout->addWidget(m_engineRuntimeGauge); //JB: without this loads of random white space?? 
+   engineRuntimeLayout->setAlignment(Qt::AlignHCenter);         
 
    engineLoadBox = new QGroupBox("Engine Load", titleBox);
    m_engineLoadLCD = new QLCDNumber();
    engineLoadBox->setAlignment(Qt::AlignHCenter);
    QHBoxLayout *engineLoadLayout = new QHBoxLayout(engineLoadBox);
    engineLoadLayout->addWidget(m_engineLoadGauge);  
-   engineLoadLayout->addWidget(m_engineLoadLCD);  
+   engineLoadLayout->addWidget(m_engineLoadLCD);
+   engineRuntimeLayout->setAlignment(Qt::AlignHCenter);         
 
    /* parameter selection box */
    selectBox = new QGroupBox("Parameters", titleBox);
    selectBox->setAlignment(Qt::AlignHCenter);
-   selectBox->setFixedSize(250, 250);
+   //selectBox->setFixedSize(250, 250);
    QHBoxLayout *selectLayout = new QHBoxLayout(selectBox);
    QVBoxLayout *selectLeft = new QVBoxLayout(selectBox);
    QVBoxLayout *selectRight = new QVBoxLayout(selectBox);
 
-   #ifndef GUI_TEST
-   /* only add selection buttons for the supported obd2 pids */
+   selectLeft->addWidget(m_engineLoadButton);
+   selectLeft->addWidget(m_rpmButton);
+   selectLeft->addWidget(m_speedButton);
+   selectLeft->addWidget(m_throttleButton);
+   selectLeft->addWidget(m_engineRuntimeButton);
+   selectRight->addWidget(m_gearButton);
+   selectRight->addWidget(m_fuelPressureButton);
+   selectRight->addWidget(m_intakeAirTempButton);
+   selectRight->addWidget(m_accButton);
+
+   m_engineLoadButton->setEnabled(false);
+   m_rpmButton->setEnabled(false);
+   m_speedButton->setEnabled(false);
+   m_throttleButton->setEnabled(false);
+   m_engineRuntimeButton->setEnabled(false);
+   m_gearButton->setEnabled(false);
+   m_fuelPressureButton->setEnabled(false);
+   m_intakeAirTempButton->setEnabled(false);
+   m_accButton->setEnabled(true);
+
+   /* only enable selection buttons for the supported obd2 pids */
    QString QPid;
    pidNum = obd->supported_pids.size();
    for (pidCnt = 0; pidCnt < pidNum; pidCnt++)
@@ -275,66 +301,27 @@ void Diagnostics::CreateLayout()
       switch (Hash::HashPID(obd->supported_pids[pidCnt])) // JB: fixed bug here (13/03/19)
       {
          /* fast channel buttons */
-         case ENGINE_LOAD :      selectLeft->addWidget(m_engineLoadButton);
+         case ENGINE_LOAD :      m_engineLoadButton->setEnabled(true);
                                  break;
-         case RPM :              selectLeft->addWidget(m_rpmButton);
+         case RPM :              m_engineLoadButton->setEnabled(true);
                                  break;
-         case SPEED :            selectLeft->addWidget(m_speedButton);
+         case SPEED :            m_engineLoadButton->setEnabled(true);
                                  break;
-         case THROTTLE :         selectLeft->addWidget(m_throttleButton);
+         case THROTTLE :         m_engineLoadButton->setEnabled(true);
                                  break;
-         case ENGINE_RUNTIME :   selectLeft->addWidget(m_engineRuntimeButton);
+         case ENGINE_RUNTIME :   m_engineLoadButton->setEnabled(true);
                                  break;
          /* slow channel buttons */
-         case FUEL_PRESSURE :    selectRight->addWidget(m_fuelPressureButton);
+         case FUEL_PRESSURE :    m_engineLoadButton->setEnabled(true);
                                  break;
-         case AIR_TEMP :         selectRight->addWidget(m_intakeAirTempButton);
+         case AIR_TEMP :         m_engineLoadButton->setEnabled(true);
                                  break;
-         case GEAR :             selectRight->addWidget(m_gearButton);
+         case GEAR :             m_engineLoadButton->setEnabled(true);
                                  break;
          default :               break;
       }
    }
-   selectRight->addWidget(m_accButton);
-   #else
-   vector<string> supported_pids;
-   supported_pids.push_back("0D");
-   supported_pids.push_back("0C");
-   supported_pids.push_back("11");
-   supported_pids.push_back("0F");
-   supported_pids.push_back("A4");
-   supported_pids.push_back("1F");
-
    
-   int num = supported_pids.size();
-   int cnt;
-   for (cnt = 0; cnt < num; cnt++)
-   {
-      cout << supported_pids[cnt] << endl;;
-      switch (Hash::HashPID(supported_pids[cnt]))
-      {
-         /* fast channel buttons */
-         case ENGINE_LOAD :      selectLeft->addWidget(m_engineLoadButton);
-                                 break;
-         case RPM :              selectLeft->addWidget(m_rpmButton);
-                                 break;
-         case SPEED :            selectLeft->addWidget(m_speedButton);
-                                 break;
-         case THROTTLE :         selectLeft->addWidget(m_throttleButton);
-                                 break;
-         /* slow channel buttons */
-         case FUEL_PRESSURE :    selectRight->addWidget(m_fuelPressureButton);
-                                 break;
-         case AIR_TEMP :         selectRight->addWidget(m_intakeAirTempButton);
-                                 break;
-         case GEAR :             selectRight->addWidget(m_gearButton);
-                                 break;
-         case ENGINE_RUNTIME :   selectRight->addWidget(m_engineRuntimeButton);
-                                 break;
-         default :               break;
-      }
-   }
-   #endif
 
    selectLeft->setAlignment(Qt::AlignLeft);
    selectRight->setAlignment(Qt::AlignHCenter);
@@ -355,16 +342,23 @@ void Diagnostics::CreateLayout()
    titleBox->setFixedSize(WIDGET_SIZE_X-30, WIDGET_SIZE_Y-100);
 
    /* default shown gauges */
-   boxLayout->addWidget(selectBox, 1, 3);
+   boxLayout->addWidget(selectBox, 1, 4, 3, 3, Qt::AlignTop);
    boxLayout->addWidget(speedBox, 1, 1);
    boxLayout->addWidget(rpmBox, 1, 1);
    boxLayout->addWidget(throttleBox, 1, 1);
-   boxLayout->addWidget(airTempBox, 1, 2);
+   boxLayout->addWidget(airTempBox, 1, 2, Qt::AlignLeft);
    boxLayout->addWidget(gearBox, 1, 2);
    boxLayout->addWidget(engineRuntimeBox, 1, 2);
    boxLayout->addWidget(engineLoadBox, 1, 2);
    boxLayout->addWidget(fuelPressureBox, 1, 2);
    boxLayout->addWidget(accBox, 1, 2);
+
+   boxLayout->setColumnMinimumWidth(3, 75);
+   boxLayout->setColumnMinimumWidth(5, 30);
+   for (int i=0; i<5; i++)
+   {
+      boxLayout->setColumnStretch(i, 1);
+   }
 
 
    boxLayout->addWidget(m_logButton, 2, 1);
