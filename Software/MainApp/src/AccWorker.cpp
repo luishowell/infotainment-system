@@ -42,7 +42,7 @@ void AccWorker::Work()
     time_t timeTaken;
 
     /* start publishing timer */
-    m_timer->start(250);
+    m_timer->start(20);
 
     while(true)
     {

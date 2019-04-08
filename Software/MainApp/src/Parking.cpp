@@ -121,7 +121,7 @@ void Parking::parking_beep()
 {
   if (!beep_effect->isPlaying())
   {
-    if ((int(beep_timer->elapsed())>=beep_delay)&&(viz_label->isVisible())&&(beep_delay>0))
+    if ((int(beep_timer->elapsed())>=beep_delay)&&(viz_label->isVisible())&&(beep_delay>0)&&(smallest_dist<1.5))
     {
       //cout<<"Time elapsed: "<<int(beep_timer->elapsed())<<endl;
       beep_effect->play();
@@ -152,17 +152,18 @@ void Parking::calc_beep_delay()
 void Parking::calc_smallest_dist()
 {
   double dist_array[6] = {rearLeft, rearRight, rearCentre, frontLeft, frontRight, frontCentre};
-  double min_dist = dist_array[0];
+  bool connected_array[6] = {rearLeftConnected, rearRightConnected, rearCentreConnected, frontLeftConnected, frontRightConnected, frontCentreConnected};
+  double min_dist = 10.0;
 
-  for (int i=1; i<6; i++)
+  for (int i=0; i<6; i++)
   {
-    if (dist_array[i]<min_dist)
+    if ((dist_array[i]<min_dist)&&connected_array[i])
     {
       min_dist = dist_array[i];
     }
   }
 
-  smallest_dist = min_dist;
+  smallest_dist = min_dist;  
 }
 
 void Parking::StateChangeMainMenu()
@@ -208,6 +209,12 @@ void Parking::CreateLayout()
 void Parking::SensorRx(sensorDist_t* msg)
 {
   //std::cout << "SENSOR DATA: " << msg->rearLeft << std::endl;
+  rearLeftConnected = msg->rearLeftConnected;
+  rearRightConnected = msg->rearRightConnected;
+  rearCentreConnected = msg->rearCentreConnected;
+  frontLeftConnected = msg->frontLeftConnected;
+  frontRightConnected = msg->frontRightConnected;
+  frontCentreConnected = msg->frontCentreConnected;
   frontCentre = msg->frontCentre;
   frontRight = msg->frontRight;
   frontLeft = msg->frontLeft;
@@ -250,10 +257,13 @@ void Parking::draw_sensor_lines(QPainter *qp)
   int x, y;
 
   // front centre
-  x = centre_x;
-  y = centre_y-(car_length/2)-dist2pix(frontCentre);
-  line_coords = calc_line_coor(x, y, bar_width, 0);
-  qp->drawLine(line_coords[0], line_coords[1], line_coords[2], line_coords[3]);
+  if (frontCentreConnected)
+  {    
+    x = centre_x;
+    y = centre_y-(car_length/2)-dist2pix(frontCentre);
+    line_coords = calc_line_coor(x, y, bar_width, 0);
+    qp->drawLine(line_coords[0], line_coords[1], line_coords[2], line_coords[3]);
+  }
   qp->setPen(pen1); 
   for (float marker_dist=0.5; marker_dist<2.1; marker_dist=marker_dist+0.5)
   {
@@ -273,10 +283,13 @@ void Parking::draw_sensor_lines(QPainter *qp)
   qp->setPen(pen2);
 
   //front right
-  x = (centre_x+(car_width/2))+cos(deg2rad(45))*dist2pix(frontRight);
-  y = (centre_y-(car_length/2))-sin(deg2rad(45))*dist2pix(frontRight);
-  line_coords = calc_line_coor(x, y, bar_width, -45);
-  qp->drawLine(line_coords[0], line_coords[1], line_coords[2], line_coords[3]);
+  if (frontRightConnected)
+  {
+    x = (centre_x+(car_width/2))+cos(deg2rad(45))*dist2pix(frontRight);
+    y = (centre_y-(car_length/2))-sin(deg2rad(45))*dist2pix(frontRight);
+    line_coords = calc_line_coor(x, y, bar_width, -45);
+    qp->drawLine(line_coords[0], line_coords[1], line_coords[2], line_coords[3]);
+  }
   qp->setPen(pen1); 
   for (float marker_dist=0.5; marker_dist<2.1; marker_dist=marker_dist+0.5)
   {
@@ -295,10 +308,13 @@ void Parking::draw_sensor_lines(QPainter *qp)
   qp->setPen(pen2);
 
   //front left
-  x = (centre_x-(car_width/2))-cos(deg2rad(45))*dist2pix(frontLeft);
-  y = (centre_y-(car_length/2))-sin(deg2rad(45))*dist2pix(frontLeft);
-  line_coords = calc_line_coor(x, y, bar_width, 45);
-  qp->drawLine(line_coords[0], line_coords[1], line_coords[2], line_coords[3]);
+  if (frontLeftConnected)
+  {
+    x = (centre_x-(car_width/2))-cos(deg2rad(45))*dist2pix(frontLeft);
+    y = (centre_y-(car_length/2))-sin(deg2rad(45))*dist2pix(frontLeft);
+    line_coords = calc_line_coor(x, y, bar_width, 45);
+    qp->drawLine(line_coords[0], line_coords[1], line_coords[2], line_coords[3]);
+  }
   qp->setPen(pen1); 
   for (float marker_dist=0.5; marker_dist<2.1; marker_dist=marker_dist+0.5)
   {
@@ -318,10 +334,13 @@ void Parking::draw_sensor_lines(QPainter *qp)
 
 
   //rear centre
-  x = centre_x;
-  y = centre_y+(car_length/2)+dist2pix(rearCentre);
-  line_coords = calc_line_coor(x, y, bar_width, 0);
-  qp->drawLine(line_coords[0], line_coords[1], line_coords[2], line_coords[3]);
+  if (rearCentreConnected)
+  {
+    x = centre_x;
+    y = centre_y+(car_length/2)+dist2pix(rearCentre);
+    line_coords = calc_line_coor(x, y, bar_width, 0);
+    qp->drawLine(line_coords[0], line_coords[1], line_coords[2], line_coords[3]);
+  }
   qp->setPen(pen1); 
   for (float marker_dist=0.5; marker_dist<2.1; marker_dist=marker_dist+0.5)
   {
@@ -340,10 +359,13 @@ void Parking::draw_sensor_lines(QPainter *qp)
   qp->setPen(pen2);
 
   //rear right
-  x = (centre_x+(car_width/2))+cos(deg2rad(45))*dist2pix(rearRight);
-  y = (centre_y+(car_length/2))+sin(deg2rad(45))*dist2pix(rearRight);
-  line_coords = calc_line_coor(x, y, bar_width, 45);
-  qp->drawLine(line_coords[0], line_coords[1], line_coords[2], line_coords[3]);
+  if (rearRightConnected)
+  {
+    x = (centre_x+(car_width/2))+cos(deg2rad(45))*dist2pix(rearRight);
+    y = (centre_y+(car_length/2))+sin(deg2rad(45))*dist2pix(rearRight);
+    line_coords = calc_line_coor(x, y, bar_width, 45);
+    qp->drawLine(line_coords[0], line_coords[1], line_coords[2], line_coords[3]);
+  }
   qp->setPen(pen1); 
   for (float marker_dist=0.5; marker_dist<2.1; marker_dist=marker_dist+0.5)
   {
@@ -362,10 +384,13 @@ void Parking::draw_sensor_lines(QPainter *qp)
   qp->setPen(pen2);
 
   //rear left
-  x = (centre_x-(car_width/2))-cos(deg2rad(45))*dist2pix(rearLeft);
-  y = (centre_y+(car_length/2))+sin(deg2rad(45))*dist2pix(rearLeft);
-  line_coords = calc_line_coor(x, y, bar_width, -45);
-  qp->drawLine(line_coords[0], line_coords[1], line_coords[2], line_coords[3]);
+  if (rearLeftConnected)
+  {
+    x = (centre_x-(car_width/2))-cos(deg2rad(45))*dist2pix(rearLeft);
+    y = (centre_y+(car_length/2))+sin(deg2rad(45))*dist2pix(rearLeft);
+    line_coords = calc_line_coor(x, y, bar_width, -45);
+    qp->drawLine(line_coords[0], line_coords[1], line_coords[2], line_coords[3]);
+  }
   qp->setPen(pen1); 
   for (float marker_dist=0.5; marker_dist<2.1; marker_dist=marker_dist+0.5)
   {
