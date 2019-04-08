@@ -16,10 +16,12 @@
 #include <iostream>
 #include <unistd.h>
 
-#define REAR_LEFT 1
-#define REAR_RIGHT 2
-#define FRONT_LEFT 3
-#define FRONT_RIGHT 4
+#define REAR_LEFT 0
+#define REAR_RIGHT 1
+#define FRONT_LEFT 2
+#define FRONT_RIGHT 3
+//#define REAR_CENTRE 4
+//#define FRONT_CENTRE 5
 
 using namespace std;
 
@@ -47,7 +49,12 @@ SensorWorker::SensorWorker()
     m_msg->rearLeft = 0;
     m_msg->rearRight = 0; 
     m_msg->rearCentre = 0;
-    m_msg->connectionFault = true;
+    m_msg->rearLeftConnectionFault = true;
+    m_msg->rearRightConnectionFault = true;
+    m_msg->rearCentreConnectionFault = true;
+    m_msg->frontLeftConnectionFault = true;
+    m_msg->frontCentreConnectionFault = true;
+    m_msg->frontRightConnectionFault = true;
 
 #endif //RPI
 
@@ -66,28 +73,17 @@ void SensorWorker::Work()
     {
         qDebug() << "SENSOR WORKER: getting data";
 #ifdef RPI
-        if ((m_mux->GetDistance(FRONT_LEFT, &m_msg->frontLeft)
-        && m_mux->GetDistance(REAR_LEFT, &m_msg->rearLeft)
-        && m_mux->GetDistance(FRONT_RIGHT, &m_msg->frontRight)
-        && m_mux->GetDistance(REAR_RIGHT, &m_msg->rearRight))	
-        == true)          
-        {
-            //GetDistance() was successful 
-    
-            m_msg->connectionFault = false;
-        }
-        else 
-        {
-            //GetDistance() failed so assume connection to sensors in lost/compromised
-        //qDebug() << "Sensor connection compromised" << endl;
-            m_msg->connectionFault = true;
-        }
+        //get the distance values from the sensor
+        m_msg->frontLeftConnectionFault = m_mux->GetDistance(FRONT_LEFT, &m_msg->frontLeft);      
+        m_msg->frontRightConnectionFault = m_mux->GetDistance(FRONT_RIGHT, &m_msg->frontRight);  
+        //m_msg->frontCentreConnectionFault = m_mux->GetDistance(FRONT_CENTRE, &m_msg->frontCentre);  
+        m_msg->rearLeftConnectionFault = m_mux->GetDistance(REAR_LEFT, &m_msg->rearLeft);  
+        //m_msg->rearCentreConnectionFault = m_mux->GetDistance(REAR_CENTRE, &m_msg->rearCentre);  
+        m_msg->rearRightConnectionFault = m_mux->GetDistance(REAR_RIGHT, &m_msg->rearRight); 
 #else
         sleep(1);
 #endif  
         
-
-
         qApp->processEvents();
     }
 }
