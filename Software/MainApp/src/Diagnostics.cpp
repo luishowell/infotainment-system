@@ -303,20 +303,20 @@ void Diagnostics::CreateLayout()
          /* fast channel buttons */
          case ENGINE_LOAD :      m_engineLoadButton->setEnabled(true);
                                  break;
-         case RPM :              m_engineLoadButton->setEnabled(true);
+         case RPM :              m_rpmButton->setEnabled(true);
                                  break;
-         case SPEED :            m_engineLoadButton->setEnabled(true);
+         case SPEED :            m_speedButton->setEnabled(true);
                                  break;
-         case THROTTLE :         m_engineLoadButton->setEnabled(true);
+         case THROTTLE :         m_throttleButton->setEnabled(true);
                                  break;
-         case ENGINE_RUNTIME :   m_engineLoadButton->setEnabled(true);
+         case ENGINE_RUNTIME :   m_engineRuntimeButton->setEnabled(true);
                                  break;
          /* slow channel buttons */
-         case FUEL_PRESSURE :    m_engineLoadButton->setEnabled(true);
+         case FUEL_PRESSURE :    m_fuelPressureButton->setEnabled(true);
                                  break;
-         case AIR_TEMP :         m_engineLoadButton->setEnabled(true);
+         case AIR_TEMP :         m_intakeAirTempButton->setEnabled(true);
                                  break;
-         case GEAR :             m_engineLoadButton->setEnabled(true);
+         case GEAR :             m_gearButton->setEnabled(true);
                                  break;
          default :               break;
       }
