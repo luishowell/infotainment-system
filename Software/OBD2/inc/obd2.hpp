@@ -81,7 +81,7 @@ class obd2{
          * @param cmd The command to send as a hex string
          * @return float The decoded hex response
          */
-        float decoded_cmd(string cmd);
+        float decoded_cmd(string cmd, bool fast_send = false, int option = 1);
 
         /**
          * @brief Reads the currently stored diagnostic trouble codes (DTC)
