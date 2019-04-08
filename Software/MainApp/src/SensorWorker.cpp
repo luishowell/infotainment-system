@@ -49,12 +49,12 @@ SensorWorker::SensorWorker()
     m_msg->rearLeft = 0;
     m_msg->rearRight = 0; 
     m_msg->rearCentre = 0;
-    m_msg->rearLeftConnectionFault = true;
-    m_msg->rearRightConnectionFault = true;
-    m_msg->rearCentreConnectionFault = true;
-    m_msg->frontLeftConnectionFault = true;
-    m_msg->frontCentreConnectionFault = true;
-    m_msg->frontRightConnectionFault = true;
+    m_msg->rearLeftConnected = false;
+    m_msg->rearRightConnected = false;
+    m_msg->rearCentreConnected = false;
+    m_msg->frontLeftConnected = false;
+    m_msg->frontCentreConnected = false;
+    m_msg->frontRightConnected = false;
 
 #endif //RPI
 
@@ -74,12 +74,12 @@ void SensorWorker::Work()
         qDebug() << "SENSOR WORKER: getting data";
 #ifdef RPI
         //get the distance values from the sensor
-        m_msg->frontLeftConnectionFault = m_mux->GetDistance(FRONT_LEFT, &m_msg->frontLeft);      
-        m_msg->frontRightConnectionFault = m_mux->GetDistance(FRONT_RIGHT, &m_msg->frontRight);  
-        //m_msg->frontCentreConnectionFault = m_mux->GetDistance(FRONT_CENTRE, &m_msg->frontCentre);  
-        m_msg->rearLeftConnectionFault = m_mux->GetDistance(REAR_LEFT, &m_msg->rearLeft);  
-        //m_msg->rearCentreConnectionFault = m_mux->GetDistance(REAR_CENTRE, &m_msg->rearCentre);  
-        m_msg->rearRightConnectionFault = m_mux->GetDistance(REAR_RIGHT, &m_msg->rearRight); 
+        m_msg->frontLeftConnected = m_mux->GetDistance(FRONT_LEFT, &m_msg->frontLeft);      
+        m_msg->frontRightConnected = m_mux->GetDistance(FRONT_RIGHT, &m_msg->frontRight);  
+        //m_msg->frontCentreConnected = m_mux->GetDistance(FRONT_CENTRE, &m_msg->frontCentre);  
+        m_msg->rearLeftConnected = m_mux->GetDistance(REAR_LEFT, &m_msg->rearLeft);  
+        //m_msg->rearCentreConnected = m_mux->GetDistance(REAR_CENTRE, &m_msg->rearCentre);  
+        m_msg->rearRightConnected = m_mux->GetDistance(REAR_RIGHT, &m_msg->rearRight); 
 #else
         sleep(1);
 #endif  
