@@ -71,10 +71,8 @@ bool ultrasonic_sensor::GetDistance(double *distance)
      //if it timed out, return error response, else record time
      if(time_left < 0)
      {
-	cout << "return false" << endl;
         return false;
      }else{
-	cout << "echo returned" << endl;
         start_time = micros();
      }
 

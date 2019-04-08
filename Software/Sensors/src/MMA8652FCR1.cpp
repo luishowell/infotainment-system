@@ -37,7 +37,6 @@ bool MMA8652FCR1::init(int devID, int intPin1, int intPin2)
 
     //check the who am i register
     int result = wiringPiI2CReadReg8(this->fd, MMA8652FCR1_WHO_AM_I_REG);
-    cout << "Who am i reg says: 0x"  << hex << result << endl;
     if(result != MMA8652FCR1_DEVICE_ID)
     {
         cout << "Who am i register mistmatch." << endl << "Expecting: 0x4A Received: " << hex << result << endl; 
