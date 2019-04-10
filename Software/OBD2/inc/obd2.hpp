@@ -79,6 +79,8 @@ class obd2{
          * @brief Sends a command and decodes the response
          * 
          * @param cmd The command to send as a hex string
+         * @param fast_send Appends a one to the cmd string indicting to the OBD2 chip that only one response is expected, removing the OBD2 internal delay
+         * @param option A few PIDs have multiple outputs, option selects which one will be returned
          * @return float The decoded hex response
          */
         float decoded_cmd(string cmd, bool fast_send = false, int option = 1);
@@ -102,7 +104,7 @@ class obd2{
          * @brief Converts a hex string to an integer
          * 
          * @param hex_string A hex string
-         * @return unsigned long The int value of the hex string
+         * @return long The int value of the hex string
          */
         long hex2int(string hex_string);
 
