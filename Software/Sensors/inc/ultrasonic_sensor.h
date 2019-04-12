@@ -86,6 +86,9 @@ class ultrasonic_sensor
         //calculated variables
         double time_diff;
         double m_distance;
+        
+        //the set maximum read distance
+        double m_maxDistance;
 
         
 

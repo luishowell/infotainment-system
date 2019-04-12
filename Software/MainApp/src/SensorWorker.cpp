@@ -18,9 +18,9 @@
 
 #define REAR_LEFT 0
 #define REAR_RIGHT 1
-#define FRONT_LEFT 2
-#define FRONT_RIGHT 3
-//#define REAR_CENTRE 4
+#define FRONT_LEFT 3
+#define FRONT_RIGHT 2
+//#define REAR_CENTRE 7
 //#define FRONT_CENTRE 5
 
 using namespace std;
