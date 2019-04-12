@@ -32,6 +32,9 @@ Packages can be installed on an Ubuntu/Debian system with `sudo apt install <pac
 - `qtmultimedia5-dev`
 - `qtmultimedia5-examples`
 - `libglm-dev`
+- `zlib1g-dev`
+- `gstreamer1.0-plugins-ugly`
+- `bluez`
 
 ## Documentation
 
