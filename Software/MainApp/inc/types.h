@@ -89,7 +89,12 @@ typedef enum {
  * 
  */
 typedef struct sensorDist {
-    bool connectionFault;
+    bool rearLeftConnected;
+    bool rearRightConnected;
+    bool rearCentreConnected;
+    bool frontLeftConnected;
+    bool frontRightConnected;
+    bool frontCentreConnected;
     double rearLeft;
     double rearRight;
     double rearCentre;

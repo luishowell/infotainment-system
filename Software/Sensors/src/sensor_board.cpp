@@ -1,3 +1,14 @@
+/**
+ * @file sensor_board.cpp
+ * @author Joe Walker
+ * @brief Implementation of sensor_board class
+ * @version 0.2
+ * @date 2019-04-01
+ * 
+ * @copyright Copyright (c) 2019
+ * 
+ */
+
 #include "config.h"
 #include "sensor_board.h"
 
@@ -47,7 +58,8 @@ bool sensor_board::GetDistance(unsigned int sensor_num, double *distance)
     }
 
 #ifdef RPI
-    delayMicroseconds(10); //wait for mux to be set properly
+	//std::cout << "MUX DELAY" << std::endl;
+    delayMicroseconds(10000); //wait for mux to be set properly
 #endif
 
     //get the distance and return success

@@ -22,6 +22,11 @@
 #include <wiringPi.h>
 #endif
 
+/**
+ * @brief Control of a HC-SR04 ultrasonic sensor
+ * 
+ */
+
 class ultrasonic_sensor
 {
     public:
@@ -86,6 +91,9 @@ class ultrasonic_sensor
         //calculated variables
         double time_diff;
         double m_distance;
+        
+        //the set maximum read distance
+        double m_maxDistance;
 
         
 

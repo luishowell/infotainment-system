@@ -42,7 +42,12 @@ int main(int argc, char** argv)
     cout << "/***************LET ME INFOTAIN YOU!/***************" << endl;
     QApplication app (argc, argv);
 
-    qApp->setStyle(QStyleFactory::create("macintosh"));
+    //qApp->setStyle(QStyleFactory::create("macintosh"));
+
+    QFile file("./MainApp/src/default.qss");
+    file.open(QFile::ReadOnly);
+    QString styleSheet = QLatin1String(file.readAll());
+    qApp->setStyleSheet(styleSheet);
 
     obd2* myObd = new obd2("/dev/rfcomm0");
     MMA8652FCR1* guiAccel;

@@ -111,35 +111,35 @@ int obd2::setup_obd(string comm_port){
         cout<<"Reset OK"<<endl;
     }
     else{
-        cout<<"Transmission error"<<endl;
+        cout<<"Reset error"<<endl;
         return -1;        
     }
     if (send_cmd("ATE0", true)=="OK"){
         cout<<"Echo off OK"<<endl;
     }
     else{
-        cout<<"Transmission error"<<endl;
+        cout<<"Echo off error"<<endl;
         return -1;  
     }
     if (send_cmd("ATL0", true)=="OK"){
         cout<<"Linefeed off OK"<<endl;
     }
     else{
-        cout<<"Transmission error"<<endl;
+        cout<<"Linefeed off error"<<endl;
         return -1;  
     }
     if (send_cmd("ATS0", true)=="OK"){
         cout<<"Spaces off OK"<<endl;
     }
     else{
-        cout<<"Transmission error"<<endl;
+        cout<<"Spaces off error"<<endl;
         return -1;  
     }
     if (send_cmd("ATSP5", true)=="OK"){
         cout<<"OBD2 Protocol set OK"<<endl;
     }
     else{
-        cout<<"Transmission error"<<endl;
+        cout<<"OBD2 Protocol set error"<<endl;
         return -1;  
     }
 
@@ -178,7 +178,7 @@ string obd2::send_cmd(string cmd, bool parse, bool fast_send){
                 }
             }        
             else if (num_bytes==0){
-                return "TRANSMISSION_ERROR: "+rec;
+                return "TRANSMISSION TIMEOUT, rec: "+rec;
             }
         }
         rec.erase(remove(rec.begin(), rec.end(), '\n'), rec.end()); //remove new line characters
@@ -234,38 +234,45 @@ string obd2::send_cmd(string cmd, bool parse, bool fast_send){
 
 
 void obd2::scan_pids(){
-    cout<<"Scanning for supported PIDs..."<<endl;
-    cout<<"May take up to 5 minutes"<<endl;
+    if (connected)
+    {
+        cout<<"Scanning for supported PIDs..."<<endl;
+        cout<<"May take up to 5 minutes"<<endl;
 
-    fstream pid_save_file;
-    pid_save_file.open("./OBD2/supported_pid_gen.txt", fstream::out | fstream::trunc);    
+        fstream pid_save_file;
+        pid_save_file.open("./OBD2/supported_pid_gen.txt", fstream::out | fstream::trunc);    
 
-    supported_pids.clear();
-    string pid_code_hex;
-    string response;
-    int pid_counter = 0;
-    for (int i=0; i<196; i++){
-        pid_code_hex = int2hex(i);
-        response = send_cmd("01"+pid_code_hex);
-        //cout<<response<<endl;
-        if (response.find("41")!=string::npos){
-            //cout<<pid_code_hex<<" Added!"<<endl;
-            pid_save_file<<pid_code_hex<<"\n";
-            supported_pids.push_back(pid_code_hex);
-            pid_counter++;
-            //pid_save_file<<response.substr(2,2)<<"\n";
+        supported_pids.clear();
+        string pid_code_hex;
+        string response;
+        int pid_counter = 0;
+        for (int i=0; i<196; i++){
+            pid_code_hex = int2hex(i);
+            response = send_cmd("01"+pid_code_hex);
+            //cout<<response<<endl;
+            if (response.find("41")!=string::npos){
+                //cout<<pid_code_hex<<" Added!"<<endl;
+                pid_save_file<<pid_code_hex<<"\n";
+                supported_pids.push_back(pid_code_hex);
+                pid_counter++;
+                //pid_save_file<<response.substr(2,2)<<"\n";
+            }
+        } 
+
+        pid_save_file.close();
+
+        if (pid_counter>0){
+            cout<<"Scanning Complete"<<endl;
+            cout<<pid_counter<<" PIDs supported"<<endl;
         }
-    } 
-
-    pid_save_file.close();
-
-    if (pid_counter>0){
-        cout<<"Scanning Complete"<<endl;
-        cout<<pid_counter<<" PIDs supported"<<endl;
+        else{
+            cout<<"Scanning failed"<<endl;
+        }
     }
-    else{
-        cout<<"Scanning failed"<<endl;
-    }
+    else
+    {
+        cout<<"OBD2: not Connected!"<<endl;
+    }    
 }
 
 
@@ -402,8 +409,8 @@ float obd2::decode_response(string response, int option){
 }
 
 
-float obd2::decoded_cmd(string cmd){
-    return decode_response(send_cmd(cmd, true));        
+float obd2::decoded_cmd(string cmd, bool fast_send, int option){
+    return decode_response(send_cmd(cmd, true, fast_send), option);        
 }
 
 

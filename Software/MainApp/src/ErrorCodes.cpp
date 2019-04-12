@@ -107,6 +107,7 @@ void ErrorCodes::GetErrorCodes()
          else
          {
             QMessageBox msgBox;
+            msgBox.setWindowFlags(Qt::Window | Qt::FramelessWindowHint);
             msgBox.setText("No current trouble codes!");
             msgBox.exec();
          }
@@ -151,6 +152,7 @@ void ErrorCodes::ClearErrorCodes()
          QMessageBox::StandardButton reply;
          reply = QMessageBox::question(this, "Clear DTC codes", "Are you sure you want to clear DTC codes?\nThink carefully...", 
          QMessageBox::Yes|QMessageBox::No);
+
          if (reply == QMessageBox::Yes) 
          {
             std::cout<<"Clearing diagnostic trouble codes..."<<std::endl;
@@ -158,6 +160,7 @@ void ErrorCodes::ClearErrorCodes()
             std::cout<<"Clear DTC rec: "<<rec<<std::endl;
             
             QMessageBox msgBox;
+            msgBox.setWindowFlags(Qt::Window | Qt::FramelessWindowHint);
                   
             if (rec.find("44")!=string::npos)
             {

@@ -79,6 +79,12 @@ private:
     QElapsedTimer *beep_timer;
     int beep_delay=0;
     double smallest_dist=0;
+    bool rearLeftConnected=false;
+    bool rearRightConnected=false;
+    bool rearCentreConnected=false;
+    bool frontLeftConnected=false;
+    bool frontRightConnected=false;
+    bool frontCentreConnected=false;
     double rearLeft=0;
     double rearRight=0;
     double rearCentre=0;

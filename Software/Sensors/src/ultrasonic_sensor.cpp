@@ -1,3 +1,14 @@
+/**
+ * @file ultrasonic_sensor.cpp
+ * @author Joe Walker
+ * @brief Implementatin of ultrasonic_sensor class.
+ * @version 0.2
+ * @date 2019-04-01
+ * 
+ * @copyright Copyright (c) 2019
+ * 
+ */
+
 #include "config.h"
 #include "ultrasonic_sensor.h"
 #include <iostream>
@@ -25,6 +36,7 @@ bool ultrasonic_sensor::init(int trigger_pin, int echo_pin)
      //set the echo pin as an input
      pinMode(echo_pin, INPUT);
      this->m_echo_pin = echo_pin;
+     pullUpDnControl(echo_pin, PUD_OFF); 
 
      //write a 0 to trigger pin
      digitalWrite (trigger_pin, LOW);
@@ -45,9 +57,16 @@ bool ultrasonic_sensor::GetDistance(double *distance)
 
 #ifdef RPI
 
+     //if the echo pin is still high, return 2m as we assume
+     //this is the response from a previous trigger
+     if(digitalRead(m_echo_pin) == HIGH){
+         *distance = this->m_maxDistance;
+         return true;
+     }
+
      //pulse the trigger pin for 10us
      digitalWrite(this->m_trigger_pin, HIGH);
-     delayMicroseconds(10);
+     delayMicroseconds(100);
      digitalWrite(this->m_trigger_pin, LOW);
 
      //timeout on both rising and falling edge of echo pin
@@ -69,18 +88,17 @@ bool ultrasonic_sensor::GetDistance(double *distance)
 
 
      //if it timed out, return error response, else record time
-     if(time_left < 0)
+     if(time_left <= 0)
      {
-	cout << "return false" << endl;
         return false;
      }else{
-	cout << "echo returned" << endl;
         start_time = micros();
      }
 
      //reset timeout values
      time_left = timeoutLen;
      while_start = micros();
+     
 
      //look for the falling edge of the echo pulse or timeout
      while((digitalRead(m_echo_pin) == HIGH) && (time_left > 0))
@@ -96,6 +114,7 @@ bool ultrasonic_sensor::GetDistance(double *distance)
      //calculate the distance and return
      time_diff = difftime(end_time, start_time);
      *distance = this->calculateDistance(time_diff); //calculate the distance
+     //cout << "Distance measured as: " << *distance << endl;
      
      return true;
 #endif
@@ -111,6 +130,7 @@ bool ultrasonic_sensor::GetDistance(double *distance)
           << "valid values are 0-5m" << endl;
           return false;
       }else{
+          this->m_maxDistance = maxDistance;
           double d = maxDistance * 2; //double the distance for there and back
           this->timeoutLen = d/this->speedOfSound; //d=vt
           this->timeoutLen *= 1000000; //convert to microseconds

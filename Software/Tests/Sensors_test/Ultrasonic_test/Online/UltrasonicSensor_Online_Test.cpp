@@ -18,6 +18,11 @@
 
 using namespace std;
 
+/**
+ * @brief Online unit tests for the ultrasonic_sensor class.
+ * 
+ */
+
 class UltrasonicSensorOnlineTest: public QObject
 {
     Q_OBJECT

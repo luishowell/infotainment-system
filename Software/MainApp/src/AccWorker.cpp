@@ -42,7 +42,7 @@ void AccWorker::Work()
     time_t timeTaken;
 
     /* start publishing timer */
-    m_timer->start(250);
+    m_timer->start(20);
 
     while(true)
     {
@@ -63,7 +63,6 @@ void AccWorker::Work()
                 /* triggered by IRQ */
             }
             acc->getData(m_msg);
-            qDebug () << "ACC WORKER: x-data = " << m_msg->xAxis;
             
         }
 #endif
@@ -79,7 +78,4 @@ void AccWorker::Publish()
     /* send */
     emit SendData(m_msg);
 
-
-
-    
 }

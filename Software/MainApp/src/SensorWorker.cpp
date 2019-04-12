@@ -16,10 +16,12 @@
 #include <iostream>
 #include <unistd.h>
 
-#define REAR_LEFT 1
-#define REAR_RIGHT 2
+#define REAR_LEFT 0
+#define REAR_RIGHT 1
 #define FRONT_LEFT 3
-#define FRONT_RIGHT 4
+#define FRONT_RIGHT 2
+//#define REAR_CENTRE 7
+//#define FRONT_CENTRE 5
 
 using namespace std;
 
@@ -47,7 +49,12 @@ SensorWorker::SensorWorker()
     m_msg->rearLeft = 0;
     m_msg->rearRight = 0; 
     m_msg->rearCentre = 0;
-    m_msg->connectionFault = true;
+    m_msg->rearLeftConnected = false;
+    m_msg->rearRightConnected = false;
+    m_msg->rearCentreConnected = false;
+    m_msg->frontLeftConnected = false;
+    m_msg->frontCentreConnected = false;
+    m_msg->frontRightConnected = false;
 
 #endif //RPI
 
@@ -66,28 +73,17 @@ void SensorWorker::Work()
     {
         qDebug() << "SENSOR WORKER: getting data";
 #ifdef RPI
-        if ((m_mux->GetDistance(FRONT_LEFT, &m_msg->frontLeft)
-        && m_mux->GetDistance(REAR_LEFT, &m_msg->rearLeft)
-        && m_mux->GetDistance(FRONT_RIGHT, &m_msg->frontRight)
-        && m_mux->GetDistance(REAR_RIGHT, &m_msg->rearRight))	
-        == true)          
-        {
-            //GetDistance() was successful 
-    
-            m_msg->connectionFault = false;
-        }
-        else 
-        {
-            //GetDistance() failed so assume connection to sensors in lost/compromised
-        //qDebug() << "Sensor connection compromised" << endl;
-            m_msg->connectionFault = true;
-        }
+        //get the distance values from the sensor
+        m_msg->frontLeftConnected = m_mux->GetDistance(FRONT_LEFT, &m_msg->frontLeft);      
+        m_msg->frontRightConnected = m_mux->GetDistance(FRONT_RIGHT, &m_msg->frontRight);  
+        //m_msg->frontCentreConnected = m_mux->GetDistance(FRONT_CENTRE, &m_msg->frontCentre);  
+        m_msg->rearLeftConnected = m_mux->GetDistance(REAR_LEFT, &m_msg->rearLeft);  
+        //m_msg->rearCentreConnected = m_mux->GetDistance(REAR_CENTRE, &m_msg->rearCentre);  
+        m_msg->rearRightConnected = m_mux->GetDistance(REAR_RIGHT, &m_msg->rearRight); 
 #else
         sleep(1);
 #endif  
         
-
-
         qApp->processEvents();
     }
 }

@@ -12,6 +12,8 @@ sudo apt install qml-module-qtquick-controls
 sudo apt install qml-module-qtquick-extras
 sudo apt install libglm-dev
 sudo apt install zlib1g-dev
+sudo apt install gstreamer1.0-plugins-ugly
+sudo apt install bluez
 
 sudo apt install git-core
 sudo apt install cmake
