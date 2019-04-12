@@ -16,6 +16,11 @@
 
 using namespace std;
 
+/**
+ * @brief Offline tests for the MMA8652FCR1 class.
+ * 
+ */
+
 class MMA8652OfflineTest: public QObject
 {
     Q_OBJECT

@@ -1,3 +1,14 @@
+/**
+ * @file MMA8652FCR1.cpp
+ * @author Joe Walker
+ * @brief Implementation of MMA8652FCR1 class.
+ * @version 0.1
+ * @date 2019-02-25
+ *
+ * @copyright Copyright (c) 2019
+ *
+ */
+
 #include "config.h"
 #include "MMA8652FCR1.h"
 

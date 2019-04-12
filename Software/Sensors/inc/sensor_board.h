@@ -26,6 +26,11 @@
 #include <wiringPi.h>
 #endif
 
+/**
+ * @brief Control of the ultrasonic sensors through the mux
+ * 
+ */
+
 class sensor_board 
 {
     public:
