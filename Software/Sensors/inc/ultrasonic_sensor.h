@@ -22,6 +22,11 @@
 #include <wiringPi.h>
 #endif
 
+/**
+ * @brief Control of a HC-SR04 ultrasonic sensor
+ * 
+ */
+
 class ultrasonic_sensor
 {
     public:

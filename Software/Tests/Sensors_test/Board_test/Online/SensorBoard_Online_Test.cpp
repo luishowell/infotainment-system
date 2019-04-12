@@ -17,6 +17,11 @@
 
 using namespace std;
 
+/**
+ * @brief Online tests for sensor_board class.
+ * 
+ */
+
 class SensorBoardOnlineTest: public QObject
 {
     Q_OBJECT

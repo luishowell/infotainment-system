@@ -76,6 +76,11 @@
 //define the device id
 #define MMA8652FCR1_DEVICE_ID               0x4a
 
+/**
+ * @brief MMA8652 acceleration control and communication through I2C
+ * 
+ */
+
 class MMA8652FCR1
 {
 
