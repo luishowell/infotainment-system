@@ -16,6 +16,7 @@ compiler:
 
 install:
   - ./infotainment-install.sh
+  - sudo apt install graphviz
 
 script: 
   - doxygen Doxyfile
