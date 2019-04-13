@@ -19,6 +19,10 @@
 #include <QObject>
 #include <QTimer>
 
+/**
+ * @brief Performs data aquisition with an accelerometer. Runs in dedicated thread, AccThread.
+ * 
+ */
 class AccWorker : public QObject
 {
     Q_OBJECT

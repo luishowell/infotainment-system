@@ -28,6 +28,10 @@
 #include <vector>
 #include <string>
 
+/**
+ * @brief Data logger window that is shown by the Diagnostics screen.
+ * 
+ */
 class LoggerWindow : public QWidget
 {
     Q_OBJECT

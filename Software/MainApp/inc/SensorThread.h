@@ -15,6 +15,10 @@
 
 #include <QThread>
 
+/**
+ * @brief Dedicated QThread for obtaining ultrasonic sensor data. Actual data aquisition is in SensorWorker.
+ * 
+ */
 class SensorThread : public QThread
 {
     Q_OBJECT

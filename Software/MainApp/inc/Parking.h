@@ -23,7 +23,7 @@
 #include <vector>
 
 /**
- * @brief Qt GUI screen for displaying parking sensors and reversing camera
+ * @brief Top level widget for parking screen. Displays parking sensors and reversing camera.
  * 
  */
 

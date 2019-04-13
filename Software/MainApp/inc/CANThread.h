@@ -19,6 +19,10 @@
 #include <QThread>
 #include <string>
 
+/**
+ * @brief Dedicated QThread for obtaining obd2 data. Actual data aquisition is in CANWorker.
+ * 
+ */
 class CANThread : public QThread
 {
     Q_OBJECT

@@ -20,6 +20,10 @@
 #include <QTableWidget>
 #include <QObject>
 
+/**
+ * @brief Top level QWidget of the Error Codes screen.
+ * 
+ */
 class ErrorCodes : public QWidget
 {
     Q_OBJECT

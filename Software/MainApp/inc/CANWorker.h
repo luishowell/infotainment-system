@@ -28,6 +28,10 @@
 #include <string>
 #include <fstream>
 
+/**
+ * @brief Performs data aquisition from the CAN/obd2 bus. Runs in dedicated thread, CANThread.
+ * 
+ */
 class CANWorker : public QObject
 {
     Q_OBJECT

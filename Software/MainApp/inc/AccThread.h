@@ -19,6 +19,10 @@
 #include <QThread>
 #include <string>
 
+/**
+ * @brief Dedicated QThread for obtaining accelerometer data. Actual data aquisition is in AccWorker.
+ * 
+ */
 class AccThread : public QThread
 {
     Q_OBJECT

@@ -19,6 +19,10 @@
 #include <QObject>
 #include <QTimer>
 
+/**
+ * @brief Performs data aquisition with an ultrasonic sensor. Runs in dedicated thread, SensorThread.
+ * 
+ */
 class SensorWorker : public QObject
 {
     Q_OBJECT

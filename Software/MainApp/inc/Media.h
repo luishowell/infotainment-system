@@ -33,7 +33,10 @@
 #include <taglib/tag.h>
 #include <taglib/id3v2frame.h>
 
-
+/**
+ * @brief Top level QWidget of Media screen.
+ * 
+ */
 class Media : public QWidget
 {
     Q_OBJECT

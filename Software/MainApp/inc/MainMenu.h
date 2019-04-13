@@ -21,6 +21,10 @@
 #include <QIcon>
 #include <QPointer>
 
+/**
+ * @brief Default screen. Contains button for each screen.
+ * 
+ */
 class MainMenu : public QWidget
 {
     Q_OBJECT

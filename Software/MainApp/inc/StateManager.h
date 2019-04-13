@@ -26,6 +26,10 @@
 #include <QString>
 #include <QPointer>
 
+/**
+ * @brief Handles state change requests to change screens within the touchscreen GUI.
+ * 
+ */
 class StateManager : public QWidget
 {
     Q_OBJECT

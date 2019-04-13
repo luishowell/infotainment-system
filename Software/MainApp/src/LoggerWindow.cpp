@@ -208,6 +208,25 @@ void LoggerWindow::ConnectButtons()
 void LoggerWindow::CloseWindow()
 {
     emit CloseRequest();
+
+    foreach (const QStorageInfo &storage, QStorageInfo::mountedVolumes()) 
+    {
+        if (storage.isValid() && storage.isReady()) 
+        {
+            if (!storage.isReadOnly()) 
+            {
+                //qDebug() << "path:" << storage.rootPath().section("/", 1, 1);   
+                if (storage.rootPath().section("/", 1, 1) == "media")
+                {
+                    QString dest;
+                    qDebug() << "path:" << storage.rootPath();
+                    dest.append(storage.rootPath());
+                    dest.append("/DataLog.csv");
+                    QFile::copy("./DataLog.csv", dest);
+                }
+            }
+        }
+    }
 }
 
 void LoggerWindow::StartLogging()
@@ -245,16 +264,7 @@ void LoggerWindow::StopLogging()
     EnableButtons();
     emit LogRequestTx(selectedParams, false);
 
-    foreach (const QStorageInfo &storage, QStorageInfo::mountedVolumes()) 
-    {
-        if (storage.isValid() && storage.isReady()) 
-        {
-            if (!storage.isReadOnly()) 
-            {
-                qDebug() << "path:" << storage.rootPath();
-            }
-        }
-    }
+    
 }
 
 void LoggerWindow::UpdateLogMsg()

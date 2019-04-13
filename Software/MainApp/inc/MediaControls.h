@@ -21,6 +21,10 @@
 #include <QAbstractButton>
 #include <QAbstractSlider>
 
+/**
+ * @brief Widget containing controls of the MediaPlayer.
+ * 
+ */
 class MediaControls : public QWidget
 {
     Q_OBJECT

@@ -30,6 +30,10 @@
 #include <QVector>
 #include <QString>
 
+/**
+ * @brief Top level QWidget of the Diagnostics screen.
+ * 
+ */
 class Diagnostics : public QWidget
 {
     Q_OBJECT

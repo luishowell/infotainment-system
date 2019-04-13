@@ -18,7 +18,7 @@
 #include "types.h"
 
 /**
- * @brief An accelerometer gauge QWidget
+ * @brief An accelerometer gauge QWidget to display g-force
  * 
  */
 
