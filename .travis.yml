@@ -18,6 +18,8 @@ install:
   - ./infotainment-install.sh
 
 script: 
+  - doxygen Doxyfile
+
   - cd Software/
   - ./BuildAll.sh
   - ./Tests/OBD2_test/Offline/bin/OBD2OfflineTest
@@ -25,9 +27,6 @@ script:
   - ./Tests/Sensors_test/MMA8652_test/Offline/bin/MMA8652OfflineTest
   - ./Tests/Sensors_test/Mux_test/Offline/bin/MuxOfflineTest
   - ./Tests/Sensors_test/Ultrasonic_test/Offline/bin/UltrasonicOfflineTest 
-  
-  - cd ..
-  - doxygen Doxyfile
 
 deploy:
   provider: pages
