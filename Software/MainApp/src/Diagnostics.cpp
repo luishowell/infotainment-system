@@ -49,8 +49,8 @@ Diagnostics::Diagnostics(QWidget *parent, obd2* myObd, MMA8652FCR1* acc) : QWidg
    testVec.push_back("0A");
 
    obd = myObd;
-   m_logWindow = new LoggerWindow(testVec);
-   //m_logWindow = new LoggerWindow(obd->supported_pids, this);
+   //m_logWindow = new LoggerWindow(testVec);
+   m_logWindow = new LoggerWindow(obd->supported_pids, this);
    m_logWindow->setFixedSize(400, 300);
  
    setFixedSize(widgetSize);
