@@ -7,7 +7,7 @@ dev|[![Build Status](https://travis-ci.com/luishowell/infotainment-system.svg?br
 
 This project aims to create a drop-in infotainment system which can be used in any vehicle with an OBD2 port.
 
-![Logo](https://i.imgur.com/GvyDmrq.png)
+![Logo](https://github.com/luishowell/infotainment-system/blob/master/Media/Logo/logo.png?raw=true)
 
 ## Planned Features
 - Graphical user interface designed for use with a touchscreen 
