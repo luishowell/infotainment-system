@@ -1,7 +1,7 @@
 /**
  * @file OBD2_Online_Test.cpp
  * @author Jamie Brown/Luis Howell
- * @brief 
+ * @brief Implementation of online tests for the obd2 class
  * @version 0.1
  * @date 2019-02-17
  * 
@@ -15,6 +15,11 @@
 #include <obd2.hpp>
 
 using namespace std;
+
+/**
+ * @brief Online tests for the obd2 class.
+ * 
+ */
 
 class OBD2OnlineTest: public QObject
 {

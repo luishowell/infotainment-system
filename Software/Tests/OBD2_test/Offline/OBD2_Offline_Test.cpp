@@ -1,7 +1,7 @@
 /**
  * @file OBD2_Offline_Test.cpp
  * @author Jamie Brown/Luis Howell
- * @brief 
+ * @brief Implementation of offline tests for the obd2 class
  * @version 0.1
  * @date 2019-03-05
  * 
@@ -15,6 +15,11 @@
 #include <obd2.hpp>
 
 using namespace std;
+
+/**
+ * @brief Offline tests for the obd2 class.
+ * 
+ */
 
 class OBD2OfflineTest: public QObject
 {
