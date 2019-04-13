@@ -22,7 +22,7 @@ Let Me Infotain You is a project developed at the University of Glasgow which br
 
 ## Documentation
 
-Complete guides on how to build and use the infotaiment system can be found on our [Github wiki](https://github.com/luishowell/infotainment-system/wiki). Detailed software documentation can be found in the [Doxygen documentation](https://luishowell.github.io/infotainment-system/html/annotated.html).
+Complete guides on how to build and use the infotaiment system can be found on our [Github wiki](https://github.com/luishowell/infotainment-system/wiki). Detailed software documentation can be found in the [Doxygen documentation](https://luishowell.github.io/infotainment-system/annotated.html).
 
 ## Social Media
 
