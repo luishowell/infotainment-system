@@ -20,6 +20,11 @@
 #include <wiringPi.h>
 #endif
 
+/**
+ * @brief Control of an 8-to-1 multiplexor
+ * 
+ */
+
 class multiplexor
 {
 

@@ -13,10 +13,14 @@
 #include <iostream>
 #include "ultrasonic_sensor.h"
 #include "types.h"
-//#include "UltrasonicSensor_test.h"
 
 
 using namespace std;
+
+/**
+ * @brief Offline unit tests for the ultrasonic_sensor class.
+ * 
+ */
 
 class UltrasonicSensorOfflineTest: public QObject
 {

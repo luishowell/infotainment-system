@@ -1,3 +1,14 @@
+/**
+ * @file sensor_board.cpp
+ * @author Joe Walker
+ * @brief Implementation of sensor_board class
+ * @version 0.2
+ * @date 2019-04-01
+ * 
+ * @copyright Copyright (c) 2019
+ * 
+ */
+
 #include "config.h"
 #include "sensor_board.h"
 

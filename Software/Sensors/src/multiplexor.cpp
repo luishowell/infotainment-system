@@ -1,3 +1,14 @@
+/**
+ * @file multiplexor.cpp
+ * @author Joe Walker
+ * @brief Implementation of multiplexor class
+ * @version 0.2
+ * @date 2019-04-01
+ * 
+ * @copyright Copyright (c) 2019
+ * 
+ */
+
 #include "config.h"
 #include "multiplexor.h"
 
