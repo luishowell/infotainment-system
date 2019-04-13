@@ -2,9 +2,17 @@ language: cpp
 sudo: required
 dist: xenial
 
+branches:
+  only:
+    - master
+
+addons:
+  apt:
+    packages:
+      - doxygen
+
 compiler:
   - gcc
-  - clang
 
 install:
   - ./infotainment-install.sh
@@ -17,3 +25,14 @@ script:
   - ./Tests/Sensors_test/MMA8652_test/Offline/bin/MMA8652OfflineTest
   - ./Tests/Sensors_test/Mux_test/Offline/bin/MuxOfflineTest
   - ./Tests/Sensors_test/Ultrasonic_test/Offline/bin/UltrasonicOfflineTest 
+  
+  - cd ..
+  - doxygen Doxyfile
+
+deploy:
+  provider: pages
+  skip_cleanup: true
+  local_dir: Docs/html
+  github_token: $GH_REPO_TOKEN
+  on:
+    branch: master
