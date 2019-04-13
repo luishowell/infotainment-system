@@ -17,6 +17,11 @@
 
 using namespace std;
 
+/**
+ * @brief Online unit tests for the MMA8652FCR1 class.
+ * 
+ */
+
 class MMA8652OnlineTest: public QObject
 {
     Q_OBJECT

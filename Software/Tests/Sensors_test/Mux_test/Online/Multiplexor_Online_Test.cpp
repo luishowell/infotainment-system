@@ -17,6 +17,11 @@
 
 using namespace std;
 
+/**
+ * @brief Online unit tests for the multiplexor class.
+ * 
+ */
+
 class MultiplexorOnlineTest: public QObject
 {
     Q_OBJECT

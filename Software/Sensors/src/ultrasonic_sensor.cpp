@@ -1,3 +1,14 @@
+/**
+ * @file ultrasonic_sensor.cpp
+ * @author Joe Walker
+ * @brief Implementatin of ultrasonic_sensor class.
+ * @version 0.2
+ * @date 2019-04-01
+ * 
+ * @copyright Copyright (c) 2019
+ * 
+ */
+
 #include "config.h"
 #include "ultrasonic_sensor.h"
 #include <iostream>

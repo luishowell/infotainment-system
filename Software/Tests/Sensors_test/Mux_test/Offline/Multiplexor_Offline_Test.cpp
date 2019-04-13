@@ -16,6 +16,11 @@
 
 using namespace std;
 
+/**
+ * @brief Offline unit tests for the multiplexor class.
+ * 
+ */
+
 class MultiplexorOfflineTest: public QObject
 {
     Q_OBJECT
