@@ -13,10 +13,16 @@ Let Me Infotain You is a project developed at the University of Glasgow which br
 * Display of fault codes and their descriptions
 * Media player 
 
+Youtube video
+
+[![promo video](https://img.youtube.com/vi/IjcHbDSLNJg/0.jpg)](https://www.youtube.com/watch?v=IjcHbDSLNJg)
+
 ## Screenshots
 
 
 ![home screen](https://github.com/luishowell/infotainment-system/blob/master/Media/Screenshots/home_screen.PNG?raw=true)
+
+![parking screen](https://github.com/luishowell/infotainment-system/blob/master/Media/Screenshots/parking_screen.png?raw=true)
 
 ![diagnostics screen](https://github.com/luishowell/infotainment-system/blob/master/Media/Screenshots/diagnostics_screen.PNG?raw=true)
 
