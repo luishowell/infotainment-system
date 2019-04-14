@@ -30,7 +30,6 @@ private slots:
     void SendCmd_Test();
     void ScanPids_Test();
     void DecodedCmd_Test();
-    void ReadDtc_Test();
 
     /* hooks */
     void initTestCase();
@@ -145,16 +144,6 @@ void OBD2OnlineTest::DecodedCmd_Test()
     QVERIFY(m_obd->decoded_cmd("5738") ==  -999);
     QVERIFY(m_obd->decoded_cmd("01") ==  -999);
 }
-
-/**
- * @brief 
- * 
- */
-void OBD2OnlineTest::ReadDtc_Test()
-{
-    //not really possible to test
-}
-
 
 /* run tests */
 //QTEST_MAIN(OBD2OnlineTest);
