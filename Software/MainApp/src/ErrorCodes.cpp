@@ -142,7 +142,6 @@ void ErrorCodes::ClearErrorCodes()
    bool waiting = true;
    bool notifyFlag = true; 
 
-   //qDebug() << "ERROR CODES: clicked";
    while (waiting)
    {
       if (Mutex::TryOBD2())

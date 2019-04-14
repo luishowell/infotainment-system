@@ -214,8 +214,7 @@ void LoggerWindow::CloseWindow()
         if (storage.isValid() && storage.isReady()) 
         {
             if (!storage.isReadOnly()) 
-            {
-                //qDebug() << "path:" << storage.rootPath().section("/", 1, 1);   
+            {   
                 if (storage.rootPath().section("/", 1, 1) == "media")
                 {
                     QString dest;
@@ -316,28 +315,19 @@ void LoggerWindow::OnClicked()
 
     if (button->isChecked())   
     {
-        qDebug() << name << " selected";
-        //std::cout << "PID: " << pid << endl; 
+        qDebug() << name << " selected"; 
         selectedParams.push_back(pid);
         
         for (int i=0; i<selectedParams.size(); i++)
         {
             qDebug() << selectedParams[i]; 
         }
-        //std::cout << endl;
         
     }
     else  
     { 
         qDebug() << name << " deselected"; 
         RemoveParameter(pid);
-        /* 
-        for (int i=0; i<selectedParams.size(); i++)
-        {
-            std::cout << selectedParams[i]; 
-        }
-        std::cout << endl;
-        */
     }
 
 }

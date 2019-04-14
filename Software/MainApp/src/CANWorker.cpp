@@ -68,9 +68,7 @@ void CANWorker::GetDiagData()
 	qDebug() << "CAN WORKER: Get fast data";
 	sleep(1);
 #endif
-    //qDebug() << "hello there";
     if (m_obd->connected)
-    //if (true)
     {
       
       ObdMsg.connectionFault = false;
@@ -133,9 +131,6 @@ void CANWorker::LogRequestRx(QVector<QString> logParams, bool start)
     for (int idx = 0; idx < paramSize; idx++)
     {
       m_logFile << Hash::PID2Name(logParams[idx]);
-      //qDebug() << "CAN WORKER: log params " << logParams[idx];
-      //paramName = Hash::PID2Name(logParams[idx]);
-      //m_logFile << paramName;
       if (idx == paramSize - 1)
       {
         
@@ -150,12 +145,7 @@ void CANWorker::LogRequestRx(QVector<QString> logParams, bool start)
 
     while(m_running) //placeholder
     {
-      qDebug() << "CAN WORKER: logging";
-      
-      //sleep(1);
-
       /* get current time */
-      
       auto endTime = std::chrono::system_clock::now();
       std::chrono::duration<double> currentTime = endTime - startTime;
       m_logFile << currentTime.count() << ",";
@@ -184,10 +174,7 @@ void CANWorker::LogRequestRx(QVector<QString> logParams, bool start)
 
     /* Start default live data acquisition routine */
     GetDiagData();
-
-  }
-  
-  
+  }  
 }
 
 /* if the timer elapses before data is ready, 

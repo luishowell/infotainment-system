@@ -115,14 +115,6 @@ void MediaControls::setState(QMediaPlayer::State state)
 
 int MediaControls::volume() const
 {
-    /* TODO: */
-    /*
-    qreal linearVolume = QAudio::convertVolume(m_volumeSlider->value() / qreal(100), 
-                                QAudio::LogarithmicVolumeScale,
-                                QAudio::LinearVolumeScale);
-
-    return qRound(linearVolume * 100);
-    */
    return m_volumeSlider->value();
 }
 
@@ -145,7 +137,6 @@ void MediaControls::onVolumeChanged(int vol)
 
 void MediaControls::onMuteRequest(bool muted)
 {
-    //if ((muted == false) && (m_isMuted == true)) 
     if (muted != m_isMuted) 
     {
         m_isMuted = muted;

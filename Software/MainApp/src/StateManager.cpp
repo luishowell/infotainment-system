@@ -25,10 +25,8 @@ StateManager::StateManager(QWidget *parent, obd2* myObd, MMA8652FCR1* acc) : QWi
 
     setFixedSize(widgetSize);
 
-    /* create GUI views */
-    
+    /* create GUI views */  
     m_mainMenu = new MainMenu(this);
-    //qDebug() << "hi";
     m_diags = new Diagnostics(this, m_obd, acc);
     m_errorCodes = new ErrorCodes(this, m_obd);
     m_parking = new Parking(this);
@@ -146,6 +144,5 @@ void StateManager::LogRequestRx(QVector<QString> logParams, bool start)
 
 void StateManager::SensorPublishDiagRx(sensorDist_t* sensorData)
 {
-  //cout << "SENSOR DATA: " << sensorData->rearLeft << endl;
   emit SensorTx(sensorData);
 }

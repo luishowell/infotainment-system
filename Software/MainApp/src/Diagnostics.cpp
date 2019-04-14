@@ -9,6 +9,11 @@
  * 
  */
 
+#include "Diagnostics.h" 
+#include "config.h"
+#include "Hash.h"
+#include "MMA8652FCR1.h"
+
 #include <QApplication>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
@@ -25,14 +30,7 @@
 
 #include <vector>
 #include <string>
-
-//#include <stdio.h>
 #include <iostream>
-#include "Diagnostics.h" 
-#include "config.h"
-#include "Hash.h"
-#include "MMA8652FCR1.h"
-
 
 using namespace std;
 
@@ -56,16 +54,11 @@ Diagnostics::Diagnostics(QWidget *parent, obd2* myObd, MMA8652FCR1* acc) : QWidg
    setFixedSize(widgetSize);
    CreateComponents();
    CreateLayout();    
-   
    connect(this, SIGNAL (NewChannelRequest(diagParams_t, obd2Channel_t)), parent, SLOT (OnNewChannelRequest(diagParams_t, obd2Channel_t))); 
-
    ConnectButtons();
-   //connect(m_homeButton, SIGNAL (clicked()), this, SLOT (StateChangeMainMenu())); 
 
    /* CAN bus initially assumed disconnected until the CAN thread specifies no connection fault */
    canConnectionFlag = false;
-
-   //logClicked = 0;
 
    qRegisterMetaType<diagParams_t>("diagParams_t");
    qRegisterMetaType<obd2Channel_t>("obd2Channel_t");
@@ -267,7 +260,6 @@ void Diagnostics::CreateLayout()
    /* parameter selection box */
    selectBox = new QGroupBox("Parameters", titleBox);
    selectBox->setAlignment(Qt::AlignHCenter);
-   //selectBox->setFixedSize(250, 250);
    QHBoxLayout *selectLayout = new QHBoxLayout(selectBox);
    QVBoxLayout *selectLeft = new QVBoxLayout(selectBox);
    QVBoxLayout *selectRight = new QVBoxLayout(selectBox);
@@ -297,7 +289,6 @@ void Diagnostics::CreateLayout()
    pidNum = obd->supported_pids.size();
    for (pidCnt = 0; pidCnt < pidNum; pidCnt++)
    {
-      //QPid = QString::fromUtf8(obd->supported_pids[pidNum].c_str());
       switch (Hash::HashPID(obd->supported_pids[pidCnt])) // JB: fixed bug here (13/03/19)
       {
          /* fast channel buttons */
@@ -360,17 +351,7 @@ void Diagnostics::CreateLayout()
       boxLayout->setColumnStretch(i, 1);
    }
 
-
    boxLayout->addWidget(m_logButton, 2, 1);
-   //boxLayout->addWidget(m_engineRuntimeLCD, 1, 4);
-   
-
-/*
-   currentRightGauge = speedBox;
-   m_currentRightObj = m_speedObject;
-   currentLeftGauge = rpmBox;
-   m_currentLeftObj = m_rpmObject;
-*/
 
    currentRightChannel.box = airTempBox;
    currentRightChannel.obj = m_airTempObject;
@@ -400,7 +381,7 @@ void Diagnostics::DiagDataRx(diagMsg_t* msg)
 {
    if (msg->connectionFault == true)
    {
-      //cout<<"WARNING: no connection to CAN bus"<<endl;
+      // cout << "WARNING: no connection to CAN bus" << endl;
 
       if(canConnectionFlag == true)
       {
@@ -448,7 +429,6 @@ void Diagnostics::AccDataRx(accValues_t* msg)
 
 void Diagnostics::ConnectButtons()
 {
-   //connect(this, SIGNAL (DiagDataChange(diagData_t)), this, SLOT (ChangeDiagDisplay(diagData_t)));
    connect(m_rpmButton, SIGNAL (clicked()), this, SLOT (ShowRpmGauge()));
    connect(m_speedButton, SIGNAL (clicked()), this, SLOT (ShowSpeedGauge()));
    connect(m_intakeAirTempButton, SIGNAL (clicked()), this, SLOT (ShowAirTempGauge()));
@@ -463,23 +443,17 @@ void Diagnostics::ConnectButtons()
    connect(m_logWindow, SIGNAL (LogRequestTx(QVector<QString>, bool)), this, SLOT (LogRequestRx(QVector<QString>, bool)));
    connect(m_logWindow, SIGNAL (CloseRequest()), this, SLOT (CloseLogWindow()));
 
-   //connect(m_logButton, &QPushButton::clicked, this, &Diagnostics::JourneyLogRequest);
-
 }
 
 /* public slots */
 
 void Diagnostics::ShowAccGauge()
 {
-   //qDebug() << "clicked acc button";
    if (currentRightGauge != accBox)
    {
       currentRightChannel.box->hide();
       accBox->show();
-      //m_accGauge->show();
       currentRightChannel.box = accBox;
-      //currentRightChannel.num = nullptr;
-      //currentRightChannel.obj = nullptr;
    }
    
 }
@@ -659,7 +633,6 @@ void Diagnostics::ButtonState(bool state)
 {
    for (int count = 0; count < obd->supported_pids.size(); count++)
    {
-      //QPid = QString::fromUtf8(obd->supported_pids[pidNum].c_str());
       switch (Hash::HashPID(obd->supported_pids[count])) // JB: fixed bug here (13/03/19)
       {
          /* fast channel buttons */

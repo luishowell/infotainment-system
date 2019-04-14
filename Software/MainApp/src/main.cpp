@@ -1,6 +1,6 @@
 /**
  * @file main.cpp
- * @author 
+ * @author Jamie Brown/Luis Howell
  * @brief Implementation of main entry point.
  * @version 0.1
  * @date 2019-03-13
@@ -42,8 +42,6 @@ int main(int argc, char** argv)
     cout << "/***************LET ME INFOTAIN YOU!/***************" << endl;
     QApplication app (argc, argv);
 
-    //qApp->setStyle(QStyleFactory::create("macintosh"));
-
     QFile file("./MainApp/src/default.qss");
     file.open(QFile::ReadOnly);
     QString styleSheet = QLatin1String(file.readAll());
@@ -51,8 +49,6 @@ int main(int argc, char** argv)
 
     obd2* myObd = new obd2("/dev/rfcomm0");
     MMA8652FCR1* guiAccel;
-
-    
 
     /* create threads */
     CANThread canT;
@@ -65,18 +61,13 @@ int main(int argc, char** argv)
     /* GUI stuff in state machine class*/
     StateManager stateMachine(0, myObd, accW.acc);
     
-    
     /* move workers into appropriate threads */
     canW.moveToThread(&canT);
     accW.moveToThread(&accT);
     sensorW.moveToThread(&sensorT);	
 
-
     qRegisterMetaType<QVector<QString>>("<QVector<QString>>");
     QObject::connect(&stateMachine, SIGNAL(LogRequestTx(QVector<QString>, bool)), &canW, SLOT(LogRequestRx(QVector<QString>, bool)));
-
-    
-
     QObject::connect(&canT, SIGNAL(started()), &canW, SLOT(GetDiagData()));
     QObject::connect(&sensorT, SIGNAL(started()), &sensorW, SLOT(Work()));
     QObject::connect(&accT, SIGNAL(started()), &accW, SLOT(Work()));
