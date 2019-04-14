@@ -15,7 +15,7 @@ Let Me Infotain You is a project developed at the University of Glasgow which br
 
 Youtube video
 
-[![promo video](https://img.youtube.com/vi/IjcHbDSLNJg/0.jpg)](https://www.youtube.com/watch?v=IjcHbDSLNJg)
+[![promo video](https://img.youtube.com/vi/IjcHbDSLNJg/sddefault.jpg)](https://www.youtube.com/watch?v=IjcHbDSLNJg)
 
 ## Screenshots
 
