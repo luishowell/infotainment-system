@@ -57,21 +57,25 @@ bool ultrasonic_sensor::GetDistance(double *distance)
 
 #ifdef RPI
 
+
      //if the echo pin is still high, return 2m as we assume
      //this is the response from a previous trigger
-     if(digitalRead(m_echo_pin) == HIGH){
+     if(digitalRead(this->m_echo_pin) == HIGH){
          *distance = this->m_maxDistance;
-         return true;
+         //cout << "previous echo noticed" << endl;
+         return true;         
      }
 
-     //pulse the trigger pin for 10us
+     //pulse the trigger pin for 100us
+     digitalWrite(this->m_trigger_pin, LOW);
+     delayMicroseconds(40);
      digitalWrite(this->m_trigger_pin, HIGH);
      delayMicroseconds(100);
      digitalWrite(this->m_trigger_pin, LOW);
 
      //timeout on both rising and falling edge of echo pin
-     //timeoutLen = 12000;
-     double time_left = timeoutLen;
+     //timeoutLen = 1000;
+     double time_left = this->timeoutLen;
 
      //time at which the while loop starts
      time_t while_start = micros();
@@ -79,11 +83,11 @@ bool ultrasonic_sensor::GetDistance(double *distance)
      time_t while_end;
 
      //look for the rising edge of the echo pulse or timeout
-     while((digitalRead(m_echo_pin) == LOW) && (time_left > 0))
+     while((digitalRead(this->m_echo_pin) == LOW) && (time_left > 0))
      {
 	  while_end = micros();
           time_taken = while_end - while_start;
-          time_left = timeoutLen - time_taken;
+          time_left = this->timeoutLen - time_taken;
      }
 
 
@@ -96,25 +100,23 @@ bool ultrasonic_sensor::GetDistance(double *distance)
      }
 
      //reset timeout values
-     time_left = timeoutLen;
+     time_left = this->timeoutLen;
      while_start = micros();
      
 
      //look for the falling edge of the echo pulse or timeout
-     while((digitalRead(m_echo_pin) == HIGH) && (time_left > 0))
+     while((digitalRead(this->m_echo_pin) == HIGH) && (time_left > 0))
      {
         while_end = micros();
         time_taken = while_end - while_start;
-        time_left = timeoutLen - time_taken;
+        time_left = this->timeoutLen - time_taken;
      }
      //record end time
      end_time = micros();
-     
 
      //calculate the distance and return
      time_diff = difftime(end_time, start_time);
      *distance = this->calculateDistance(time_diff); //calculate the distance
-     //cout << "Distance measured as: " << *distance << endl;
      
      return true;
 #endif
