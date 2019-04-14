@@ -59,7 +59,7 @@ bool sensor_board::GetDistance(unsigned int sensor_num, double *distance)
 
 #ifdef RPI
 	//std::cout << "MUX DELAY" << std::endl;
-    delayMicroseconds(10000); //wait for mux to be set properly
+    delayMicroseconds(70000); //wait for mux to be set properly
 #endif
 
     //get the distance and return success

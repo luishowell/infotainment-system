@@ -16,12 +16,12 @@
 #include <iostream>
 #include <unistd.h>
 
-#define REAR_LEFT 0
-#define REAR_RIGHT 1
-#define FRONT_LEFT 3
-#define FRONT_RIGHT 2
-//#define REAR_CENTRE 7
-//#define FRONT_CENTRE 5
+#define REAR_LEFT 7
+#define REAR_RIGHT 3
+#define FRONT_LEFT 0
+#define FRONT_RIGHT 1
+#define REAR_CENTRE 5
+#define FRONT_CENTRE 2
 
 using namespace std;
 
@@ -76,10 +76,10 @@ void SensorWorker::Work()
         //get the distance values from the sensor
         m_msg->frontLeftConnected = m_mux->GetDistance(FRONT_LEFT, &m_msg->frontLeft);      
         m_msg->frontRightConnected = m_mux->GetDistance(FRONT_RIGHT, &m_msg->frontRight);  
-        //m_msg->frontCentreConnected = m_mux->GetDistance(FRONT_CENTRE, &m_msg->frontCentre);  
+        m_msg->frontCentreConnected = m_mux->GetDistance(FRONT_CENTRE, &m_msg->frontCentre);  
         m_msg->rearLeftConnected = m_mux->GetDistance(REAR_LEFT, &m_msg->rearLeft);  
         //m_msg->rearCentreConnected = m_mux->GetDistance(REAR_CENTRE, &m_msg->rearCentre);  
-        m_msg->rearRightConnected = m_mux->GetDistance(REAR_RIGHT, &m_msg->rearRight); 
+        m_msg->rearRightConnected = m_mux->GetDistance(REAR_RIGHT, &m_msg->rearRight);
 #else
         sleep(1);
 #endif  

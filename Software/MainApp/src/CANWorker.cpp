@@ -75,7 +75,7 @@ void CANWorker::GetDiagData()
       qDebug() << "CAN WORKER: trying obd2";
       if ( Mutex::TryOBD2() )
       {
-        ObdMsg.channelA = m_obd->decoded_cmd(ObdMsg.requestA);
+        ObdMsg.channelA = m_obd->decoded_cmd(ObdMsg.requestA, true);
         Mutex::UnlockOBD2();
       }
       else
@@ -153,7 +153,7 @@ void CANWorker::LogRequestRx(QVector<QString> logParams, bool start)
       for (int idx = 0; idx < paramSize; idx++)
       {
         /* write to csv file */
-        m_logFile << m_obd->decoded_cmd(logParams[idx].toStdString());
+        m_logFile << m_obd->decoded_cmd(logParams[idx].toStdString(), true);
         if (idx == paramSize - 1)
         {
           m_logFile << endl;
@@ -186,7 +186,7 @@ void CANWorker::PublishDiagData()
 
   if (Mutex::TryOBD2())
   {
-    ObdMsg.channelB = m_obd->decoded_cmd(ObdMsg.requestB);
+    ObdMsg.channelB = m_obd->decoded_cmd(ObdMsg.requestB, true);
     Mutex::UnlockOBD2();
   }
   else
