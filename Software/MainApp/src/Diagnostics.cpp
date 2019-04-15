@@ -45,8 +45,7 @@ Diagnostics::Diagnostics(QWidget *parent, obd2* myObd, MMA8652FCR1* acc) : QWidg
    QMessageBox msgBox(QMessageBox::Question,
                    "", 
                    "Fancy Dials/Gauges may be slow on some platforms. Do you want to enable them?", 
-                   QMessageBox::Yes | QMessageBox::No, this,
-                   Qt::FramelessWindowHint);
+                   QMessageBox::Yes | QMessageBox::No, this);
        msgBox.setDefaultButton(QMessageBox::Yes);
    int ret = msgBox.exec();
    if (ret == QMessageBox::Yes)
