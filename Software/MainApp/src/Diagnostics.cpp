@@ -77,7 +77,7 @@ void Diagnostics::CreateComponents()
    /* create g-force meter */
    m_accGauge = new AccGauge(1);
 
-   m_accGauge->calibrate(m_acc->staticVals);
+   bool calibrate_success = m_accGauge->calibrate(m_acc->staticVals);
 
    /* set up speedometer */
    QQuickView *speedoQML = new QQuickView();
