@@ -12,7 +12,9 @@ INCLUDEPATH     += ../../../../MainApp/inc
 DEPENDPATH  += . ../../../../Sensors/
 LIBS        +=  ../../../../Sensors/bin/libSENSORS.a
 #comment out if not on the pi
-#LIBS        += -L/usr/local/lib -lwiringPi
+LIBS        += -L/usr/local/lib -lwiringPi
+LIBS += -lcrypt
+LIBS += -lrt
 
 #inputs
 SOURCES         += ./SensorBoard_Offline_Test.cpp  
@@ -21,3 +23,5 @@ SOURCES         += ./SensorBoard_Offline_Test.cpp
 DESTDIR          = ./bin 
 OBJECTS_DIR      = ./bin/src 
 MOC_DIR          = moc
+
+DEFINES             += RPI=1
