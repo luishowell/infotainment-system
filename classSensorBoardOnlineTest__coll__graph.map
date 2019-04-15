@@ -1,0 +1,5 @@
+<map id="SensorBoardOnlineTest" name="SensorBoardOnlineTest">
+<area shape="rect" id="node3" href="$classsensor__board.html" title="Control of the ultrasonic sensors through the mux. " alt="" coords="112,95,221,121"/>
+<area shape="rect" id="node4" href="$classultrasonic__sensor.html" title="Control of a HC&#45;SR04 ultrasonic sensor. " alt="" coords="30,5,165,32"/>
+<area shape="rect" id="node5" href="$classmultiplexor.html" title="Control of an 8&#45;to&#45;1 multiplexor. " alt="" coords="189,5,283,32"/>
+</map>

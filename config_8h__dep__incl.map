@@ -1,0 +1,42 @@
+<map id="Software/MainApp/inc/config.h" name="Software/MainApp/inc/config.h">
+<area shape="rect" id="node2" href="$AccThread_8h.html" title="Dedicated thread for obtaining accelerometer data. Actual implementation is included in AccWorker whi..." alt="" coords="88,95,246,136"/>
+<area shape="rect" id="node4" href="$main_8cpp.html" title="Welcome to Let Me Infotain You! " alt="" coords="543,407,703,448"/>
+<area shape="rect" id="node5" href="$AccWorker_8h.html" title="Software/MainApp/inc\l/AccWorker.h" alt="" coords="792,199,950,240"/>
+<area shape="rect" id="node7" href="$CANThread_8h.html" title="Dedicated thread for interfacing with the OBD2 bus. Functionality is contained in CANWorker and is mo..." alt="" coords="297,310,456,351"/>
+<area shape="rect" id="node8" href="$CANWorker_8h.html" title="Contains functionality that interfaces with the OBD2 bus. This is moved to a dedicated thread..." alt="" coords="674,95,833,136"/>
+<area shape="rect" id="node10" href="$MediaControls_8h.html" title="Widget containing the audio controls for the media player. " alt="" coords="2120,95,2278,136"/>
+<area shape="rect" id="node13" href="$StateManager_8cpp.html" title="Implemetation of CANThread. " alt="" coords="1792,407,1952,448"/>
+<area shape="rect" id="node14" href="$Media_8cpp.html" title="Implementation of Media. " alt="" coords="2119,310,2279,351"/>
+<area shape="rect" id="node16" href="$SensorThread_8h.html" title="Dedicated thread for interfacing with the ultrasonic parking sensors. Functionality is contained in S..." alt="" coords="440,95,598,136"/>
+<area shape="rect" id="node18" href="$SensorWorker_8h.html" title="Contains functionality that interfaces with the ultrasonic parking sensors. This is moved to a dedica..." alt="" coords="2354,310,2513,351"/>
+<area shape="rect" id="node20" href="$Diagnostics_8cpp.html" title="Implementation of Diagnostics. " alt="" coords="1000,310,1160,351"/>
+<area shape="rect" id="node21" href="$ErrorCodes_8cpp.html" title="Implementation of ErrorCodes. " alt="" coords="3607,95,3767,136"/>
+<area shape="rect" id="node22" href="$MainMenu_8cpp.html" title="Implementation of MainMenu. " alt="" coords="3791,95,3951,136"/>
+<area shape="rect" id="node23" href="$Parking_8cpp.html" title="Implementation of Parking. " alt="" coords="3975,95,4135,136"/>
+<area shape="rect" id="node24" href="$MMA8652FCR1_8h.html" title="The class MMA8652FCR1.h provides methods for controlling the operation of the accelerometer of the sa..." alt="" coords="1349,95,1505,136"/>
+<area shape="rect" id="node27" href="$MMA8652FCR1_8cpp.html" title="Implementation of MMA8652FCR1 class. " alt="" coords="1532,199,1690,240"/>
+<area shape="rect" id="node29" href="$MMA8652__Online__Test_8cpp.html" title="Online tests for the MMA8652 class. " alt="" coords="1714,191,1911,247"/>
+<area shape="rect" id="node30" href="$multiplexor_8h.html" title="The class multiplexor provides methods for controlling the operation of a multiplexor from the raspbe..." alt="" coords="2709,95,2865,136"/>
+<area shape="rect" id="node31" href="$sensor__board_8h.html" title="The class sensor_board provides methods for controlling the sensor board, containing the multiplexor ..." alt="" coords="2506,199,2662,240"/>
+<area shape="rect" id="node32" href="$sensor__board_8cpp.html" title="Implementation of sensor_board class. " alt="" coords="2538,310,2695,351"/>
+<area shape="rect" id="node34" href="$SensorBoard__Online__Test_8cpp.html" title="Online tests for the sensor board class. " alt="" coords="3092,303,3306,359"/>
+<area shape="rect" id="node35" href="$multiplexor_8cpp.html" title="Implementation of multiplexor class. " alt="" coords="2912,199,3070,240"/>
+<area shape="rect" id="node37" href="$Multiplexor__Online__Test_8cpp.html" title="Online tests for the multiplexor class. " alt="" coords="3094,191,3296,247"/>
+<area shape="rect" id="node38" href="$ultrasonic__sensor_8h.html" title="The class ultrasonic_sensor provides methods for controlling the operation of an ultrasonic sensor fr..." alt="" coords="3376,95,3532,136"/>
+<area shape="rect" id="node39" href="$ultrasonic__sensor_8cpp.html" title="Implementatin of ultrasonic_sensor class. " alt="" coords="3372,199,3536,240"/>
+<area shape="rect" id="node41" href="$UltrasonicSensor__Online__Test_8cpp.html" title="Contains online unit tests for the ultrasonic_sensor class. " alt="" coords="3763,184,3942,255"/>
+<area shape="rect" id="node3" href="$AccThread_8cpp.html" title="Implementation of AccThread. " alt="" coords="36,199,196,240"/>
+<area shape="rect" id="node6" href="$AccWorker_8cpp.html" title="Implementation of AccWorker. " alt="" coords="816,310,976,351"/>
+<area shape="rect" id="node9" href="$CANWorker_8cpp.html" title="Implementation of CANWorker. " alt="" coords="556,199,716,240"/>
+<area shape="rect" id="node11" href="$Media_8h.html" title="The main widget class for the main menu. " alt="" coords="2120,199,2278,240"/>
+<area shape="rect" id="node15" href="$MediaControls_8cpp.html" title="Implementation of MediaControls. " alt="" coords="1935,199,2095,240"/>
+<area shape="rect" id="node12" href="$StateManager_8h.html" title="Class that handles state change requests to change windows within the touchscreen GUI..." alt="" coords="1416,310,1574,351"/>
+<area shape="rect" id="node17" href="$SensorThread_8cpp.html" title="Implementation of SensorThread. " alt="" coords="322,199,482,240"/>
+<area shape="rect" id="node19" href="$SensorWorker_8cpp.html" title="Implementation of SensorWorker. " alt="" coords="2354,407,2514,448"/>
+<area shape="rect" id="node25" href="$Diagnostics_8h.html" title="The main widget class for the diagnostics screen. " alt="" coords="1077,199,1236,240"/>
+<area shape="rect" id="node28" href="$MMA8652__Offline__Test_8cpp.html" title="Offline tests for the MMA8652 class. " alt="" coords="1260,191,1458,247"/>
+<area shape="rect" id="node26" href="$LoggerWindow_8cpp.html" title="Implementation of LoggerWindow. " alt="" coords="1184,310,1344,351"/>
+<area shape="rect" id="node36" href="$Multiplexor__Offline__Test_8cpp.html" title="Offline tests for the multiplexor class. " alt="" coords="2686,191,2888,247"/>
+<area shape="rect" id="node33" href="$SensorBoard__Offline__Test_8cpp.html" title="Offline tests for the sensor board class. " alt="" coords="2720,303,2934,359"/>
+<area shape="rect" id="node40" href="$UltrasonicSensor__Offline__Test_8cpp.html" title="Contains offline unit tests for the ultrasonic_sensor class. " alt="" coords="3560,184,3739,255"/>
+</map>

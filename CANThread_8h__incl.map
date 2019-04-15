@@ -1,0 +1,5 @@
+<map id="Software/MainApp/inc/CANThread.h" name="Software/MainApp/inc/CANThread.h">
+<area shape="rect" id="node2" href="$config_8h.html" title="This file used for global configuration of the app. Resizing of widgets etc. " alt="" coords="69,95,141,121"/>
+<area shape="rect" id="node5" href="$types_8h.html" title="Contains all custom typedefs and structs used in the project. " alt="" coords="323,95,392,121"/>
+<area shape="rect" id="node10" href="$obd2_8hpp.html" title="The class obd2 provides methods for communicating with an OBD2 vhicle over Bluetooth. " alt="" coords="165,95,248,121"/>
+</map>

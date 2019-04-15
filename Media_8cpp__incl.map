@@ -1,0 +1,7 @@
+<map id="Software/MainApp/src/Media.cpp" name="Software/MainApp/src/Media.cpp">
+<area shape="rect" id="node2" href="$config_8h.html" title="This file used for global configuration of the app. Resizing of widgets etc. " alt="" coords="1970,244,2042,271"/>
+<area shape="rect" id="node5" href="$Media_8h.html" title="The main widget class for the main menu. " alt="" coords="1193,95,1265,121"/>
+<area shape="rect" id="node6" href="$types_8h.html" title="Contains all custom typedefs and structs used in the project. " alt="" coords="411,169,481,196"/>
+<area shape="rect" id="node11" href="$MediaControls_8h.html" title="Widget containing the audio controls for the media player. " alt="" coords="1493,169,1618,196"/>
+<area shape="rect" id="node16" href="$PlaylistModel_8h.html" title="Adapted from the Qt Media Player example https://doc.qt.io/qt&#45;5/qtmultimedia&#45;multimediawidgets&#45;player..." alt="" coords="188,169,304,196"/>
+</map>

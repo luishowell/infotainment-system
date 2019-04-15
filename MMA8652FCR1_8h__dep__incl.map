@@ -1,0 +1,13 @@
+<map id="Software/Sensors/inc/MMA8652FCR1.h" name="Software/Sensors/inc/MMA8652FCR1.h">
+<area shape="rect" id="node2" href="$AccWorker_8h.html" title="Software/MainApp/inc\l/AccWorker.h" alt="" coords="123,102,282,143"/>
+<area shape="rect" id="node5" href="$Diagnostics_8h.html" title="The main widget class for the diagnostics screen. " alt="" coords="407,102,566,143"/>
+<area shape="rect" id="node6" href="$StateManager_8h.html" title="Class that handles state change requests to change windows within the touchscreen GUI..." alt="" coords="241,199,399,240"/>
+<area shape="rect" id="node8" href="$Diagnostics_8cpp.html" title="Implementation of Diagnostics. " alt="" coords="608,199,768,240"/>
+<area shape="rect" id="node10" href="$MMA8652FCR1_8cpp.html" title="Implementation of MMA8652FCR1 class. " alt="" coords="641,102,799,143"/>
+<area shape="rect" id="node11" href="$MMA8652__Offline__Test_8cpp.html" title="Offline tests for the MMA8652 class. " alt="" coords="823,95,1020,151"/>
+<area shape="rect" id="node12" href="$MMA8652__Online__Test_8cpp.html" title="Online tests for the MMA8652 class. " alt="" coords="1044,95,1241,151"/>
+<area shape="rect" id="node3" href="$AccWorker_8cpp.html" title="Implementation of AccWorker. " alt="" coords="5,199,165,240"/>
+<area shape="rect" id="node4" href="$main_8cpp.html" title="Welcome to Let Me Infotain You! " alt="" coords="123,288,283,329"/>
+<area shape="rect" id="node9" href="$LoggerWindow_8cpp.html" title="Implementation of LoggerWindow. " alt="" coords="424,199,584,240"/>
+<area shape="rect" id="node7" href="$StateManager_8cpp.html" title="Implemetation of CANThread. " alt="" coords="307,288,467,329"/>
+</map>

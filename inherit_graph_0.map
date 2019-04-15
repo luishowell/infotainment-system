@@ -1,0 +1,11 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="node2" href="$classAccGauge.html" title="An accelerometer gauge QWidget to display g&#45;force. " alt="" coords="141,5,228,32"/>
+<area shape="rect" id="node3" href="$classDiagnostics.html" title="Top level QWidget of the Diagnostics screen. " alt="" coords="137,56,233,83"/>
+<area shape="rect" id="node4" href="$classErrorCodes.html" title="Top level QWidget of the Error Codes screen. " alt="" coords="138,107,231,133"/>
+<area shape="rect" id="node5" href="$classLoggerWindow.html" title="Data logger window that is shown by the Diagnostics screen. " alt="" coords="128,157,241,184"/>
+<area shape="rect" id="node6" href="$classMainMenu.html" title="Default screen. Contains button for each screen. " alt="" coords="141,208,228,235"/>
+<area shape="rect" id="node7" href="$classMedia.html" title="Top level QWidget of Media screen. " alt="" coords="155,259,215,285"/>
+<area shape="rect" id="node8" href="$classMediaControls.html" title="Widget containing controls of the MediaPlayer. " alt="" coords="128,309,241,336"/>
+<area shape="rect" id="node9" href="$classParking.html" title="Top level widget for parking screen. Displays parking sensors and reversing camera. " alt="" coords="151,360,219,387"/>
+<area shape="rect" id="node10" href="$classStateManager.html" title="Handles state change requests to change screens within the touchscreen GUI. " alt="" coords="128,411,241,437"/>
+</map>

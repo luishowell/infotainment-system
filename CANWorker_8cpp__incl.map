@@ -1,0 +1,8 @@
+<map id="Software/MainApp/src/CANWorker.cpp" name="Software/MainApp/src/CANWorker.cpp">
+<area shape="rect" id="node2" href="$CANWorker_8h.html" title="Contains functionality that interfaces with the OBD2 bus. This is moved to a dedicated thread..." alt="" coords="484,95,588,121"/>
+<area shape="rect" id="node19" href="$Hash_8h.html" title="Hash functions for OBD2 pid codes. " alt="" coords="167,95,234,121"/>
+<area shape="rect" id="node20" href="$Mutex_8h_source.html" title="Mutex.h" alt="" coords="664,95,737,121"/>
+<area shape="rect" id="node3" href="$config_8h.html" title="This file used for global configuration of the app. Resizing of widgets etc. " alt="" coords="624,169,696,196"/>
+<area shape="rect" id="node6" href="$types_8h.html" title="Contains all custom typedefs and structs used in the project. " alt="" coords="430,169,499,196"/>
+<area shape="rect" id="node11" href="$obd2_8hpp.html" title="The class obd2 provides methods for communicating with an OBD2 vhicle over Bluetooth. " alt="" coords="272,169,355,196"/>
+</map>

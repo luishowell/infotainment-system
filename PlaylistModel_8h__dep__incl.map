@@ -1,0 +1,7 @@
+<map id="Software/MainApp/inc/PlaylistModel.h" name="Software/MainApp/inc/PlaylistModel.h">
+<area shape="rect" id="node2" href="$Media_8h.html" title="The main widget class for the main menu. " alt="" coords="190,95,349,136"/>
+<area shape="rect" id="node3" href="$StateManager_8h.html" title="Class that handles state change requests to change windows within the touchscreen GUI..." alt="" coords="98,184,257,225"/>
+<area shape="rect" id="node6" href="$Media_8cpp.html" title="Implementation of Media. " alt="" coords="281,184,441,225"/>
+<area shape="rect" id="node4" href="$main_8cpp.html" title="Welcome to Let Me Infotain You! " alt="" coords="5,273,165,315"/>
+<area shape="rect" id="node5" href="$StateManager_8cpp.html" title="Implemetation of CANThread. " alt="" coords="189,273,349,315"/>
+</map>

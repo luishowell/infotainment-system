@@ -1,0 +1,7 @@
+<map id="Software/MainApp/inc/SensorWorker.h" name="Software/MainApp/inc/SensorWorker.h">
+<area shape="rect" id="node2" href="$config_8h.html" title="This file used for global configuration of the app. Resizing of widgets etc. " alt="" coords="389,244,461,271"/>
+<area shape="rect" id="node5" href="$types_8h.html" title="Contains all custom typedefs and structs used in the project. " alt="" coords="187,169,256,196"/>
+<area shape="rect" id="node10" href="$sensor__board_8h.html" title="The class sensor_board provides methods for controlling the sensor board, containing the multiplexor ..." alt="" coords="373,95,494,121"/>
+<area shape="rect" id="node14" href="$ultrasonic__sensor_8h.html" title="The class ultrasonic_sensor provides methods for controlling the operation of an ultrasonic sensor fr..." alt="" coords="561,169,706,196"/>
+<area shape="rect" id="node16" href="$multiplexor_8h.html" title="The class multiplexor provides methods for controlling the operation of a multiplexor from the raspbe..." alt="" coords="381,169,485,196"/>
+</map>

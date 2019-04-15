@@ -1,0 +1,4 @@
+<map id="CANWorker" name="CANWorker">
+<area shape="rect" id="node3" href="$structdiagMsg.html" title="Structure containing requested OBD2 parameters for a given channel. " alt="" coords="103,5,178,32"/>
+<area shape="rect" id="node4" href="$classobd2.html" title="OBD2 vehicle communication over Bluetooth. " alt="" coords="203,5,257,32"/>
+</map>

@@ -1,0 +1,6 @@
+<map id="Software/Sensors/inc/sensor_board.h" name="Software/Sensors/inc/sensor_board.h">
+<area shape="rect" id="node2" href="$config_8h.html" title="This file used for global configuration of the app. Resizing of widgets etc. " alt="" coords="37,169,109,196"/>
+<area shape="rect" id="node8" href="$ultrasonic__sensor_8h.html" title="The class ultrasonic_sensor provides methods for controlling the operation of an ultrasonic sensor fr..." alt="" coords="203,95,348,121"/>
+<area shape="rect" id="node10" href="$multiplexor_8h.html" title="The class multiplexor provides methods for controlling the operation of a multiplexor from the raspbe..." alt="" coords="23,95,127,121"/>
+<area shape="rect" id="node11" href="$types_8h.html" title="Contains all custom typedefs and structs used in the project. " alt="" coords="527,95,597,121"/>
+</map>

@@ -1,0 +1,5 @@
+<map id="Software/MainApp/src/AccThread.cpp" name="Software/MainApp/src/AccThread.cpp">
+<area shape="rect" id="node2" href="$AccThread_8h.html" title="Dedicated thread for obtaining accelerometer data. Actual implementation is included in AccWorker whi..." alt="" coords="174,95,275,121"/>
+<area shape="rect" id="node3" href="$config_8h.html" title="This file used for global configuration of the app. Resizing of widgets etc. " alt="" coords="61,169,133,196"/>
+<area shape="rect" id="node6" href="$types_8h.html" title="Contains all custom typedefs and structs used in the project. " alt="" coords="229,169,298,196"/>
+</map>

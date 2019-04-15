@@ -1,0 +1,8 @@
+<map id="Software/Sensors/inc/sensor_board.h" name="Software/Sensors/inc/sensor_board.h">
+<area shape="rect" id="node2" href="$SensorWorker_8h.html" title="Contains functionality that interfaces with the ultrasonic parking sensors. This is moved to a dedica..." alt="" coords="98,102,257,143"/>
+<area shape="rect" id="node5" href="$sensor__board_8cpp.html" title="Implementation of sensor_board class. " alt="" coords="281,102,439,143"/>
+<area shape="rect" id="node6" href="$SensorBoard__Offline__Test_8cpp.html" title="Offline tests for the sensor board class. " alt="" coords="463,95,678,151"/>
+<area shape="rect" id="node7" href="$SensorBoard__Online__Test_8cpp.html" title="Online tests for the sensor board class. " alt="" coords="702,95,917,151"/>
+<area shape="rect" id="node3" href="$main_8cpp.html" title="Welcome to Let Me Infotain You! " alt="" coords="5,199,165,240"/>
+<area shape="rect" id="node4" href="$SensorWorker_8cpp.html" title="Implementation of SensorWorker. " alt="" coords="189,199,349,240"/>
+</map>

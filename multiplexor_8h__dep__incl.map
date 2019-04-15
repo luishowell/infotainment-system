@@ -1,0 +1,12 @@
+<map id="Software/Sensors/inc/multiplexor.h" name="Software/Sensors/inc/multiplexor.h">
+<area shape="rect" id="node2" href="$sensor__board_8h.html" title="The class sensor_board provides methods for controlling the sensor board, containing the multiplexor ..." alt="" coords="387,102,543,143"/>
+<area shape="rect" id="node9" href="$multiplexor_8cpp.html" title="Implementation of multiplexor class. " alt="" coords="568,102,725,143"/>
+<area shape="rect" id="node10" href="$Multiplexor__Offline__Test_8cpp.html" title="Offline tests for the multiplexor class. " alt="" coords="750,95,951,151"/>
+<area shape="rect" id="node11" href="$Multiplexor__Online__Test_8cpp.html" title="Online tests for the multiplexor class. " alt="" coords="975,95,1177,151"/>
+<area shape="rect" id="node3" href="$SensorWorker_8h.html" title="Contains functionality that interfaces with the ultrasonic parking sensors. This is moved to a dedica..." alt="" coords="98,206,257,247"/>
+<area shape="rect" id="node6" href="$sensor__board_8cpp.html" title="Implementation of sensor_board class. " alt="" coords="281,206,439,247"/>
+<area shape="rect" id="node7" href="$SensorBoard__Offline__Test_8cpp.html" title="Offline tests for the sensor board class. " alt="" coords="463,199,678,255"/>
+<area shape="rect" id="node8" href="$SensorBoard__Online__Test_8cpp.html" title="Online tests for the sensor board class. " alt="" coords="702,199,917,255"/>
+<area shape="rect" id="node4" href="$main_8cpp.html" title="Welcome to Let Me Infotain You! " alt="" coords="5,303,165,344"/>
+<area shape="rect" id="node5" href="$SensorWorker_8cpp.html" title="Implementation of SensorWorker. " alt="" coords="189,303,349,344"/>
+</map>

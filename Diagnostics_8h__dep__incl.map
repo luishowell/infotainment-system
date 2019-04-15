@@ -1,0 +1,7 @@
+<map id="Software/MainApp/inc/Diagnostics.h" name="Software/MainApp/inc/Diagnostics.h">
+<area shape="rect" id="node2" href="$StateManager_8h.html" title="Class that handles state change requests to change windows within the touchscreen GUI..." alt="" coords="98,95,257,136"/>
+<area shape="rect" id="node5" href="$Diagnostics_8cpp.html" title="Implementation of Diagnostics. " alt="" coords="281,95,441,136"/>
+<area shape="rect" id="node6" href="$LoggerWindow_8cpp.html" title="Implementation of LoggerWindow. " alt="" coords="465,95,625,136"/>
+<area shape="rect" id="node3" href="$main_8cpp.html" title="Welcome to Let Me Infotain You! " alt="" coords="5,184,165,225"/>
+<area shape="rect" id="node4" href="$StateManager_8cpp.html" title="Implemetation of CANThread. " alt="" coords="189,184,349,225"/>
+</map>

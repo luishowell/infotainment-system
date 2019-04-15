@@ -1,0 +1,7 @@
+<map id="Diagnostics" name="Diagnostics">
+<area shape="rect" id="node6" href="$classLoggerWindow.html" title="Data logger window that is shown by the Diagnostics screen. " alt="" coords="57,95,170,121"/>
+<area shape="rect" id="node3" href="$classMMA8652FCR1.html" title="MMA8652 acceleration control and communication through I2C. " alt="" coords="195,95,312,121"/>
+<area shape="rect" id="node4" href="$structaccValues__t.html" title=": Structure of accelerometer data types. " alt="" coords="204,5,303,32"/>
+<area shape="rect" id="node5" href="$classobd2.html" title="OBD2 vehicle communication over Bluetooth. " alt="" coords="337,95,391,121"/>
+<area shape="rect" id="node7" href="$structDiagnostics_1_1currentDisplay.html" title="Structure containing objects for a displayed diagnostics parameter. " alt="" coords="415,95,611,121"/>
+</map>

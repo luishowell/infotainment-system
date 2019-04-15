@@ -1,0 +1,4 @@
+<map id="sensor_board" name="sensor_board">
+<area shape="rect" id="node2" href="$classultrasonic__sensor.html" title="Control of a HC&#45;SR04 ultrasonic sensor. " alt="" coords="5,5,140,32"/>
+<area shape="rect" id="node3" href="$classmultiplexor.html" title="Control of an 8&#45;to&#45;1 multiplexor. " alt="" coords="165,5,258,32"/>
+</map>

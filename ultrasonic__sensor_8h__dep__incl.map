@@ -1,0 +1,12 @@
+<map id="Software/Sensors/inc/ultrasonic_sensor.h" name="Software/Sensors/inc/ultrasonic_sensor.h">
+<area shape="rect" id="node2" href="$sensor__board_8h.html" title="The class sensor_board provides methods for controlling the sensor board, containing the multiplexor ..." alt="" coords="387,109,543,151"/>
+<area shape="rect" id="node9" href="$ultrasonic__sensor_8cpp.html" title="Implementatin of ultrasonic_sensor class. " alt="" coords="567,109,731,151"/>
+<area shape="rect" id="node10" href="$UltrasonicSensor__Offline__Test_8cpp.html" title="Contains offline unit tests for the ultrasonic_sensor class. " alt="" coords="756,95,935,165"/>
+<area shape="rect" id="node11" href="$UltrasonicSensor__Online__Test_8cpp.html" title="Contains online unit tests for the ultrasonic_sensor class. " alt="" coords="959,95,1137,165"/>
+<area shape="rect" id="node3" href="$SensorWorker_8h.html" title="Contains functionality that interfaces with the ultrasonic parking sensors. This is moved to a dedica..." alt="" coords="98,221,257,262"/>
+<area shape="rect" id="node6" href="$sensor__board_8cpp.html" title="Implementation of sensor_board class. " alt="" coords="281,221,439,262"/>
+<area shape="rect" id="node7" href="$SensorBoard__Offline__Test_8cpp.html" title="Offline tests for the sensor board class. " alt="" coords="463,213,678,269"/>
+<area shape="rect" id="node8" href="$SensorBoard__Online__Test_8cpp.html" title="Online tests for the sensor board class. " alt="" coords="702,213,917,269"/>
+<area shape="rect" id="node4" href="$main_8cpp.html" title="Welcome to Let Me Infotain You! " alt="" coords="5,317,165,359"/>
+<area shape="rect" id="node5" href="$SensorWorker_8cpp.html" title="Implementation of SensorWorker. " alt="" coords="189,317,349,359"/>
+</map>

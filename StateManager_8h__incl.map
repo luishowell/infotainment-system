@@ -1,0 +1,15 @@
+<map id="Software/MainApp/inc/StateManager.h" name="Software/MainApp/inc/StateManager.h">
+<area shape="rect" id="node2" href="$types_8h.html" title="Contains all custom typedefs and structs used in the project. " alt="" coords="2139,244,2208,271"/>
+<area shape="rect" id="node7" href="$MainMenu_8h.html" title="The main widget class for the main menu. " alt="" coords="192,169,291,196"/>
+<area shape="rect" id="node13" href="$Diagnostics_8h.html" title="The main widget class for the diagnostics screen. " alt="" coords="829,95,937,121"/>
+<area shape="rect" id="node22" href="$AccGauge_8h_source.html" title="AccGauge.h" alt="" coords="1518,169,1616,196"/>
+<area shape="rect" id="node24" href="$MMA8652FCR1_8h.html" title="The class MMA8652FCR1.h provides methods for controlling the operation of the accelerometer of the sa..." alt="" coords="3362,169,3492,196"/>
+<area shape="rect" id="node37" href="$Parking_8h.html" title="Parking.h" alt="" coords="1742,169,1822,196"/>
+<area shape="rect" id="node40" href="$ErrorCodes_8h.html" title="The main widget class for the fault codes screen. " alt="" coords="1682,95,1788,121"/>
+<area shape="rect" id="node42" href="$Media_8h.html" title="The main widget class for the main menu. " alt="" coords="2311,95,2383,121"/>
+<area shape="rect" id="node14" href="$obd2_8hpp.html" title="The class obd2 provides methods for communicating with an OBD2 vhicle over Bluetooth. " alt="" coords="1896,169,1979,196"/>
+<area shape="rect" id="node16" href="$LoggerWindow_8h.html" title="The main widget class for the logger window that is shown when the journey logger button is clicked..." alt="" coords="1116,169,1240,196"/>
+<area shape="rect" id="node25" href="$config_8h.html" title="This file used for global configuration of the app. Resizing of widgets etc. " alt="" coords="2891,244,2963,271"/>
+<area shape="rect" id="node43" href="$MediaControls_8h.html" title="Widget containing the audio controls for the media player. " alt="" coords="2616,169,2742,196"/>
+<area shape="rect" id="node45" href="$PlaylistModel_8h.html" title="Adapted from the Qt Media Player example https://doc.qt.io/qt&#45;5/qtmultimedia&#45;multimediawidgets&#45;player..." alt="" coords="2337,169,2453,196"/>
+</map>
