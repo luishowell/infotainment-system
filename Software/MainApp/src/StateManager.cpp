@@ -64,7 +64,6 @@ void StateManager::CANPublishDiagRx(diagMsg_t* msg)
 
 void StateManager::AccDataRx(accValues_t* msg)
 {
-    qDebug() << "STATE MANAGER: received acc data";
 
     /* forward to diagnostics window */
     emit AccDataTx(msg);
