@@ -129,7 +129,6 @@ void StateManager::ChangeRequested(state_t req_state, QWidget* currentView)
 
 void StateManager::OnNewChannelRequest(diagParams_t dataRequested, obd2Channel_t channel)
 {
-    //cout<<"CHANNEL REQUESTED"<<endl;
     /* forward to the OBD2 thread */
     emit NewChannelRequest(dataRequested, channel);
 }

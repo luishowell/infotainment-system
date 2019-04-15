@@ -35,7 +35,9 @@
 #include <iostream>
 #include <unistd.h>
 
-#define GAUGEDELAY 1000
+/* JB: timer delay used to stop the dials briefly flickering at the previously selected parameter's 
+     value. Occurs due to slight delay in the request being sent to OBD2 bus */
+#define GAUGEDELAY 1000  
 
 using namespace std;
 
@@ -57,19 +59,9 @@ Diagnostics::Diagnostics(QWidget *parent, obd2* myObd, MMA8652FCR1* acc) : QWidg
       m_fancyEnabled = false;
    }
    
-
    m_acc = acc;
-    
-   std::vector<std::string> testVec;
-   testVec.push_back("0C");
-   testVec.push_back("0D");
-   testVec.push_back("1F");
-   testVec.push_back("04");
-   testVec.push_back("A4");
-   testVec.push_back("0A");
-
    obd = myObd;
-   //m_logWindow = new LoggerWindow(testVec);
+
    m_logWindow = new LoggerWindow(obd->supported_pids, this);
    m_logWindow->setFixedSize(400, 300);
  
@@ -102,7 +94,7 @@ void Diagnostics::CreateComponents()
       bool calibrate_success = m_accGauge->calibrate(m_acc->staticVals);
       if (calibrate_success)
       {
-         std::cout<<"Acc calibration success!"<<std::endl;
+         qDebug() << "DIAGNOSTICS: Acc calibration success!";
          break;
       }
       sleep(1);
@@ -226,7 +218,6 @@ void Diagnostics::CreateLayout()
    accBox->setAlignment(Qt::AlignHCenter);
    QPointer<QVBoxLayout> accLayout = new QVBoxLayout(accBox);
    accLayout->addWidget(m_accGauge);
-   //accLayout->setAlignment(Qt::AlignHCenter);
 
    speedBox = new QGroupBox("Speed(KPH)", titleBox);
    m_speedLCD = new QLCDNumber();
@@ -259,6 +250,7 @@ void Diagnostics::CreateLayout()
    else
    {
       QStackedLayout *rpmLayout = new QStackedLayout(rpmBox);
+      rpmBox->setTitle("RPM");
       rpmLayout->addWidget(m_rpmLCD);
       m_rpmGauge->hide();
       rpmLayout->setAlignment(Qt::AlignHCenter);
@@ -435,7 +427,6 @@ void Diagnostics::CreateLayout()
 
    m_warningTimer = new QTimer(this);
    connect(m_warningTimer, SIGNAL(timeout()), this, SLOT(WarningTimeout()));
-   //m_CANWarning->show();
 
    boxLayout->addWidget(m_CANWarning, 3, 1);
 

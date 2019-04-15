@@ -81,9 +81,6 @@ MediaControls::MediaControls(QWidget *parent) : QWidget(parent)
 }
 
 /* public */
-
-
-
 QMediaPlayer::State MediaControls::state() const
 {
     return m_playerState;

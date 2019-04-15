@@ -1,7 +1,7 @@
 /**
  * @file main.cpp
  * @author Jamie Brown/Luis Howell
- * @brief Implementation of main entry point.
+ * @brief Welcome to Let Me Infotain You!
  * @version 0.1
  * @date 2019-03-13
  * 

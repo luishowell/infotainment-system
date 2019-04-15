@@ -45,8 +45,6 @@ CANWorker::CANWorker(obd2* obd)
   diagTimer = new QTimer(this);
   connect(diagTimer, SIGNAL(timeout()), this, SLOT(PublishDiagData()));
 
-  /* create data logging file*/
-  //m_logFile = new ofstream;git
 }
 
 CANWorker::~CANWorker()
@@ -72,7 +70,6 @@ void CANWorker::GetDiagData()
     {
       
       ObdMsg.connectionFault = false;
-      qDebug() << "CAN WORKER: trying obd2";
       if ( Mutex::TryOBD2() )
       {
         ObdMsg.channelA = m_obd->decoded_cmd(ObdMsg.requestA, true);
