@@ -825,8 +825,6 @@ void Diagnostics::ShowMe()
 {
    this->show();
    if (m_logWindow->isLogging()) m_logWindow->raise();
-  
-   EnableButtons();
    
 }
 
