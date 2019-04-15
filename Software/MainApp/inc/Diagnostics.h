@@ -164,6 +164,8 @@ private slots:
      * 
      */
     void WarningTimeout();
+    
+    void GaugeTimeout();
 
 signals:
     /**
@@ -285,6 +287,8 @@ private:
     bool m_firstShow = true;
     QGridLayout* boxLayout;
     QGroupBox* titleBox;
+    bool m_enableGauge;
+    QPointer<QTimer> m_gaugeDelay;
 };
 //Q_DECLARE_METATYPE(std::vector<std::string>)
 

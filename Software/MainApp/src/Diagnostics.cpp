@@ -33,6 +33,9 @@
 #include <vector>
 #include <string>
 #include <iostream>
+#include <unistd.h>
+
+#define GAUGEDELAY 1000
 
 using namespace std;
 
@@ -92,7 +95,19 @@ void Diagnostics::CreateComponents()
    const QSize dialSize = QSize(140, 140);
 
    /* create g-force meter */
-   m_accGauge = new AccGauge(1, m_acc->staticVals);
+   m_accGauge = new AccGauge(1);
+
+   for (int i=0;i<5;i++)
+   {
+      bool record_success = m_acc->recordStatic();
+      bool calibrate_success = m_accGauge->calibrate(m_acc->staticVals);
+      if (calibrate_success)
+      {
+         std::cout<<"Acc calibration success!"<<std::endl;
+         break;
+      }
+      sleep(1);
+   }
 
    /* set up speedometer */
    QQuickView *speedoQML = new QQuickView();
@@ -425,21 +440,22 @@ void Diagnostics::CreateLayout()
 
    boxLayout->addWidget(m_CANWarning, 3, 1);
 
-   currentRightChannel.box = airTempBox;
+   currentRightChannel.box = accBox;
    currentRightChannel.obj = m_airTempObject;
-   currentLeftChannel.box = speedBox;
-   currentLeftChannel.obj = m_speedObject;
-   currentLeftChannel.num = m_engineRuntimeLCD;
+   currentLeftChannel.box = rpmBox;
+   currentLeftChannel.obj = m_rpmObject;
+   currentLeftChannel.num = m_rpmLCD;
    currentRightChannel.num = m_engineRuntimeLCD;
 
    /* default hidden gauges */
-   rpmBox->hide();
-   accBox->hide();
+   speedBox->hide();
+   //accBox->hide();
    throttleBox->hide();
    gearBox->hide();
    fuelPressureBox->hide();
    engineLoadBox->hide();
    engineRuntimeBox->hide();
+   airTempBox->hide();
 
    vLayout->addWidget(titleBox);
    vLayout->addWidget(m_homeButton, Qt::AlignBottom);
@@ -447,7 +463,15 @@ void Diagnostics::CreateLayout()
    setLayout(vLayout); 
 
    m_warningTimer->start(1000);
+   
+   m_gaugeDelay = new QTimer(this);
+   connect(m_gaugeDelay, SIGNAL(timeout()), this, SLOT(GaugeTimeout()));
+}
 
+void Diagnostics::GaugeTimeout()
+{
+    m_enableGauge = true;
+    m_gaugeDelay->stop();
 }
 
 void Diagnostics::WarningTimeout()
@@ -508,15 +532,32 @@ void Diagnostics::DiagDataRx(diagMsg_t* msg)
       else { leftVal = msg->channelA; }
       //leftVal = msg->channelA;
       rightVal = msg->channelB;
+      qDebug() << "DIAGNOSTICS RIGHT CHANNEL: " << rightVal;
       
-      currentLeftChannel.obj->setProperty("value", leftVal);
-      currentLeftChannel.num->display(leftVal);
+      /* wait for initial delay */
+      if (m_enableGauge)
+      {
+          currentLeftChannel.obj->setProperty("myVal", leftVal);
+          currentLeftChannel.num->display(msg->channelA);
+      }
+      else
+      {
+          currentLeftChannel.obj->setProperty("myVal", 0);
+          currentLeftChannel.num->display(0);
+      }
 
       if (currentRightGauge != accBox)
       {
-         currentRightChannel.obj->setProperty("value", rightVal);
-         //currentRightChannel.obj->setProperty("value", 15);
-         currentRightChannel.num->display(msg->channelB);
+          if(m_enableGauge)
+          {   currentRightChannel.obj->setProperty("myVal", rightVal);
+              //currentRightChannel.obj->setProperty("myVal", 15);
+              currentRightChannel.num->display(msg->channelB);
+          }
+          else
+          {
+              currentRightChannel.obj->setProperty("myVal", 0);	
+              currentRightChannel.num->display(0);
+          }
       }
            
    }
@@ -564,7 +605,10 @@ void Diagnostics::ShowAirTempGauge()
    if (currentRightGauge != airTempBox)
    {
       /* request intake air temperate to be obtained from the OBD2 thread */
-      emit NewChannelRequest(AIR_TEMP, CHANNEL_A);
+      emit NewChannelRequest(AIR_TEMP, CHANNEL_B);
+      
+      m_gaugeDelay->start(GAUGEDELAY);
+      m_enableGauge = false;
       currentRightChannel.box->hide();
       airTempBox->show();
       if (m_fancyEnabled)
@@ -587,11 +631,17 @@ void Diagnostics::ShowSpeedGauge()
    {
       /* request speed data to be obtained from the OBD2 thread */
       emit NewChannelRequest(SPEED, CHANNEL_A);
+      
+      m_gaugeDelay->start(GAUGEDELAY);
+      m_enableGauge = false;
       currentLeftChannel.box->hide();
-      speedBox->show();
+      
       currentLeftChannel.box = speedBox; 
       currentLeftChannel.num = m_speedLCD;
       currentLeftChannel.obj = m_speedObject;
+      currentLeftChannel.obj->setProperty("value", 0);
+      currentLeftChannel.num->display(0);
+      speedBox->show();
 
    }
 }
@@ -602,11 +652,17 @@ void Diagnostics::ShowRpmGauge()
    {
       /* request RPM data to be obtained from the OBD2 thread */
       emit NewChannelRequest(RPM, CHANNEL_A);
+      
+      m_gaugeDelay->start(GAUGEDELAY);
+      m_enableGauge = false;
       currentLeftChannel.box->hide();
-      rpmBox->show();
+      
       currentLeftChannel.box = rpmBox;
       currentLeftChannel.num = m_rpmLCD;
       currentLeftChannel.obj = m_rpmObject;
+      currentLeftChannel.obj->setProperty("value", 0);
+      currentLeftChannel.num->display(0);
+      rpmBox->show();
    }     
 }
 
@@ -616,11 +672,17 @@ void Diagnostics::ShowThrottleGauge()
    {
       /* request throttle data to be obtained from the OBD2 thread */
       emit NewChannelRequest(THROTTLE, CHANNEL_A);
+      
+      m_gaugeDelay->start(GAUGEDELAY);
+      m_enableGauge = false;
       currentLeftChannel.box->hide();
-      throttleBox->show();
+      
       currentLeftChannel.box = throttleBox;
       currentLeftChannel.num = m_throttleLCD;
       currentLeftChannel.obj = m_throttleObject;
+      currentLeftChannel.obj->setProperty("value", 0);
+      currentLeftChannel.num->display(0);
+      throttleBox->show();
    }  
 }
 
@@ -630,11 +692,17 @@ void Diagnostics::ShowGearGauge()
    {
       /* request throttle data to be obtained from the OBD2 thread */
       emit NewChannelRequest(GEAR, CHANNEL_B);
+      
+      m_gaugeDelay->start(GAUGEDELAY);
+      m_enableGauge = false;
       currentRightChannel.box->hide();
-      gearBox->show();
+      
       currentRightChannel.box = gearBox;
       currentRightChannel.num = m_gearLCD;
       currentRightChannel.obj = m_gearObject;
+      currentRightChannel.obj->setProperty("value", 0);
+      currentRightChannel.num->display(0);
+      gearBox->show();
    } 
 }
 
@@ -644,6 +712,9 @@ void Diagnostics::ShowFuelPressureGauge()
    {
       /* request throttle data to be obtained from the OBD2 thread */
       emit NewChannelRequest(FUEL_PRESSURE, CHANNEL_B);
+      
+      m_gaugeDelay->start(GAUGEDELAY);
+      m_enableGauge = false;
       currentRightChannel.box->hide();
       fuelPressureBox->show();
       if (m_fancyEnabled)
@@ -658,6 +729,9 @@ void Diagnostics::ShowFuelPressureGauge()
       currentRightChannel.box = fuelPressureBox;
       currentRightChannel.num = m_fuelPressureLCD;
       currentRightChannel.obj = m_fuelPressureObject;
+      currentRightChannel.obj->setProperty("value", 0);
+      currentRightChannel.num->display(0);
+      fuelPressureBox->show();
    } 
 
 }
@@ -668,6 +742,9 @@ void Diagnostics::ShowEngineRuntimeGauge()
    {
       /* request throttle data to be obtained from the OBD2 thread */
       emit NewChannelRequest(ENGINE_RUNTIME, CHANNEL_B);
+      
+      m_gaugeDelay->start(GAUGEDELAY);
+      m_enableGauge = false;
       currentRightChannel.box->hide();
       engineRuntimeBox->show();
       currentRightChannel.box = engineRuntimeBox;
@@ -682,6 +759,9 @@ void Diagnostics::ShowEngineLoadGauge()
    {
       /* request throttle data to be obtained from the OBD2 thread */
       emit NewChannelRequest(ENGINE_LOAD, CHANNEL_B);
+      
+      m_gaugeDelay->start(GAUGEDELAY);
+      m_enableGauge = false;
       currentRightChannel.box->hide();
       engineLoadBox->show();
       currentRightChannel.box = engineLoadBox;
