@@ -32,6 +32,7 @@
 #include <vector>
 #include <string>
 #include <iostream>
+#include <unistd.h>
 
 #define GAUGEDELAY 1000
 
@@ -77,7 +78,17 @@ void Diagnostics::CreateComponents()
    /* create g-force meter */
    m_accGauge = new AccGauge(1);
 
-   bool calibrate_success = m_accGauge->calibrate(m_acc->staticVals);
+   for (int i=0;i<5;i++)
+   {
+      bool record_success = m_acc->recordStatic();
+      bool calibrate_success = m_accGauge->calibrate(m_acc->staticVals);
+      if (calibrate_success)
+      {
+         std::cout<<"Acc calibration success!"<<std::endl;
+         break;
+      }
+      sleep(1);
+   }
 
    /* set up speedometer */
    QQuickView *speedoQML = new QQuickView();
