@@ -75,7 +75,9 @@ void Diagnostics::CreateComponents()
    const QSize dialSize = QSize(140, 140);
 
    /* create g-force meter */
-   m_accGauge = new AccGauge(1, m_acc->staticVals);
+   m_accGauge = new AccGauge(1);
+
+   m_accGauge->calibrate(m_acc->staticVals);
 
    /* set up speedometer */
    QQuickView *speedoQML = new QQuickView();
