@@ -18,10 +18,7 @@
 #define DEBUG 
 
 /* comment the following line for non raspberry-pi builds */
-//#define RPI 1
-#ifdef RPI
-//#undef RPI
-#endif
+#define RPI 1
 
 /* size of raspberry pi touchscreen */
 #define WIDGET_SIZE_X 800
@@ -32,11 +29,5 @@ const QSize widgetSize = QSize(WIDGET_SIZE_X, WIDGET_SIZE_Y);
 #define DIAG_RATE 420 //ms
 #define LOGGING_RATE 1500 //ms
 #define FUEL_CAPACITY 65 //litres
-
-
-
-
-
-
 
 #endif // CONFIG_H

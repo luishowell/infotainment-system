@@ -82,7 +82,7 @@ void CANWorker::GetDiagData()
     }
     else 
     { 
-      qDebug() << "CAN WORKER: connection fault";
+      //qDebug() << "CAN WORKER: connection fault";
       ObdMsg.connectionFault = true; 
     	usleep(1000); // JB: this time should not exceed the publishing timer interval 
 
