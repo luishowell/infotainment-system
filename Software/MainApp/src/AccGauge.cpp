@@ -9,7 +9,7 @@
 #include "AccGauge.h"
 
 
-AccGauge::AccGauge(float max_G, accValues_t* acc_cal, int size, QWidget *parent)
+AccGauge::AccGauge(float max_G, int size, QWidget *parent)
 : QWidget(parent), _max_G(max_G), x_axis(1.0, 0.0, 0.0), y_axis(0.0, 1.0, 0.0), z_axis(0.0, 0.0, 1.0)
 {
   if (size!=0)
@@ -17,16 +17,48 @@ AccGauge::AccGauge(float max_G, accValues_t* acc_cal, int size, QWidget *parent)
     _size=size;
     resize_widget = false;
   }    
+  
+  _z_rot=0;
+  _x_rot=0;
 
-  glm::vec3 acc_down(acc_cal->xAxis, acc_cal->yAxis, acc_cal->zAxis);
-  _z_rot = radians(270)-xy_angle(acc_down);   
-  glm::vec3 rotated = rotate(acc_down, z_axis, _z_rot);
-  _x_rot = radians(270)-yz_angle(rotated);
+  // glm::vec3 acc_down(acc_cal->xAxis, acc_cal->yAxis, acc_cal->zAxis);
+  // _z_rot = radians(270)-xy_angle(acc_down);   
+  // glm::vec3 rotated = rotate(acc_down, z_axis, _z_rot);
+  // _x_rot = radians(270)-yz_angle(rotated);
 
     label = new QLabel();
     QVBoxLayout *vbox = new QVBoxLayout();
     vbox->addWidget(label);
     setLayout(vbox);
+}
+
+
+bool AccGauge::calibrate(accValues_t* acc_cal)
+{
+  glm::vec3 acc_down(acc_cal->xAxis, acc_cal->yAxis, acc_cal->zAxis);
+  _z_rot = radians(270)-xy_angle(acc_down);   
+  glm::vec3 rotated = rotate(acc_down, z_axis, _z_rot);
+  _x_rot = radians(270)-yz_angle(rotated);
+
+  glm::vec3 v(acc_cal->xAxis, acc_cal->yAxis, acc_cal->zAxis);
+
+  glm::vec3 rotated_value = rotate(v, z_axis, _z_rot);
+  rotated_value = rotate(rotated_value, x_axis, _x_rot);
+
+  float x = -rotated.x;
+  float y = rotated.y;
+
+  float threshold = 0.2;
+
+  if ((x<threshold)&&(y<threshold))
+  {
+    return true;
+  }
+  else
+  {
+    return false;
+    std::cout<<"AccGauge: calibration failed!"<<std::endl;
+  }  
 }
 
 

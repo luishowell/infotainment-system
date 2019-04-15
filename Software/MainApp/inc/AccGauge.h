@@ -34,7 +34,7 @@ public:
      * @param size Optional, set a constant size for the gauge in pixels
      * @param parent Optional, QWidget parent
      */
-    AccGauge(float max_G, accValues_t* acc_cal, int size=0, QWidget *parent = 0);
+    AccGauge(float max_G, int size=0, QWidget *parent = 0);
 
     int _size;
     float _max_G;
@@ -45,6 +45,8 @@ public:
      * @param acc_value An accValues_t type containing a set of acc readings
      */
     void update_gauge(accValues_t* acc_value);
+
+    bool calibrate(accValues_t* acc_cal);
 
 private:
     QLabel *label;
