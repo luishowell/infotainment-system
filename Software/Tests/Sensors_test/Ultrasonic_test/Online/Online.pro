@@ -13,7 +13,9 @@ DEPENDPATH  += . ../../../../Sensors/
 LIBS        +=  ../../../../Sensors/bin/libSENSORS.a
 
 #comment out if not on the pi
-#LIBS        += -L/usr/local/lib -lwiringPi
+LIBS        += -L/usr/local/lib -lwiringPi
+LIBS += -lcrypt
+LIBS += -lrt
 
 #inputs
 SOURCES         += ./UltrasonicSensor_Online_Test.cpp  
