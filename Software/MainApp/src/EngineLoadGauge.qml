@@ -10,6 +10,7 @@ Rectangle {
     border.width: 1
     border.color: "lightGray"
 
+    property int myVal
     gradient: Gradient {
         GradientStop { position: 0.0; color: "aliceblue" }
         GradientStop { position: 1.0; color: "gainsboro" }
@@ -24,7 +25,7 @@ Rectangle {
 
         maximumValue: 100
 
-        value: 65
+        value: myVal
         Behavior on value {
             NumberAnimation {
                 duration: 50

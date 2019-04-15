@@ -84,7 +84,6 @@ void ErrorCodes::GetErrorCodes()
    bool notifyFlag = true; 
    vector<string> dtc_codes;
 
-   //qDebug() << "ERROR CODES: clicked";
    while (waiting)
    {
       if (Mutex::TryOBD2())
@@ -107,7 +106,7 @@ void ErrorCodes::GetErrorCodes()
          else
          {
             QMessageBox msgBox;
-            msgBox.setWindowFlags(Qt::Window | Qt::FramelessWindowHint);
+            msgBox.setWindowFlags(Qt::Window);
             msgBox.setText("No current trouble codes!");
             msgBox.exec();
          }
@@ -142,7 +141,6 @@ void ErrorCodes::ClearErrorCodes()
    bool waiting = true;
    bool notifyFlag = true; 
 
-   //qDebug() << "ERROR CODES: clicked";
    while (waiting)
    {
       if (Mutex::TryOBD2())
@@ -160,7 +158,7 @@ void ErrorCodes::ClearErrorCodes()
             std::cout<<"Clear DTC rec: "<<rec<<std::endl;
             
             QMessageBox msgBox;
-            msgBox.setWindowFlags(Qt::Window | Qt::FramelessWindowHint);
+            msgBox.setWindowFlags(Qt::Window);
                   
             if (rec.find("44")!=string::npos)
             {

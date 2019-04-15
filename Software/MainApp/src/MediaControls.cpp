@@ -22,7 +22,6 @@
 
 MediaControls::MediaControls(QWidget *parent) : QWidget(parent)
 {
-    qDebug() << "MEDIA CONTROLS: creating...";
 
     QSize btnSize(50, 50);
 
@@ -81,9 +80,6 @@ MediaControls::MediaControls(QWidget *parent) : QWidget(parent)
 }
 
 /* public */
-
-
-
 QMediaPlayer::State MediaControls::state() const
 {
     return m_playerState;
@@ -115,14 +111,6 @@ void MediaControls::setState(QMediaPlayer::State state)
 
 int MediaControls::volume() const
 {
-    /* TODO: */
-    /*
-    qreal linearVolume = QAudio::convertVolume(m_volumeSlider->value() / qreal(100), 
-                                QAudio::LogarithmicVolumeScale,
-                                QAudio::LinearVolumeScale);
-
-    return qRound(linearVolume * 100);
-    */
    return m_volumeSlider->value();
 }
 
@@ -134,18 +122,14 @@ bool MediaControls::isMuted() const
 
 /* PUBLIC SLOTS */
 
-
 void MediaControls::onVolumeChanged(int vol)
 {
-    qDebug() << "MEDIA CONTROLS: volume = " << vol;
-
     emit volumeRequest( volume() );
 }
 
 
 void MediaControls::onMuteRequest(bool muted)
 {
-    //if ((muted == false) && (m_isMuted == true)) 
     if (muted != m_isMuted) 
     {
         m_isMuted = muted;
@@ -162,8 +146,6 @@ void MediaControls::onMuteRequest(bool muted)
 
 void MediaControls::onPlayClicked()
 {
-    qDebug() << "MEDIA CONTROLS: play clicked";
-
    emit playRequest();
    m_pauseButton->setEnabled(true);
    m_stopButton->setEnabled(false);
@@ -171,7 +153,6 @@ void MediaControls::onPlayClicked()
 
 void MediaControls::onPauseClicked()
 {
-    qDebug() << "MEDIA CONTROLS: pause clicked";
     emit pauseRequest();
     m_pauseButton->setEnabled(false);
     m_playButton->setEnabled(true);
@@ -180,13 +161,11 @@ void MediaControls::onPauseClicked()
 
 void MediaControls::onMuteClicked()
 {
-    qDebug() << "MEDIA CONTROLS: mute clicked";
     emit muteRequest(!m_isMuted);
 }
 
 void MediaControls::onStopClicked()
 {
-    qDebug() << "MEDIA CONTROLS: stop clicked";
     emit stopRequest();
 
 }

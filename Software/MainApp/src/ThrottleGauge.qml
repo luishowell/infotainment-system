@@ -24,7 +24,8 @@ Rectangle {
 
         maximumValue: 100
 
-        value: 65
+        property int myVal
+        value: myVal
         Behavior on value {
             NumberAnimation {
                 duration: 50

@@ -39,7 +39,9 @@ PRE_TARGETDEPS += ../Sensors/bin/libSENSORS.a
 LIBS        +=  -L../OBD2/bin/ -lOBD2
 LIBS        +=  -L../Sensors/bin/ -lSENSORS
 # system-wide libs
-#LIBS += -L/usr/local/lib -lwiringPi
+LIBS += -L/usr/local/lib -lwiringPi
+LIBS += -lcrypt
+LIBS += -lrt
 LIBS        += -L/usr/local/lib/taglib/taglib -ltag
 LIBS        += -lz
 

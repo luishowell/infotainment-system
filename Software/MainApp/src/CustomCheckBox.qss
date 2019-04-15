@@ -10,12 +10,12 @@ QCheckBox::indicator:checked:pressed
 
 QCheckBox::indicator:unchecked
 {
-    image: url(./MainApp/images/amber.jpg);
+    image: url(./MainApp/images/white.jpg);
 }
 
 QCheckBox::indicator:unchecked:pressed
 {
-    image: url(./MainApp/images/amberPressed.jpg);
+    image: url(./MainApp/images/whitePressed.jpg);
 }
 
 QCheckBox:indicator:unchecked:disabled

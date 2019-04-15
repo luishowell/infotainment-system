@@ -18,7 +18,7 @@ sudo apt install bluez
 sudo apt install git-core
 sudo apt install cmake
 
-git clone git://git.drogon.net/wiringPi
+git clone git://git.drogon.net/wiringPi -v
 cd wiringPi/
 ./build
 cd ..

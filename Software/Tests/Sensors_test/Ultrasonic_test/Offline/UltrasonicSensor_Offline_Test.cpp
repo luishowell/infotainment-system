@@ -28,8 +28,6 @@ class UltrasonicSensorOfflineTest: public QObject
 private slots:
     /* unit tests for ultrasonic_sensor */
     void UltrasonicSensor_Test();
-    void init_Test();
-    void GetDistance_Test();
     void setTimeout_Test();
     void calculateDistance_Test();
     
@@ -101,26 +99,6 @@ void UltrasonicSensorOfflineTest::UltrasonicSensor_Test()
     QVERIFY2(m_sensor->timeoutLen == 11765, "Default timeout length is incorrect");
 }
 
-/**
- * @brief Tests the init function when not on a RPI
- * 
- */
-void UltrasonicSensorOfflineTest::init_Test()
-{
-    qDebug() << "Testing the init function";
-    QVERIFY2(m_sensor->init(0, 1)==false, "Check RPI define in config file");
-}
-
-/**
- * @brief Tests the getDistance function when the RPI is not connected
- * 
- */
-void UltrasonicSensorOfflineTest::GetDistance_Test()
-{
-    qDebug() << "Testing the getDistance function";
-    double testVal;
-    QVERIFY2(m_sensor->GetDistance(&testVal)==false, "Check RPI define in config file");
-}
 
 /**
  * @brief Tests the getDistance function when the RPI is not connected

@@ -28,9 +28,6 @@ class MMA8652OfflineTest: public QObject
 private slots:
     /* unit tests for mma8652 */
     void MMA8652_Test();
-    void init_Test();
-    void getData_Test();
-    void recordStatic_Test();
     void twosComp_Test();
 
     /* hooks */
@@ -97,39 +94,7 @@ void MMA8652OfflineTest::MMA8652_Test()
     
 }
 
-/**
- * @brief Test the init function
- * 
- */
-void MMA8652OfflineTest::init_Test()
-{
-    qDebug() << "Testing the init function";
 
-    QVERIFY2(m_acc->init(0x1D, 7, 0)==false, "Check RPI define in config file");
-}
-
-/**
- * @brief Test the getDistance function
- * 
- */
-void MMA8652OfflineTest::getData_Test()
-{
-    qDebug() << "Testing the getData function";
-
-    accValues_t testData;
-    QVERIFY2(m_acc->getData(&testData)==false, "Check RPI define in config file");
-}
-
-/**
- * @brief Test the recordStatic function
- * 
- */
-void MMA8652OfflineTest::recordStatic_Test()
-{
-    qDebug() << "Testing the recordStatic function";
-
-    QVERIFY2(m_acc->recordStatic()==false, "Check RPI define in config file");
-}
 
 /**
  * @brief Test the twos complement function

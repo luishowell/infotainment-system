@@ -26,8 +26,6 @@
 
 LoggerWindow::LoggerWindow(std::vector<std::string> supportedPids, QWidget* parent)
 {
-    qDebug() << "LOGGER WINDOW: ";
-
     this->setWindowFlags(Qt::WindowStaysOnTopHint);
 
     m_pids = supportedPids;
@@ -59,7 +57,6 @@ LoggerWindow::LoggerWindow(std::vector<std::string> supportedPids, QWidget* pare
     styleFile.open(QIODevice::ReadOnly);
     QTextStream textStream(&styleFile);
     QString styleSheet = textStream.readAll();
-    qDebug() << "LOGGER WINDOW: " << styleSheet;
     styleFile.close();
 
     /* set green/amber/red style for checkbuttons */
@@ -214,12 +211,10 @@ void LoggerWindow::CloseWindow()
         if (storage.isValid() && storage.isReady()) 
         {
             if (!storage.isReadOnly()) 
-            {
-                //qDebug() << "path:" << storage.rootPath().section("/", 1, 1);   
+            {   
                 if (storage.rootPath().section("/", 1, 1) == "media")
                 {
                     QString dest;
-                    qDebug() << "path:" << storage.rootPath();
                     dest.append(storage.rootPath());
                     dest.append("/DataLog.csv");
                     QFile::copy("./DataLog.csv", dest);
@@ -231,9 +226,6 @@ void LoggerWindow::CloseWindow()
 
 void LoggerWindow::StartLogging()
 {
-    /* emit start signal */
-    qDebug() << "LOGGER: start button clicked";
-
     m_isLogging = true;
     m_selectMsg->hide();
     m_startButton->hide();
@@ -245,14 +237,13 @@ void LoggerWindow::StartLogging()
     m_msgTimer->start(1000);
     m_stoppedMsg->hide();
     DisableButtons();
+
+    /* emit start signal */
     emit LogRequestTx(selectedParams, true);
 }
 
 void LoggerWindow::StopLogging()
 {
-    /* emit stop signal */
-    qDebug() << "LOGGER: start button clicked";
-
     m_isLogging = false;
     m_stopButton->hide();
     m_startButton->show();
@@ -262,9 +253,9 @@ void LoggerWindow::StopLogging()
     m_loggingMsg->hide();
     m_stoppedMsg->show();
     EnableButtons();
-    emit LogRequestTx(selectedParams, false);
 
-    
+    /* emit stop signal */
+    emit LogRequestTx(selectedParams, false);
 }
 
 void LoggerWindow::UpdateLogMsg()
@@ -315,29 +306,13 @@ void LoggerWindow::OnClicked()
     }
 
     if (button->isChecked())   
-    {
-        qDebug() << name << " selected";
-        //std::cout << "PID: " << pid << endl; 
+    { 
         selectedParams.push_back(pid);
-        
-        for (int i=0; i<selectedParams.size(); i++)
-        {
-            qDebug() << selectedParams[i]; 
-        }
-        //std::cout << endl;
         
     }
     else  
     { 
-        qDebug() << name << " deselected"; 
         RemoveParameter(pid);
-        /* 
-        for (int i=0; i<selectedParams.size(); i++)
-        {
-            std::cout << selectedParams[i]; 
-        }
-        std::cout << endl;
-        */
     }
 
 }

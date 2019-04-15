@@ -28,8 +28,6 @@ class SensorBoardOfflineTest: public QObject
 private slots:
     /* unit tests for sensor_board */
     void SensorBoard_Test();
-    void init_Test();
-    void GetDistance_Test();
 
     /* hooks */
     void initTestCase();
@@ -95,30 +93,6 @@ void SensorBoardOfflineTest::SensorBoard_Test()
     
 }
 
-/**
- * @brief Test the init function
- * 
- */
-void SensorBoardOfflineTest::init_Test()
-{
-    qDebug() << "Testing the init function";
-
-    sensorPins_t testPins;
-    QVERIFY2(m_board->init(testPins)==false, "Check RPI define in config file");
-}
-
-/**
- * @brief Test the getDistance function
- * 
- */
-void SensorBoardOfflineTest::GetDistance_Test()
-{
-    qDebug() << "Testing the getDistance function";
-
-    double testDistance;
-    QVERIFY2(m_board->GetDistance(1, &testDistance)==false, "Check RPI define in config file");
-    QVERIFY2(m_board->GetDistance(-1, &testDistance)==false, "Check RPI define in config file");
-}
 
 /* run tests */
 //QTEST_MAIN(SensorBoardOfflineTest);

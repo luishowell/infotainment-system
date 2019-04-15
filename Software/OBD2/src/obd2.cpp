@@ -25,7 +25,6 @@ obd2::obd2(string comm_port){
     serial_port = setup_obd(comm_port);
 
     if (serial_port == -1){
-        //cout<< "Connection Error!"<<endl;
         bool fixed = false;
         for (int i=0; i<2;i++){ //tries to setup 2 more times before quitting
             cout<<"Trying again..."<<endl;
@@ -166,8 +165,6 @@ string obd2::send_cmd(string cmd, bool parse, bool fast_send){
         string rec = "";
         while(1){
             int num_bytes = read(serial_port,read_buf, 1);
-            //cout<<"Num bytes: "<<num_bytes<<endl;
-            //cout<<read_buf[0]<<endl;
             if(num_bytes>0){              
                 if (read_buf[0]=='>'){                  
                     break;        
@@ -249,13 +246,10 @@ void obd2::scan_pids(){
         for (int i=0; i<196; i++){
             pid_code_hex = int2hex(i);
             response = send_cmd("01"+pid_code_hex);
-            //cout<<response<<endl;
             if (response.find("41")!=string::npos){
-                //cout<<pid_code_hex<<" Added!"<<endl;
                 pid_save_file<<pid_code_hex<<"\n";
                 supported_pids.push_back(pid_code_hex);
                 pid_counter++;
-                //pid_save_file<<response.substr(2,2)<<"\n";
             }
         } 
 

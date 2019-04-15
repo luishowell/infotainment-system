@@ -77,7 +77,6 @@ void Media::CreateLayout()
    m_player = new QMediaPlayer(this);
    m_player->setAudioRole(QAudio::MusicRole);
 
-   //qDebug() << "MEDIA PLAYER: supported roles  " << role;
    for(QAudio::Role role : m_player->supportedAudioRoles())
    {
       qDebug() << "MEDIA PLAYER: supported roles  " << role;
@@ -107,7 +106,6 @@ void Media::CreateLayout()
    connect(m_controls, SIGNAL(stopRequest()), m_player, SLOT(stop()));
    connect(m_controls, SIGNAL(fwdRequest()), this, SLOT(onFwdClicked()));
    connect(m_controls, SIGNAL(backRequest()), this, SLOT(onBackClicked()));
-   //connect(m_controls, SIGNAL(volumeRequest(int)), m_player, SLOT(setVolume(int)));
    connect(m_controls, SIGNAL(volumeRequest(int)), this, SLOT(SetVolume(int)));
    connect(m_controls, SIGNAL(muteRequest(bool)), m_player, SLOT(setMuted(bool)));
 
@@ -122,31 +120,25 @@ void Media::CreateLayout()
    {
         qDebug() << "MEDIA: music player not available";
         m_controls->setEnabled(false);
-        //m_playlistView->setEnabled(false);
     }
-
 
    /* setup table */
    m_table = new QTableWidget(0, 5, this);
    m_table->setFixedSize(550, 125);
    m_table->horizontalHeader()->setStretchLastSection(true);
    m_table->setSelectionMode(QAbstractItemView::SingleSelection);
-   //m_table->setEditTriggers(QAbstractItemView::NoEditTriggers);
    m_table->setSelectionBehavior(QAbstractItemView::SelectRows);
    QStringList headers;
    headers << tr("Title") << tr("Artist") << tr("Album") << tr("Genre") << tr("Year");
    m_table->setHorizontalHeaderLabels(headers);
    connect(m_table, SIGNAL(cellPressed(int,int)), this, SLOT(songClicked(int,int)));
-   //connect(m_table, SIGNAL(cellChanged(int,int)), this, SLOT(songClicked(int,int)));
    m_tableCount = 0;
-   //m_table->setFixedSize(500, 500);
    m_songClicked = false;
    
    m_slider = new QSlider(Qt::Horizontal, this);
    m_slider->setRange(0, m_player->duration() / 1000);
    connect(m_player, SIGNAL(durationChanged()), this, SLOT(durationChanged()));
    connect(m_slider, SIGNAL(positionChanged()), this, SLOT(positionChanged()));
-   //connect(m_slider, SIGNAL(valueChanged(int)), this, SLOT(onSeekChanged(int)));
    connect(m_slider, SIGNAL(sliderMoved(int)), this, SLOT(onSeekChanged(int)));
    m_slider->setTracking(false);
 
@@ -157,24 +149,15 @@ void Media::CreateLayout()
    hLayout->addWidget(m_removeButton);
    hLayout->addWidget(m_controls);
    
-
-   //mainLayout->addLayout(hLayout);
-   //mainLayout->addWidget(m_table);
-
-   //boxLayout->addWidget(m_openButton);
-   //boxLayout->addWidget(m_controls);
    boxLayout->addLayout(hLayout, 0, 0);
    boxLayout->addWidget(m_slider, 2, 0);
    boxLayout->addWidget(m_table, 1, 0);
    boxLayout->addWidget(m_timeLabel, 2, 1);
 
    /* album artwork */
-   //QPointer<QGroupBox> albumBox = new QGroupBox(titleBox);
    m_artHandle = new QLabel(titleBox);
    m_artHandle->setFixedSize(125, 125);
    boxLayout->addWidget(m_artHandle, 1, 1);
-   //boxLayout->addWidget(m_albumArt, 1, 1);
-
  
    m_homeButton = new QPushButton("Home");
    m_homeButton->setFixedSize(WIDGET_SIZE_X-30, 50);
@@ -225,7 +208,6 @@ void Media::SetVolume(int vol)
 
 void Media::AddToTable(QUrl url)
 {
-   qDebug() << "ADD TO TABLE";
    audioMetaData_t metaData;
    QByteArray ba;
    
@@ -234,7 +216,6 @@ void Media::AddToTable(QUrl url)
    metaData.filePath = ba.data();
 
    GetMetaData(&metaData);
-   //DurationChanged(metaData.duration);
    m_playlistMetaData.push_back(metaData);
 
    m_table->setRowCount(m_tableCount + 1);
@@ -315,7 +296,6 @@ void Media::ShowAlbumArt(int index)
 
 void Media::Open()
 {
-   qDebug() << "MEDIA: open clicked";
    QFileDialog fileDialog(this);
    fileDialog.setAcceptMode(QFileDialog::AcceptOpen);
    fileDialog.setWindowTitle(tr("Open Files"));
@@ -344,18 +324,14 @@ static bool IsPlaylist(const QUrl &url) // Check for ".m3u" playlists.
 
 void Media::songClicked(int row, int cell)
 {
-   qDebug() << "MEDIA: song clicked (row " << row << ", cell " << cell << ")";
    m_selectedSong = row;
    m_songClicked = true;
-
    m_tableTimer->start(5000);
 
-   //GetMetaData(m_player, row);
 }
 
 void Media::onBackClicked()
 {
-   qDebug() << "MEDIA: back button clicked";
    if(m_player->position() <= 5000)
    {
       if (m_playlist->currentIndex() > 0) 
@@ -366,7 +342,6 @@ void Media::onBackClicked()
       {
          m_player->setPosition(0);
       }
-      
    }
    else
    {
@@ -378,21 +353,12 @@ void Media::onBackClicked()
 
 void Media::onFwdClicked()
 {
-   qDebug() << "MEDIA: fwd clicked";
    if ((m_playlist->currentIndex() + 1) < m_playlistMetaData.size()) m_playlist->next();
-
-   if ((m_playlist->currentIndex() < m_playlistMetaData.size()) && (m_playlist->currentIndex() >= 0))
-   {
-      qDebug() << m_playlist->currentIndex() << " < " << m_playlistMetaData.size();
-      //ShowAlbumArt(m_playlist->currentIndex());
-   }    
+  
 }
 
 void Media::onPlayClicked()
 {
-   qDebug() << "MEDIA: play clicked" << m_selectedSong << m_tableCount << m_playlist->currentIndex();
-   //qDebug() << m_playlist->media(0).canonicalUrl().fileName();
-
    if((m_selectedSong == m_playlist->currentIndex()) && (m_selectedSong != -1))
    {
       /* load selected song */
@@ -412,10 +378,7 @@ void Media::onPlayClicked()
 }
 
 void Media::onRemoveClicked()
-{
-   qDebug() << "MEDIA: remove clicked ";
-   qDebug() << "MEDIA: index (" << m_playlist->currentIndex() << ") m_selectedSong (" << m_selectedSong;
-   
+{   
    if (m_songClicked && (m_playlistMetaData.size() >= 0))
    {
       m_playlistMetaData.remove(m_selectedSong);
@@ -444,7 +407,6 @@ void Media::onRemoveClicked()
 void Media::onSeekChanged(int secs)
 {
    m_player->setPosition(secs * 1000);
-   qDebug() << "MEDIA: seek " << secs;
 }
 
 void Media::DurationChanged(int duration)
@@ -475,14 +437,12 @@ void Media::positionChanged(qint64 progress)
 
 void Media::songChanged(int currentSong)
 {
-   qDebug() << "MEDIA: song changed" << m_playlist->currentIndex() << m_playlist->mediaCount();
    if (!m_player->isAudioAvailable());
    if (m_playlist->currentIndex() != -1)
    {
       ShowAlbumArt(currentSong);
       SelectRow();
       DurationChanged(m_playlistMetaData[currentSong].duration);
-      //m_table->removeRow(currentSong - 1);
    }
   
 

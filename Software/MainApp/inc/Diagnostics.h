@@ -29,6 +29,7 @@
 #include <QPointer>
 #include <QVector>
 #include <QString>
+#include <QLabel>
 
 /**
  * @brief Top level QWidget of the Diagnostics screen.
@@ -156,6 +157,16 @@ public slots:
      */
     void ShowMe();
 
+private slots:
+
+    /**
+     * @brief turns the connection warning off and on
+     * 
+     */
+    void WarningTimeout();
+    
+    void GaugeTimeout();
+
 signals:
     /**
      * @brief Request to change the current view. 
@@ -201,6 +212,12 @@ private:
     void ButtonState(bool state);
 
     /**
+     * @brief Enables all selection buttons
+     * 
+     */
+    void EnableButtons();
+
+    /**
      * @brief Structure containing objects for a displayed diagnostics parameter. 
      * 
      */
@@ -212,10 +229,6 @@ private:
 
     currentDisplay_t currentLeftChannel;
     currentDisplay_t currentRightChannel;
-
-    
-    //int logClicked;
-
     QPushButton *m_homeButton;
     QWidget *m_speedometer;
     QObject *m_speedObject;
@@ -241,14 +254,8 @@ private:
     QWidget *m_engineLoadGauge;
     QObject *m_engineLoadObject;
     QLCDNumber *m_engineLoadLCD;
-
     QPointer<AccGauge> m_accGauge;
     MMA8652FCR1* m_acc;
-
-/*
-    QObject *m_currentLeftObj;
-    QObject *m_currentRightObj;
-*/
     QPointer<QGroupBox> accBox;
     QGroupBox* speedBox;
     QGroupBox* rpmBox;
@@ -259,12 +266,8 @@ private:
     QGroupBox* fuelPressureBox;
     QGroupBox* engineRuntimeBox;
     QGroupBox* engineLoadBox;
-
-
-
     QGroupBox *currentLeftGauge;
     QGroupBox *currentRightGauge;
-
     QPointer<QPushButton> m_rpmButton;
     QPointer<QPushButton> m_speedButton;
     QPointer<QPushButton> m_intakeAirTempButton;
@@ -274,16 +277,18 @@ private:
     QPointer<QPushButton> m_engineRuntimeButton;
     QPointer<QPushButton> m_engineLoadButton;
     QPointer<QPushButton> m_accButton;
-
-
     QPushButton *m_logButton;
-    
     QQuickItem *speedo;
-
-    
-    
-    
-    bool canConnectionFlag;
+    bool canConnectionFlag = true;
+    QPointer<QLabel> m_CANWarning;
+    QPointer<QTimer> m_warningTimer;
+    bool m_timedout;
+    bool m_fancyEnabled;
+    bool m_firstShow = true;
+    QGridLayout* boxLayout;
+    QGroupBox* titleBox;
+    bool m_enableGauge;
+    QPointer<QTimer> m_gaugeDelay;
 };
 //Q_DECLARE_METATYPE(std::vector<std::string>)
 

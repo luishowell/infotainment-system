@@ -1,3 +1,14 @@
+/**
+ * @file PlaylistModel.h
+ * @author 
+ * @brief Adapted from the Qt Media Player example https://doc.qt.io/qt-5/qtmultimedia-multimediawidgets-player-playlistmodel-h.html 
+ * @version 0.1
+ * @date 2019-04-15
+ * 
+ * @copyright Copyright (c) 2019
+ * 
+ */
+
 #ifndef PLAYLISTMODEL_H
 #define PLAYLISTMODEL_H
 
@@ -6,6 +17,10 @@
 
 class QMediaPlaylist;
 
+/**
+ * @brief model of playlist used by the QMediaPlayer
+ * 
+ */
 class PlaylistModel : public QAbstractItemModel
 {
     Q_OBJECT
@@ -17,7 +32,17 @@ public:
         ColumnCount
     };
 
+    /**
+     * @brief Construct a new Playlist Model object
+     * 
+     * @param parent 
+     */
     explicit PlaylistModel(QObject *parent = nullptr);
+
+    /**
+     * @brief Destroy the Playlist Model object
+     * 
+     */
     ~PlaylistModel();
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;

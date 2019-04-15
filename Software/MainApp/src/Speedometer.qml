@@ -8,7 +8,8 @@ import QtQuick.Extras.Private 1.0
         id: speedo1
         objectName: id
 
-        property int value: 0
+        property int myVal
+        value: myVal
         maximumValue : 100 
         
         property int minWidth: 100

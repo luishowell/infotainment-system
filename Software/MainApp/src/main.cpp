@@ -1,7 +1,7 @@
 /**
  * @file main.cpp
- * @author 
- * @brief Implementation of main entry point.
+ * @author Jamie Brown/Luis Howell
+ * @brief Welcome to Let Me Infotain You!
  * @version 0.1
  * @date 2019-03-13
  * 
@@ -41,18 +41,12 @@ int main(int argc, char** argv)
 {
     cout << "/***************LET ME INFOTAIN YOU!/***************" << endl;
     QApplication app (argc, argv);
-
-    //qApp->setStyle(QStyleFactory::create("macintosh"));
-
-    QFile file("./MainApp/src/default.qss");
-    file.open(QFile::ReadOnly);
-    QString styleSheet = QLatin1String(file.readAll());
-    qApp->setStyleSheet(styleSheet);
+#ifdef RPI
+    QApplication::setOverrideCursor(Qt::BlankCursor); //removes cursor on touchscreen
+#endif
 
     obd2* myObd = new obd2("/dev/rfcomm0");
     MMA8652FCR1* guiAccel;
-
-    
 
     /* create threads */
     CANThread canT;
@@ -65,18 +59,13 @@ int main(int argc, char** argv)
     /* GUI stuff in state machine class*/
     StateManager stateMachine(0, myObd, accW.acc);
     
-    
     /* move workers into appropriate threads */
     canW.moveToThread(&canT);
     accW.moveToThread(&accT);
     sensorW.moveToThread(&sensorT);	
 
-
     qRegisterMetaType<QVector<QString>>("<QVector<QString>>");
     QObject::connect(&stateMachine, SIGNAL(LogRequestTx(QVector<QString>, bool)), &canW, SLOT(LogRequestRx(QVector<QString>, bool)));
-
-    
-
     QObject::connect(&canT, SIGNAL(started()), &canW, SLOT(GetDiagData()));
     QObject::connect(&sensorT, SIGNAL(started()), &sensorW, SLOT(Work()));
     QObject::connect(&accT, SIGNAL(started()), &accW, SLOT(Work()));
@@ -97,7 +86,7 @@ int main(int argc, char** argv)
 
 #ifdef RPI
     stateMachine.showFullScreen();
-    QApplication::setOverrideCursor(Qt::BlankCursor); //removes cursor on touchscreen
+    
 #else
     stateMachine.show();
 #endif

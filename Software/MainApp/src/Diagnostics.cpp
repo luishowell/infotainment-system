@@ -9,6 +9,11 @@
  * 
  */
 
+#include "Diagnostics.h" 
+#include "config.h"
+#include "Hash.h"
+#include "MMA8652FCR1.h"
+
 #include <QApplication>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
@@ -22,50 +27,52 @@
 #include <QQuickItem>
 #include <QQuickWidget>
 #include <QQmlProperty>
+#include <QPixmap>
+#include <QMessageBox>
 
 #include <vector>
 #include <string>
-
-//#include <stdio.h>
 #include <iostream>
-#include "Diagnostics.h" 
-#include "config.h"
-#include "Hash.h"
-#include "MMA8652FCR1.h"
+#include <unistd.h>
 
+/* JB: timer delay used to stop the dials briefly flickering at the previously selected parameter's 
+     value. Occurs due to slight delay in the request being sent to OBD2 bus */
+#define GAUGEDELAY 1000  
 
 using namespace std;
 
 Diagnostics::Diagnostics(QWidget *parent, obd2* myObd, MMA8652FCR1* acc) : QWidget(parent) 
  {   
-   m_acc = acc;
-    
-   std::vector<std::string> testVec;
-   testVec.push_back("0C");
-   testVec.push_back("0D");
-   testVec.push_back("1F");
-   testVec.push_back("04");
-   testVec.push_back("A4");
-   testVec.push_back("0A");
 
+   QMessageBox msgBox(QMessageBox::Question,
+                   "", 
+                   "Fancy Dials/Gauges may be slow on some platforms. Do you want to enable them?", 
+                   QMessageBox::Yes | QMessageBox::No, this);
+       msgBox.setDefaultButton(QMessageBox::Yes);
+   int ret = msgBox.exec();
+   if (ret == QMessageBox::Yes)
+   {
+      m_fancyEnabled = true;
+   }
+   else
+   {
+      m_fancyEnabled = false;
+   }
+   
+   m_acc = acc;
    obd = myObd;
-   m_logWindow = new LoggerWindow(testVec);
-   //m_logWindow = new LoggerWindow(obd->supported_pids, this);
+
+   m_logWindow = new LoggerWindow(obd->supported_pids, this);
    m_logWindow->setFixedSize(400, 300);
  
    setFixedSize(widgetSize);
    CreateComponents();
    CreateLayout();    
-   
    connect(this, SIGNAL (NewChannelRequest(diagParams_t, obd2Channel_t)), parent, SLOT (OnNewChannelRequest(diagParams_t, obd2Channel_t))); 
-
    ConnectButtons();
-   //connect(m_homeButton, SIGNAL (clicked()), this, SLOT (StateChangeMainMenu())); 
 
    /* CAN bus initially assumed disconnected until the CAN thread specifies no connection fault */
    canConnectionFlag = false;
-
-   //logClicked = 0;
 
    qRegisterMetaType<diagParams_t>("diagParams_t");
    qRegisterMetaType<obd2Channel_t>("obd2Channel_t");
@@ -79,7 +86,19 @@ void Diagnostics::CreateComponents()
    const QSize dialSize = QSize(140, 140);
 
    /* create g-force meter */
-   m_accGauge = new AccGauge(1, m_acc->staticVals);
+   m_accGauge = new AccGauge(1);
+
+   for (int i=0;i<5;i++)
+   {
+      bool record_success = m_acc->recordStatic();
+      bool calibrate_success = m_accGauge->calibrate(m_acc->staticVals);
+      if (calibrate_success)
+      {
+         qDebug() << "DIAGNOSTICS: Acc calibration success";
+         break;
+      }
+      sleep(1);
+   }
 
    /* set up speedometer */
    QQuickView *speedoQML = new QQuickView();
@@ -145,7 +164,6 @@ void Diagnostics::CreateComponents()
    engineLoadQML->setResizeMode(QQuickView::SizeRootObjectToView);
    m_engineLoadObject = engineLoadQML->rootObject();
 
-   qDebug() << "Buttons";
    /* set up selection buttons */
    m_rpmButton             = new QPushButton("RPM");
    m_speedButton           = new QPushButton("Speed");
@@ -183,10 +201,10 @@ void Diagnostics::CreateLayout()
    QVBoxLayout* vLayout = new QVBoxLayout(this);
    vLayout->setSpacing(25);
 
-   QGroupBox* titleBox = new QGroupBox("Diagnostics", this);
+   titleBox = new QGroupBox("Diagnostics", this);
    titleBox->setAlignment(Qt::AlignHCenter);
 
-   QGridLayout* boxLayout = new QGridLayout(titleBox);
+   boxLayout = new QGridLayout(titleBox);
 
    boxLayout->setVerticalSpacing(10);
 
@@ -199,36 +217,68 @@ void Diagnostics::CreateLayout()
    accBox->setAlignment(Qt::AlignHCenter);
    QPointer<QVBoxLayout> accLayout = new QVBoxLayout(accBox);
    accLayout->addWidget(m_accGauge);
-   //accLayout->setAlignment(Qt::AlignHCenter);
 
-   speedBox = new QGroupBox("Speed", titleBox);
+   speedBox = new QGroupBox("Speed(KPH)", titleBox);
    m_speedLCD = new QLCDNumber();
    speedBox->setAlignment(Qt::AlignHCenter);
-   QVBoxLayout *speedLayout = new QVBoxLayout(speedBox);
-   speedLayout->addWidget(m_speedometer);
-   speedLayout->addWidget(m_speedLCD);
-   speedLayout->setAlignment(Qt::AlignHCenter);
-
-   rpmBox = new QGroupBox("RPM", titleBox);
+   if (m_fancyEnabled)
+   {
+      QVBoxLayout *speedLayout = new QVBoxLayout(speedBox);
+      speedLayout->addWidget(m_speedometer);
+      speedLayout->addWidget(m_speedLCD);
+      speedLayout->setAlignment(Qt::AlignHCenter);
+   }
+   else
+   {
+      QStackedLayout *speedLayout = new QStackedLayout(speedBox);
+      speedLayout->addWidget(m_speedLCD);
+      m_speedometer->hide();
+      speedLayout->setAlignment(Qt::AlignHCenter);
+   }
+   
+   rpmBox = new QGroupBox("RPM(x100/min)", titleBox);
    m_rpmLCD = new QLCDNumber();
    rpmBox->setAlignment(Qt::AlignHCenter);
-   QVBoxLayout *rpmLayout = new QVBoxLayout(rpmBox);
-   rpmLayout->addWidget(m_rpmGauge);
-   rpmLayout->addWidget(m_rpmLCD);
-   rpmLayout->setAlignment(Qt::AlignHCenter);   
-
+   if (m_fancyEnabled)
+   {
+      QVBoxLayout *rpmLayout = new QVBoxLayout(rpmBox);
+      rpmLayout->addWidget(m_rpmGauge);
+      rpmLayout->addWidget(m_rpmLCD);
+      rpmLayout->setAlignment(Qt::AlignHCenter);
+   }
+   else
+   {
+      QStackedLayout *rpmLayout = new QStackedLayout(rpmBox);
+      rpmBox->setTitle("RPM");
+      rpmLayout->addWidget(m_rpmLCD);
+      m_rpmGauge->hide();
+      rpmLayout->setAlignment(Qt::AlignHCenter);
+   }
+  
    airTempBox = new QGroupBox("Intake Air Temperature", titleBox);
    m_airTempLCD = new QLCDNumber();
    airTempBox->setAlignment(Qt::AlignHCenter);
-   QHBoxLayout *airTempLayout = new QHBoxLayout(airTempBox);
-   airTempLayout->addWidget(m_airTempGauge);
-   airTempLayout->setAlignment(Qt::AlignHCenter);   
+   if (m_fancyEnabled)
+   {
+      QVBoxLayout *airTempLayout = new QVBoxLayout(airTempBox);
+      airTempLayout->addWidget(m_airTempGauge);
+      //airTempLayout->addWidget(m_airTempLCD);
+      airTempLayout->setAlignment(Qt::AlignHCenter);
+   }
+   else
+   {
+      QStackedLayout *airTempLayout = new QStackedLayout(airTempBox);
+      airTempLayout->addWidget(m_airTempLCD);
+      m_airTempGauge->hide();
+      airTempLayout->setAlignment(Qt::AlignHCenter);
+   }  
 
    throttleBox = new QGroupBox("Throttle Position", titleBox);
    m_throttleLCD = new QLCDNumber();
    throttleBox->setAlignment(Qt::AlignHCenter);
-   QHBoxLayout *throttleLayout = new QHBoxLayout(throttleBox);
-   throttleLayout->addWidget(m_throttleGauge);
+   QStackedLayout *throttleLayout = new QStackedLayout(throttleBox);
+   //throttleLayout->addWidget(m_throttleGauge);
+   m_throttleGauge->hide();
    throttleLayout->addWidget(m_throttleLCD);
    throttleLayout->setAlignment(Qt::AlignHCenter);      
 
@@ -243,10 +293,20 @@ void Diagnostics::CreateLayout()
    fuelPressureBox = new QGroupBox("Fuel Pressure", titleBox);
    m_fuelPressureLCD = new QLCDNumber();
    fuelPressureBox->setAlignment(Qt::AlignHCenter);
-   QHBoxLayout *fuelPressureLayout = new QHBoxLayout(fuelPressureBox);
-   fuelPressureLayout->addWidget(m_fuelPressureGauge);
-   fuelPressureLayout->addWidget(m_fuelPressureLCD);
-   fuelPressureLayout->setAlignment(Qt::AlignHCenter);      
+   if (m_fancyEnabled)
+   {
+      QVBoxLayout *fuelLayout = new QVBoxLayout(fuelPressureBox);
+      fuelLayout->addWidget(m_fuelPressureGauge);
+      //fuelLayout->addWidget(m_fuelPressureLCD);
+      fuelLayout->setAlignment(Qt::AlignHCenter);
+   }
+   else
+   {
+      QStackedLayout *fuelLayout = new QStackedLayout(fuelPressureBox);
+      fuelLayout->addWidget(m_fuelPressureLCD);
+      m_fuelPressureGauge->hide();
+      fuelLayout->setAlignment(Qt::AlignHCenter);
+   }     
    
    engineRuntimeBox = new QGroupBox("Engine Runtime", titleBox);
    m_engineRuntimeLCD = new QLCDNumber(engineRuntimeBox);
@@ -259,15 +319,15 @@ void Diagnostics::CreateLayout()
    engineLoadBox = new QGroupBox("Engine Load", titleBox);
    m_engineLoadLCD = new QLCDNumber();
    engineLoadBox->setAlignment(Qt::AlignHCenter);
-   QHBoxLayout *engineLoadLayout = new QHBoxLayout(engineLoadBox);
-   engineLoadLayout->addWidget(m_engineLoadGauge);  
+   QStackedLayout *engineLoadLayout = new QStackedLayout(engineLoadBox);
+   //engineLoadLayout->addWidget(m_engineLoadGauge);  
+   m_engineLoadGauge->hide();
    engineLoadLayout->addWidget(m_engineLoadLCD);
    engineRuntimeLayout->setAlignment(Qt::AlignHCenter);         
 
    /* parameter selection box */
    selectBox = new QGroupBox("Parameters", titleBox);
    selectBox->setAlignment(Qt::AlignHCenter);
-   //selectBox->setFixedSize(250, 250);
    QHBoxLayout *selectLayout = new QHBoxLayout(selectBox);
    QVBoxLayout *selectLeft = new QVBoxLayout(selectBox);
    QVBoxLayout *selectRight = new QVBoxLayout(selectBox);
@@ -297,7 +357,6 @@ void Diagnostics::CreateLayout()
    pidNum = obd->supported_pids.size();
    for (pidCnt = 0; pidCnt < pidNum; pidCnt++)
    {
-      //QPid = QString::fromUtf8(obd->supported_pids[pidNum].c_str());
       switch (Hash::HashPID(obd->supported_pids[pidCnt])) // JB: fixed bug here (13/03/19)
       {
          /* fast channel buttons */
@@ -322,7 +381,6 @@ void Diagnostics::CreateLayout()
       }
    }
    
-
    selectLeft->setAlignment(Qt::AlignLeft);
    selectRight->setAlignment(Qt::AlignHCenter);
    selectLayout->addLayout(selectLeft);
@@ -360,52 +418,87 @@ void Diagnostics::CreateLayout()
       boxLayout->setColumnStretch(i, 1);
    }
 
-
    boxLayout->addWidget(m_logButton, 2, 1);
-   //boxLayout->addWidget(m_engineRuntimeLCD, 1, 4);
-   
 
-/*
-   currentRightGauge = speedBox;
-   m_currentRightObj = m_speedObject;
-   currentLeftGauge = rpmBox;
-   m_currentLeftObj = m_rpmObject;
-*/
+   m_CANWarning = new QLabel(this);
+   m_CANWarning->setText("ODB2 not connected");
+   m_CANWarning->hide();
 
-   currentRightChannel.box = airTempBox;
+   m_warningTimer = new QTimer(this);
+   connect(m_warningTimer, SIGNAL(timeout()), this, SLOT(WarningTimeout()));
+
+   boxLayout->addWidget(m_CANWarning, 3, 1);
+
+   currentRightChannel.box = accBox;
    currentRightChannel.obj = m_airTempObject;
-   currentLeftChannel.box = speedBox;
-   currentLeftChannel.obj = m_speedObject;
-   currentLeftChannel.num = m_engineRuntimeLCD;
+   currentLeftChannel.box = rpmBox;
+   currentLeftChannel.obj = m_rpmObject;
+   currentLeftChannel.num = m_rpmLCD;
    currentRightChannel.num = m_engineRuntimeLCD;
 
    /* default hidden gauges */
-   rpmBox->hide();
-   accBox->hide();
-   //airTempBox->hide();
+   speedBox->hide();
+   //accBox->hide();
    throttleBox->hide();
    gearBox->hide();
    fuelPressureBox->hide();
    engineLoadBox->hide();
    engineRuntimeBox->hide();
+   airTempBox->hide();
 
    vLayout->addWidget(titleBox);
    vLayout->addWidget(m_homeButton, Qt::AlignBottom);
 
-   setLayout(vLayout);
+   setLayout(vLayout); 
 
+   m_warningTimer->start(1000);
+   
+   m_gaugeDelay = new QTimer(this);
+   connect(m_gaugeDelay, SIGNAL(timeout()), this, SLOT(GaugeTimeout()));
+}
+
+void Diagnostics::GaugeTimeout()
+{
+    m_enableGauge = true;
+    m_gaugeDelay->stop();
+}
+
+void Diagnostics::WarningTimeout()
+{
+   if (m_timedout) 
+   {
+      m_CANWarning->show();
+      m_timedout = false;
+   }
+   else 
+   {
+      m_CANWarning->hide();
+      m_timedout = true;
+   }
+   
+}
+
+void Diagnostics::EnableButtons()
+{
+   m_intakeAirTempButton->setEnabled(true);
+   m_speedButton->setEnabled(true);
+   m_gearButton->setEnabled(true);
+   m_fuelPressureButton->setEnabled(true);
+   m_engineRuntimeButton->setEnabled(true);
+   m_throttleButton->setEnabled(true);
+   m_speedButton->setEnabled(true);
+   m_rpmButton->setEnabled(true);
+   m_engineLoadButton->setEnabled(true);
 }
 
 void Diagnostics::DiagDataRx(diagMsg_t* msg)
 {
    if (msg->connectionFault == true)
    {
-      //cout<<"WARNING: no connection to CAN bus"<<endl;
-
+      
       if(canConnectionFlag == true)
       {
-         m_speedObject->setProperty("value", 0);
-         m_rpmObject->setProperty("value", 0);
+         m_speedObject->setProperty("myVal", 0);
          canConnectionFlag = false; 
       }    
    }
@@ -413,7 +506,9 @@ void Diagnostics::DiagDataRx(diagMsg_t* msg)
    {
       if(canConnectionFlag == false)
       {
-         cout<<"CAN bus connection established"<<endl;
+         qDebug() << "CAN bus connection established";
+         m_warningTimer->stop();
+         m_CANWarning->hide();
          canConnectionFlag = true;
       }
        
@@ -426,13 +521,30 @@ void Diagnostics::DiagDataRx(diagMsg_t* msg)
       //leftVal = msg->channelA;
       rightVal = msg->channelB;
       
-      currentLeftChannel.obj->setProperty("value", leftVal);
-      currentLeftChannel.num->display(leftVal);
+      /* wait for initial delay */
+      if (m_enableGauge)
+      {
+          currentLeftChannel.obj->setProperty("myVal", leftVal);
+          currentLeftChannel.num->display(msg->channelA);
+      }
+      else
+      {
+          currentLeftChannel.obj->setProperty("myVal", 0);
+          currentLeftChannel.num->display(0);
+      }
 
       if (currentRightGauge != accBox)
       {
-         currentRightChannel.obj->setProperty("value", rightVal);
-         currentRightChannel.num->display(msg->channelB);
+          if(m_enableGauge)
+          {   currentRightChannel.obj->setProperty("myVal", rightVal);
+              //currentRightChannel.obj->setProperty("myVal", 15);
+              currentRightChannel.num->display(msg->channelB);
+          }
+          else
+          {
+              currentRightChannel.obj->setProperty("myVal", 0);	
+              currentRightChannel.num->display(0);
+          }
       }
            
    }
@@ -441,14 +553,11 @@ void Diagnostics::DiagDataRx(diagMsg_t* msg)
 
 void Diagnostics::AccDataRx(accValues_t* msg)
 {
-   qDebug() << "DIAGNOSTICS: received acc values";
-
    m_accGauge->update_gauge(msg);
 }
 
 void Diagnostics::ConnectButtons()
 {
-   //connect(this, SIGNAL (DiagDataChange(diagData_t)), this, SLOT (ChangeDiagDisplay(diagData_t)));
    connect(m_rpmButton, SIGNAL (clicked()), this, SLOT (ShowRpmGauge()));
    connect(m_speedButton, SIGNAL (clicked()), this, SLOT (ShowSpeedGauge()));
    connect(m_intakeAirTempButton, SIGNAL (clicked()), this, SLOT (ShowAirTempGauge()));
@@ -463,23 +572,17 @@ void Diagnostics::ConnectButtons()
    connect(m_logWindow, SIGNAL (LogRequestTx(QVector<QString>, bool)), this, SLOT (LogRequestRx(QVector<QString>, bool)));
    connect(m_logWindow, SIGNAL (CloseRequest()), this, SLOT (CloseLogWindow()));
 
-   //connect(m_logButton, &QPushButton::clicked, this, &Diagnostics::JourneyLogRequest);
-
 }
 
 /* public slots */
 
 void Diagnostics::ShowAccGauge()
 {
-   //qDebug() << "clicked acc button";
    if (currentRightGauge != accBox)
    {
       currentRightChannel.box->hide();
       accBox->show();
-      //m_accGauge->show();
       currentRightChannel.box = accBox;
-      //currentRightChannel.num = nullptr;
-      //currentRightChannel.obj = nullptr;
    }
    
 }
@@ -489,9 +592,20 @@ void Diagnostics::ShowAirTempGauge()
    if (currentRightGauge != airTempBox)
    {
       /* request intake air temperate to be obtained from the OBD2 thread */
-      emit NewChannelRequest(AIR_TEMP, CHANNEL_A);
+      emit NewChannelRequest(AIR_TEMP, CHANNEL_B);
+      
+      m_gaugeDelay->start(GAUGEDELAY);
+      m_enableGauge = false;
       currentRightChannel.box->hide();
       airTempBox->show();
+      if (m_fancyEnabled)
+      {
+         m_airTempGauge->show();
+      }
+      else
+      {
+         m_airTempLCD->show();
+      }
       currentRightChannel.box = airTempBox;
       currentRightChannel.num = m_airTempLCD;
       currentRightChannel.obj = m_airTempObject;
@@ -504,11 +618,17 @@ void Diagnostics::ShowSpeedGauge()
    {
       /* request speed data to be obtained from the OBD2 thread */
       emit NewChannelRequest(SPEED, CHANNEL_A);
+      
+      m_gaugeDelay->start(GAUGEDELAY);
+      m_enableGauge = false;
       currentLeftChannel.box->hide();
-      speedBox->show();
+      
       currentLeftChannel.box = speedBox; 
       currentLeftChannel.num = m_speedLCD;
       currentLeftChannel.obj = m_speedObject;
+      currentLeftChannel.obj->setProperty("value", 0);
+      currentLeftChannel.num->display(0);
+      speedBox->show();
 
    }
 }
@@ -519,11 +639,17 @@ void Diagnostics::ShowRpmGauge()
    {
       /* request RPM data to be obtained from the OBD2 thread */
       emit NewChannelRequest(RPM, CHANNEL_A);
+      
+      m_gaugeDelay->start(GAUGEDELAY);
+      m_enableGauge = false;
       currentLeftChannel.box->hide();
-      rpmBox->show();
+      
       currentLeftChannel.box = rpmBox;
       currentLeftChannel.num = m_rpmLCD;
       currentLeftChannel.obj = m_rpmObject;
+      currentLeftChannel.obj->setProperty("value", 0);
+      currentLeftChannel.num->display(0);
+      rpmBox->show();
    }     
 }
 
@@ -533,11 +659,17 @@ void Diagnostics::ShowThrottleGauge()
    {
       /* request throttle data to be obtained from the OBD2 thread */
       emit NewChannelRequest(THROTTLE, CHANNEL_A);
+      
+      m_gaugeDelay->start(GAUGEDELAY);
+      m_enableGauge = false;
       currentLeftChannel.box->hide();
-      throttleBox->show();
+      
       currentLeftChannel.box = throttleBox;
       currentLeftChannel.num = m_throttleLCD;
       currentLeftChannel.obj = m_throttleObject;
+      currentLeftChannel.obj->setProperty("value", 0);
+      currentLeftChannel.num->display(0);
+      throttleBox->show();
    }  
 }
 
@@ -547,11 +679,17 @@ void Diagnostics::ShowGearGauge()
    {
       /* request throttle data to be obtained from the OBD2 thread */
       emit NewChannelRequest(GEAR, CHANNEL_B);
+      
+      m_gaugeDelay->start(GAUGEDELAY);
+      m_enableGauge = false;
       currentRightChannel.box->hide();
-      gearBox->show();
+      
       currentRightChannel.box = gearBox;
       currentRightChannel.num = m_gearLCD;
       currentRightChannel.obj = m_gearObject;
+      currentRightChannel.obj->setProperty("value", 0);
+      currentRightChannel.num->display(0);
+      gearBox->show();
    } 
 }
 
@@ -561,11 +699,26 @@ void Diagnostics::ShowFuelPressureGauge()
    {
       /* request throttle data to be obtained from the OBD2 thread */
       emit NewChannelRequest(FUEL_PRESSURE, CHANNEL_B);
+      
+      m_gaugeDelay->start(GAUGEDELAY);
+      m_enableGauge = false;
       currentRightChannel.box->hide();
       fuelPressureBox->show();
+      if (m_fancyEnabled)
+      {
+         m_fuelPressureGauge->show();
+      }
+      else
+      {
+         m_fuelPressureLCD->show();
+      }
+      
       currentRightChannel.box = fuelPressureBox;
       currentRightChannel.num = m_fuelPressureLCD;
       currentRightChannel.obj = m_fuelPressureObject;
+      currentRightChannel.obj->setProperty("value", 0);
+      currentRightChannel.num->display(0);
+      fuelPressureBox->show();
    } 
 
 }
@@ -576,6 +729,9 @@ void Diagnostics::ShowEngineRuntimeGauge()
    {
       /* request throttle data to be obtained from the OBD2 thread */
       emit NewChannelRequest(ENGINE_RUNTIME, CHANNEL_B);
+      
+      m_gaugeDelay->start(GAUGEDELAY);
+      m_enableGauge = false;
       currentRightChannel.box->hide();
       engineRuntimeBox->show();
       currentRightChannel.box = engineRuntimeBox;
@@ -590,20 +746,20 @@ void Diagnostics::ShowEngineLoadGauge()
    {
       /* request throttle data to be obtained from the OBD2 thread */
       emit NewChannelRequest(ENGINE_LOAD, CHANNEL_B);
+      
+      m_gaugeDelay->start(GAUGEDELAY);
+      m_enableGauge = false;
       currentRightChannel.box->hide();
       engineLoadBox->show();
       currentRightChannel.box = engineLoadBox;
       currentRightChannel.num = m_engineLoadLCD;
       currentRightChannel.obj = m_engineLoadObject;
+
    } 
 }
 
 void Diagnostics::JourneyLogRequest()
 {
-   cout<<"LOG REQUESTED"<<endl;
-
-   
-   //m_logWindow = new LoggerWindow(obd->supported_pids);
    if(!m_logWindow->isHidden())
    {
       m_logWindow->raise();
@@ -614,19 +770,11 @@ void Diagnostics::JourneyLogRequest()
       m_logWindow->show();
       ButtonState(false);
    }
-   /* TODO: implement log request signal*/
-   /* send log request to state machine */
    //emit StartLogging();
 }
 
 void Diagnostics::LogRequestRx(QVector<QString> logParams, bool start)
 {
-   qDebug() << "DIAGNOSTICS: ";
-   for (int i = 0; i < logParams.size(); i++)
-   {
-      qDebug() << logParams[i];
-   }
-
    if (start == false)
    {
       //m_logWindow->hide();
@@ -645,7 +793,6 @@ void Diagnostics::CloseLogWindow()
 
 void Diagnostics::StateChangeMainMenu()
 {
-   qDebug() << "clicked home button";
    emit DisplayChange(MAIN_MENU, this);
 }
 
@@ -653,13 +800,13 @@ void Diagnostics::ShowMe()
 {
    this->show();
    if (m_logWindow->isLogging()) m_logWindow->raise();
+   
 }
 
 void Diagnostics::ButtonState(bool state)
 {
    for (int count = 0; count < obd->supported_pids.size(); count++)
    {
-      //QPid = QString::fromUtf8(obd->supported_pids[pidNum].c_str());
       switch (Hash::HashPID(obd->supported_pids[count])) // JB: fixed bug here (13/03/19)
       {
          /* fast channel buttons */

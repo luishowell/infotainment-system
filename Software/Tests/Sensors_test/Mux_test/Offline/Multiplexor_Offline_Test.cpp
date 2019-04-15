@@ -27,8 +27,6 @@ class MultiplexorOfflineTest: public QObject
 private slots:
     /* unit tests for multiplexor */
     void Multiplexor_Test();
-    void Init_Test();
-    void SetMux_Test();
 
     /* hooks */
     void initTestCase();
@@ -94,25 +92,7 @@ void MultiplexorOfflineTest::Multiplexor_Test()
     
 }
 
-/**
- * @brief Tests the init function when not on RPI
- * 
- */
-void MultiplexorOfflineTest::Init_Test()
-{
-    qDebug() << "Testing the init function";
-    QVERIFY2(m_mux->init(0, 1, 2)==false, "Check RPI define in config file");
-}
 
-/**
- * @brief Tests the set_mux function when not on RPI
- * 
- */
-void MultiplexorOfflineTest::SetMux_Test()
-{
-    qDebug() << "Testing the set_mux function";
-    QVERIFY2(m_mux->set_mux(1)==false, "Check RPI define in config file");
-}
 
 /* run tests */
 //QTEST_MAIN(MultiplexorOfflineTest);

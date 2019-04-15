@@ -8,8 +8,9 @@ import QtQuick.Extras.Private 1.0
         id: speedo1
         objectName: id
 
-        property int value: 0
-        maximumValue : 200 
+        property int myVal
+        value: myVal
+        maximumValue : 70 
         
         property int minWidth: 100
         property int minHeight: 100
@@ -51,7 +52,7 @@ import QtQuick.Extras.Private 1.0
                 implicitWidth: outerRadius * 0.02
                 antialiasing: true
                 implicitHeight: outerRadius * 0.06
-                color: styleData.value >= 80 ? "#e34c22" : "#black"
+                color: styleData.value >= 50 ? "#e34c22" : "#black"
             }
 
             minorTickmark: Rectangle {
@@ -59,13 +60,13 @@ import QtQuick.Extras.Private 1.0
                 implicitWidth: outerRadius * 0.01
                 antialiasing: true
                 implicitHeight: outerRadius * 0.03
-                color: styleData.value >= 80 ? "#e34c22" : "#black"
+                color: styleData.value >= 50 ? "#e34c22" : "#black"
             }
 
             tickmarkLabel:  Text {
                 font.pixelSize: Math.max(6, outerRadius * 0.1)
                 text: styleData.value
-                color: styleData.value >= 80 ? "#e34c22" : "#black"
+                color: styleData.value >= 50 ? "#e34c22" : "#black"
                 antialiasing: true
             }
 

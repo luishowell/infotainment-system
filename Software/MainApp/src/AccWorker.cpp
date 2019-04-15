@@ -73,9 +73,6 @@ void AccWorker::Work()
 
 void AccWorker::Publish()
 {
-    qDebug() << "ACC WORKER: send!";
-
     /* send */
     emit SendData(m_msg);
-
 }

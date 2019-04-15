@@ -20,15 +20,12 @@ using namespace std;
 StateManager::StateManager(QWidget *parent, obd2* myObd, MMA8652FCR1* acc) : QWidget(parent)
 {
     cout << "State manager started" << endl;
-
     m_obd = myObd;
 
     setFixedSize(widgetSize);
 
-    /* create GUI views */
-    
+    /* create GUI views */  
     m_mainMenu = new MainMenu(this);
-    //qDebug() << "hi";
     m_diags = new Diagnostics(this, m_obd, acc);
     m_errorCodes = new ErrorCodes(this, m_obd);
     m_parking = new Parking(this);
@@ -66,7 +63,6 @@ void StateManager::CANPublishDiagRx(diagMsg_t* msg)
 
 void StateManager::AccDataRx(accValues_t* msg)
 {
-    qDebug() << "STATE MANAGER: received acc data";
 
     /* forward to diagnostics window */
     emit AccDataTx(msg);
@@ -77,7 +73,6 @@ void StateManager::ChangeRequested(state_t req_state, QWidget* currentView)
     switch(req_state)
     {
         case MAIN_MENU : { 
-            cout << "Main Menu" << endl;
             if (currentView != m_mainMenu)
             {
                 currentView->hide();
@@ -86,7 +81,6 @@ void StateManager::ChangeRequested(state_t req_state, QWidget* currentView)
             break;
         }
         case DIAGNOSTICS : {
-            cout <<"Diagnostics" << endl; 
             if (currentView != m_diags)
             {
                currentView->hide();
@@ -96,8 +90,6 @@ void StateManager::ChangeRequested(state_t req_state, QWidget* currentView)
             break;    
         }
         case ERROR_CODES : { 
-            cout <<"Error Codes"<<endl; 
-
             if (currentView != m_errorCodes)
             {
                currentView->hide();
@@ -132,20 +124,17 @@ void StateManager::ChangeRequested(state_t req_state, QWidget* currentView)
 
 void StateManager::OnNewChannelRequest(diagParams_t dataRequested, obd2Channel_t channel)
 {
-    //cout<<"CHANNEL REQUESTED"<<endl;
     /* forward to the OBD2 thread */
     emit NewChannelRequest(dataRequested, channel);
 }
 
 void StateManager::LogRequestRx(QVector<QString> logParams, bool start)
 {
-    qDebug() << "STATE MANAGER: logging";
     emit LogRequestTx(logParams, start);
 }
 
 
 void StateManager::SensorPublishDiagRx(sensorDist_t* sensorData)
 {
-  //cout << "SENSOR DATA: " << sensorData->rearLeft << endl;
   emit SensorTx(sensorData);
 }
