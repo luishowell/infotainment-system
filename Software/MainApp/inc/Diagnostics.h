@@ -281,6 +281,10 @@ private:
     QPointer<QLabel> m_CANWarning;
     QPointer<QTimer> m_warningTimer;
     bool m_timedout;
+    bool m_fancyEnabled;
+    bool m_firstShow = true;
+    QGridLayout* boxLayout;
+    QGroupBox* titleBox;
 };
 //Q_DECLARE_METATYPE(std::vector<std::string>)
 

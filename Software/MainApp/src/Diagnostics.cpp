@@ -28,6 +28,7 @@
 #include <QQuickWidget>
 #include <QQmlProperty>
 #include <QPixmap>
+#include <QMessageBox>
 
 #include <vector>
 #include <string>
@@ -37,6 +38,24 @@ using namespace std;
 
 Diagnostics::Diagnostics(QWidget *parent, obd2* myObd, MMA8652FCR1* acc) : QWidget(parent) 
  {   
+
+   QMessageBox msgBox(QMessageBox::Question,
+                   "", 
+                   "Fancy Dials/Gauges may be slow on some platforms. Do you want to enable them?", 
+                   QMessageBox::Yes | QMessageBox::No, this,
+                   Qt::FramelessWindowHint);
+       msgBox.setDefaultButton(QMessageBox::Yes);
+   int ret = msgBox.exec();
+   if (ret == QMessageBox::Yes)
+   {
+      m_fancyEnabled = true;
+   }
+   else
+   {
+      m_fancyEnabled = false;
+   }
+   
+
    m_acc = acc;
     
    std::vector<std::string> testVec;
@@ -177,10 +196,10 @@ void Diagnostics::CreateLayout()
    QVBoxLayout* vLayout = new QVBoxLayout(this);
    vLayout->setSpacing(25);
 
-   QGroupBox* titleBox = new QGroupBox("Diagnostics", this);
+   titleBox = new QGroupBox("Diagnostics", this);
    titleBox->setAlignment(Qt::AlignHCenter);
 
-   QGridLayout* boxLayout = new QGridLayout(titleBox);
+   boxLayout = new QGridLayout(titleBox);
 
    boxLayout->setVerticalSpacing(10);
 
@@ -198,25 +217,56 @@ void Diagnostics::CreateLayout()
    speedBox = new QGroupBox("Speed(KPH)", titleBox);
    m_speedLCD = new QLCDNumber();
    speedBox->setAlignment(Qt::AlignHCenter);
-   QVBoxLayout *speedLayout = new QVBoxLayout(speedBox);
-   speedLayout->addWidget(m_speedometer);
-   speedLayout->addWidget(m_speedLCD);
-   speedLayout->setAlignment(Qt::AlignHCenter);
-
+   if (m_fancyEnabled)
+   {
+      QVBoxLayout *speedLayout = new QVBoxLayout(speedBox);
+      speedLayout->addWidget(m_speedometer);
+      speedLayout->addWidget(m_speedLCD);
+      speedLayout->setAlignment(Qt::AlignHCenter);
+   }
+   else
+   {
+      QStackedLayout *speedLayout = new QStackedLayout(speedBox);
+      speedLayout->addWidget(m_speedLCD);
+      m_speedometer->hide();
+      speedLayout->setAlignment(Qt::AlignHCenter);
+   }
+   
    rpmBox = new QGroupBox("RPM(x100/min)", titleBox);
    m_rpmLCD = new QLCDNumber();
    rpmBox->setAlignment(Qt::AlignHCenter);
-   QVBoxLayout *rpmLayout = new QVBoxLayout(rpmBox);
-   rpmLayout->addWidget(m_rpmGauge);
-   rpmLayout->addWidget(m_rpmLCD);
-   rpmLayout->setAlignment(Qt::AlignHCenter);   
-
+   if (m_fancyEnabled)
+   {
+      QVBoxLayout *rpmLayout = new QVBoxLayout(rpmBox);
+      rpmLayout->addWidget(m_rpmGauge);
+      rpmLayout->addWidget(m_rpmLCD);
+      rpmLayout->setAlignment(Qt::AlignHCenter);
+   }
+   else
+   {
+      QStackedLayout *rpmLayout = new QStackedLayout(rpmBox);
+      rpmLayout->addWidget(m_rpmLCD);
+      m_rpmGauge->hide();
+      rpmLayout->setAlignment(Qt::AlignHCenter);
+   }
+  
    airTempBox = new QGroupBox("Intake Air Temperature", titleBox);
    m_airTempLCD = new QLCDNumber();
    airTempBox->setAlignment(Qt::AlignHCenter);
-   QHBoxLayout *airTempLayout = new QHBoxLayout(airTempBox);
-   airTempLayout->addWidget(m_airTempGauge);
-   airTempLayout->setAlignment(Qt::AlignHCenter);   
+   if (m_fancyEnabled)
+   {
+      QVBoxLayout *airTempLayout = new QVBoxLayout(airTempBox);
+      airTempLayout->addWidget(m_airTempGauge);
+      //airTempLayout->addWidget(m_airTempLCD);
+      airTempLayout->setAlignment(Qt::AlignHCenter);
+   }
+   else
+   {
+      QStackedLayout *airTempLayout = new QStackedLayout(airTempBox);
+      airTempLayout->addWidget(m_airTempLCD);
+      m_airTempGauge->hide();
+      airTempLayout->setAlignment(Qt::AlignHCenter);
+   }  
 
    throttleBox = new QGroupBox("Throttle Position", titleBox);
    m_throttleLCD = new QLCDNumber();
@@ -238,10 +288,20 @@ void Diagnostics::CreateLayout()
    fuelPressureBox = new QGroupBox("Fuel Pressure", titleBox);
    m_fuelPressureLCD = new QLCDNumber();
    fuelPressureBox->setAlignment(Qt::AlignHCenter);
-   QHBoxLayout *fuelPressureLayout = new QHBoxLayout(fuelPressureBox);
-   fuelPressureLayout->addWidget(m_fuelPressureGauge);
-   //fuelPressureLayout->addWidget(m_fuelPressureLCD);
-   fuelPressureLayout->setAlignment(Qt::AlignHCenter);      
+   if (m_fancyEnabled)
+   {
+      QVBoxLayout *fuelLayout = new QVBoxLayout(fuelPressureBox);
+      fuelLayout->addWidget(m_fuelPressureGauge);
+      //fuelLayout->addWidget(m_fuelPressureLCD);
+      fuelLayout->setAlignment(Qt::AlignHCenter);
+   }
+   else
+   {
+      QStackedLayout *fuelLayout = new QStackedLayout(fuelPressureBox);
+      fuelLayout->addWidget(m_fuelPressureLCD);
+      m_fuelPressureGauge->hide();
+      fuelLayout->setAlignment(Qt::AlignHCenter);
+   }     
    
    engineRuntimeBox = new QGroupBox("Engine Runtime", titleBox);
    m_engineRuntimeLCD = new QLCDNumber(engineRuntimeBox);
@@ -387,6 +447,7 @@ void Diagnostics::CreateLayout()
    setLayout(vLayout); 
 
    m_warningTimer->start(1000);
+
 }
 
 void Diagnostics::WarningTimeout()
@@ -506,6 +567,14 @@ void Diagnostics::ShowAirTempGauge()
       emit NewChannelRequest(AIR_TEMP, CHANNEL_A);
       currentRightChannel.box->hide();
       airTempBox->show();
+      if (m_fancyEnabled)
+      {
+         m_airTempGauge->show();
+      }
+      else
+      {
+         m_airTempLCD->show();
+      }
       currentRightChannel.box = airTempBox;
       currentRightChannel.num = m_airTempLCD;
       currentRightChannel.obj = m_airTempObject;
@@ -577,6 +646,15 @@ void Diagnostics::ShowFuelPressureGauge()
       emit NewChannelRequest(FUEL_PRESSURE, CHANNEL_B);
       currentRightChannel.box->hide();
       fuelPressureBox->show();
+      if (m_fancyEnabled)
+      {
+         m_fuelPressureGauge->show();
+      }
+      else
+      {
+         m_fuelPressureLCD->show();
+      }
+      
       currentRightChannel.box = fuelPressureBox;
       currentRightChannel.num = m_fuelPressureLCD;
       currentRightChannel.obj = m_fuelPressureObject;
@@ -609,6 +687,7 @@ void Diagnostics::ShowEngineLoadGauge()
       currentRightChannel.box = engineLoadBox;
       currentRightChannel.num = m_engineLoadLCD;
       currentRightChannel.obj = m_engineLoadObject;
+
    } 
 }
 
@@ -667,6 +746,9 @@ void Diagnostics::ShowMe()
 {
    this->show();
    if (m_logWindow->isLogging()) m_logWindow->raise();
+  
+   EnableButtons();
+   
 }
 
 void Diagnostics::ButtonState(bool state)

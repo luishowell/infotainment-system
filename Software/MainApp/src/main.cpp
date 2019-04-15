@@ -35,7 +35,7 @@
 
 using namespace std;
 
-#define RPI 1
+//#define RPI 1
 
 int main(int argc, char** argv)
 {
