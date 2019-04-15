@@ -94,7 +94,7 @@ void Diagnostics::CreateComponents()
       bool calibrate_success = m_accGauge->calibrate(m_acc->staticVals);
       if (calibrate_success)
       {
-         qDebug() << "DIAGNOSTICS: Acc calibration success!";
+         qDebug() << "DIAGNOSTICS: Acc calibration success";
          break;
       }
       sleep(1);
@@ -164,7 +164,6 @@ void Diagnostics::CreateComponents()
    engineLoadQML->setResizeMode(QQuickView::SizeRootObjectToView);
    m_engineLoadObject = engineLoadQML->rootObject();
 
-   qDebug() << "Buttons";
    /* set up selection buttons */
    m_rpmButton             = new QPushButton("RPM");
    m_speedButton           = new QPushButton("Speed");
@@ -466,7 +465,6 @@ void Diagnostics::GaugeTimeout()
 
 void Diagnostics::WarningTimeout()
 {
-   qDebug() << "TIMEOUT";
    if (m_timedout) 
    {
       m_CANWarning->show();
@@ -508,7 +506,7 @@ void Diagnostics::DiagDataRx(diagMsg_t* msg)
    {
       if(canConnectionFlag == false)
       {
-         cout<<"CAN bus connection established"<<endl;
+         qDebug() << "CAN bus connection established";
          m_warningTimer->stop();
          m_CANWarning->hide();
          canConnectionFlag = true;
@@ -522,7 +520,6 @@ void Diagnostics::DiagDataRx(diagMsg_t* msg)
       else { leftVal = msg->channelA; }
       //leftVal = msg->channelA;
       rightVal = msg->channelB;
-      qDebug() << "DIAGNOSTICS RIGHT CHANNEL: " << rightVal;
       
       /* wait for initial delay */
       if (m_enableGauge)
@@ -763,10 +760,6 @@ void Diagnostics::ShowEngineLoadGauge()
 
 void Diagnostics::JourneyLogRequest()
 {
-   cout<<"LOG REQUESTED"<<endl;
-
-   
-   //m_logWindow = new LoggerWindow(obd->supported_pids);
    if(!m_logWindow->isHidden())
    {
       m_logWindow->raise();
@@ -777,19 +770,11 @@ void Diagnostics::JourneyLogRequest()
       m_logWindow->show();
       ButtonState(false);
    }
-   /* TODO: implement log request signal*/
-   /* send log request to state machine */
    //emit StartLogging();
 }
 
 void Diagnostics::LogRequestRx(QVector<QString> logParams, bool start)
 {
-   qDebug() << "DIAGNOSTICS: ";
-   for (int i = 0; i < logParams.size(); i++)
-   {
-      qDebug() << logParams[i];
-   }
-
    if (start == false)
    {
       //m_logWindow->hide();
@@ -808,7 +793,6 @@ void Diagnostics::CloseLogWindow()
 
 void Diagnostics::StateChangeMainMenu()
 {
-   qDebug() << "clicked home button";
    emit DisplayChange(MAIN_MENU, this);
 }
 

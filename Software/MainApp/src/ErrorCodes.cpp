@@ -84,7 +84,6 @@ void ErrorCodes::GetErrorCodes()
    bool notifyFlag = true; 
    vector<string> dtc_codes;
 
-   //qDebug() << "ERROR CODES: clicked";
    while (waiting)
    {
       if (Mutex::TryOBD2())

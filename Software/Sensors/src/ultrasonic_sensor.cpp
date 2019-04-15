@@ -62,7 +62,6 @@ bool ultrasonic_sensor::GetDistance(double *distance)
      //this is the response from a previous trigger
      if(digitalRead(this->m_echo_pin) == HIGH){
          *distance = this->m_maxDistance;
-         //cout << "previous echo noticed" << endl;
          return true;         
      }
 

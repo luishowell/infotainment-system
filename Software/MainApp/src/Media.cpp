@@ -208,7 +208,6 @@ void Media::SetVolume(int vol)
 
 void Media::AddToTable(QUrl url)
 {
-   qDebug() << "ADD TO TABLE";
    audioMetaData_t metaData;
    QByteArray ba;
    
@@ -297,7 +296,6 @@ void Media::ShowAlbumArt(int index)
 
 void Media::Open()
 {
-   qDebug() << "MEDIA: open clicked";
    QFileDialog fileDialog(this);
    fileDialog.setAcceptMode(QFileDialog::AcceptOpen);
    fileDialog.setWindowTitle(tr("Open Files"));
@@ -326,17 +324,14 @@ static bool IsPlaylist(const QUrl &url) // Check for ".m3u" playlists.
 
 void Media::songClicked(int row, int cell)
 {
-   qDebug() << "MEDIA: song clicked (row " << row << ", cell " << cell << ")";
    m_selectedSong = row;
    m_songClicked = true;
-
    m_tableTimer->start(5000);
 
 }
 
 void Media::onBackClicked()
 {
-   qDebug() << "MEDIA: back button clicked";
    if(m_player->position() <= 5000)
    {
       if (m_playlist->currentIndex() > 0) 
@@ -347,7 +342,6 @@ void Media::onBackClicked()
       {
          m_player->setPosition(0);
       }
-      
    }
    else
    {
@@ -359,18 +353,12 @@ void Media::onBackClicked()
 
 void Media::onFwdClicked()
 {
-   qDebug() << "MEDIA: fwd clicked";
    if ((m_playlist->currentIndex() + 1) < m_playlistMetaData.size()) m_playlist->next();
-
-   if ((m_playlist->currentIndex() < m_playlistMetaData.size()) && (m_playlist->currentIndex() >= 0))
-   {
-      qDebug() << m_playlist->currentIndex() << " < " << m_playlistMetaData.size();
-   }    
+  
 }
 
 void Media::onPlayClicked()
 {
-   qDebug() << "MEDIA: play clicked" << m_selectedSong << m_tableCount << m_playlist->currentIndex();
    if((m_selectedSong == m_playlist->currentIndex()) && (m_selectedSong != -1))
    {
       /* load selected song */
@@ -390,10 +378,7 @@ void Media::onPlayClicked()
 }
 
 void Media::onRemoveClicked()
-{
-   qDebug() << "MEDIA: remove clicked ";
-   qDebug() << "MEDIA: index (" << m_playlist->currentIndex() << ") m_selectedSong (" << m_selectedSong;
-   
+{   
    if (m_songClicked && (m_playlistMetaData.size() >= 0))
    {
       m_playlistMetaData.remove(m_selectedSong);
@@ -422,7 +407,6 @@ void Media::onRemoveClicked()
 void Media::onSeekChanged(int secs)
 {
    m_player->setPosition(secs * 1000);
-   qDebug() << "MEDIA: seek " << secs;
 }
 
 void Media::DurationChanged(int duration)
@@ -453,7 +437,6 @@ void Media::positionChanged(qint64 progress)
 
 void Media::songChanged(int currentSong)
 {
-   qDebug() << "MEDIA: song changed" << m_playlist->currentIndex() << m_playlist->mediaCount();
    if (!m_player->isAudioAvailable());
    if (m_playlist->currentIndex() != -1)
    {

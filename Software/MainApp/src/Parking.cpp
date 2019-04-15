@@ -123,7 +123,6 @@ void Parking::parking_beep()
   {
     if ((int(beep_timer->elapsed())>=beep_delay)&&(viz_label->isVisible())&&(beep_delay>0)&&(smallest_dist<1.5))
     {
-      //cout<<"Time elapsed: "<<int(beep_timer->elapsed())<<endl;
       beep_effect->play();
       beep_timer->start();
     }   
@@ -208,7 +207,6 @@ void Parking::CreateLayout()
 
 void Parking::SensorRx(sensorDist_t* msg)
 {
-  //std::cout << "SENSOR DATA: " << msg->rearLeft << std::endl;
   rearLeftConnected = msg->rearLeftConnected;
   rearRightConnected = msg->rearRightConnected;
   rearCentreConnected = msg->rearCentreConnected;

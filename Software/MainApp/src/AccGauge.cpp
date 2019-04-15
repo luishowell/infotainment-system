@@ -171,8 +171,6 @@ void AccGauge::resizeEvent(QResizeEvent *e)
     {
       int width = this->width()-25;
       int height = this->height()-25;
-      // std::cout<<"Width: "<<this->width()<<std::endl;
-      // std::cout<<"Height: "<<this->height()<<std::endl;
       if (width<height)
       {
           _size = width;
@@ -187,11 +185,6 @@ void AccGauge::resizeEvent(QResizeEvent *e)
 
 void AccGauge::draw_acc_viz(QPainter *qp)
 {
-
-  //placeholder
-  //_acc_x = 1;
-  //_acc_y = -1;
-
   int dot_radius = int(_size*0.05);
   
     int centre_x = int(_size/2);

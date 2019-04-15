@@ -114,10 +114,6 @@ void CANWorker::LogRequestRx(QVector<QString> logParams, bool start)
 
     int paramSize = logParams.size();
     QVector<float> logMsg;
-    for (int idx = 0; idx < paramSize; idx++)
-    {
-      qDebug() << logParams[idx];
-    }
 
     /* stop live data acquisition */
     diagTimer->stop();  //slow channel
@@ -179,7 +175,6 @@ void CANWorker::LogRequestRx(QVector<QString> logParams, bool start)
 	in the GetDiagData() loop */
 void CANWorker::PublishDiagData()
 {
-	qDebug() << "CAN WORKER: get slow data";
 
   if (Mutex::TryOBD2())
   {
@@ -207,61 +202,53 @@ void CANWorker::OnNewChannelRequest(diagParams_t dataRequested, obd2Channel_t ch
   {
     case SPEED: 
         {
-            cout<<"OBD2: SPEED REQUESTED"<<endl;
             if(channel == CHANNEL_A) { ObdMsg.requestA = "010D"; }
             else { ObdMsg.requestB = "010D"; }
             break;    
         }
         case RPM:
         {
-            cout<<"OBD2: RPM REQUESTED"<<endl;
             if(channel == CHANNEL_A) { ObdMsg.requestA = "010C"; }
             else { ObdMsg.requestB = "010C"; }
             break;    
         }
         case AIR_TEMP:
         {
-            cout<<"OBD2: AIR TEMP REQUESTED"<<endl;
             if(channel == CHANNEL_A) { ObdMsg.requestA = "010F"; }
             else { ObdMsg.requestB = "010F"; }
             break;    
         }
         case THROTTLE:
         {
-	          qDebug() << "OBD2: THROTTLE POSITION REQUESTED";
             if(channel == CHANNEL_A) { ObdMsg.requestA = "0111"; }
             else { ObdMsg.requestB = "0111"; }
             break;           
         }
         case GEAR:
         {
-	          qDebug() << "OBD2: CURRENT GEAR REQUESTED";
             if(channel == CHANNEL_A) { ObdMsg.requestA = "01A4"; }
             else { ObdMsg.requestB = "01A4"; }
             break;           
         }
         case FUEL_PRESSURE:
         {
-	          qDebug() << "OBD2: FUEL PRESSURE REQUESTED";
             if(channel == CHANNEL_A) { ObdMsg.requestA = "010A"; }
             else { ObdMsg.requestB = "010A"; }
             break;           
         }
         case ENGINE_LOAD:
         {
-	          qDebug() << "OBD2: ENGINE LOAD REQUESTED";
             if(channel == CHANNEL_A) { ObdMsg.requestA = "0104"; }
             else { ObdMsg.requestB = "0104"; }
             break;           
         }
         case ENGINE_RUNTIME:
         {
-	          qDebug() << "OBD2: ENGINE RUNTIME REQUESTED";
             if(channel == CHANNEL_A) { ObdMsg.requestA = "011F"; }
             else { ObdMsg.requestB = "011F"; }
             break;           
         }
-        default: qDebug() << " OBD2: DATA REQUEST ERROR";
+        default: qDebug() << " OBD2: data request error";
   }
 }
 

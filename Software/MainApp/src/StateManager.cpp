@@ -20,7 +20,6 @@ using namespace std;
 StateManager::StateManager(QWidget *parent, obd2* myObd, MMA8652FCR1* acc) : QWidget(parent)
 {
     cout << "State manager started" << endl;
-
     m_obd = myObd;
 
     setFixedSize(widgetSize);
@@ -74,7 +73,6 @@ void StateManager::ChangeRequested(state_t req_state, QWidget* currentView)
     switch(req_state)
     {
         case MAIN_MENU : { 
-            cout << "Main Menu" << endl;
             if (currentView != m_mainMenu)
             {
                 currentView->hide();
@@ -83,7 +81,6 @@ void StateManager::ChangeRequested(state_t req_state, QWidget* currentView)
             break;
         }
         case DIAGNOSTICS : {
-            cout <<"Diagnostics" << endl; 
             if (currentView != m_diags)
             {
                currentView->hide();
@@ -93,8 +90,6 @@ void StateManager::ChangeRequested(state_t req_state, QWidget* currentView)
             break;    
         }
         case ERROR_CODES : { 
-            cout <<"Error Codes"<<endl; 
-
             if (currentView != m_errorCodes)
             {
                currentView->hide();
@@ -135,7 +130,6 @@ void StateManager::OnNewChannelRequest(diagParams_t dataRequested, obd2Channel_t
 
 void StateManager::LogRequestRx(QVector<QString> logParams, bool start)
 {
-    qDebug() << "STATE MANAGER: logging";
     emit LogRequestTx(logParams, start);
 }
 

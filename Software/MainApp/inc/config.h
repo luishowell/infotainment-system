@@ -18,7 +18,10 @@
 #define DEBUG 
 
 /* comment the following line for non raspberry-pi builds */
-#define RPI 1
+//#define RPI 1
+#ifdef RPI
+//#undef RPI
+#endif
 
 /* size of raspberry pi touchscreen */
 #define WIDGET_SIZE_X 800

@@ -71,7 +71,6 @@ void SensorWorker::Work()
     m_timer->start(100); //msecs
     while(true)
     {
-        qDebug() << "SENSOR WORKER: getting data";
 #ifdef RPI
         //get the distance values from the sensor
         m_msg->frontLeftConnected = m_mux->GetDistance(FRONT_LEFT, &m_msg->frontLeft);      
@@ -90,9 +89,7 @@ void SensorWorker::Work()
 
 void SensorWorker::PublishSensorData()
 {
-    qDebug() << "SENSOR WORKER: publishing";
 #ifdef RPI
-
     /* send data to the GUI's diagnostics viewer */
     emit SensorPublishDiagTx(m_msg);
 #endif

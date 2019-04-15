@@ -22,7 +22,6 @@
 
 MediaControls::MediaControls(QWidget *parent) : QWidget(parent)
 {
-    qDebug() << "MEDIA CONTROLS: creating...";
 
     QSize btnSize(50, 50);
 
@@ -123,11 +122,8 @@ bool MediaControls::isMuted() const
 
 /* PUBLIC SLOTS */
 
-
 void MediaControls::onVolumeChanged(int vol)
 {
-    qDebug() << "MEDIA CONTROLS: volume = " << vol;
-
     emit volumeRequest( volume() );
 }
 
@@ -150,8 +146,6 @@ void MediaControls::onMuteRequest(bool muted)
 
 void MediaControls::onPlayClicked()
 {
-    qDebug() << "MEDIA CONTROLS: play clicked";
-
    emit playRequest();
    m_pauseButton->setEnabled(true);
    m_stopButton->setEnabled(false);
@@ -159,7 +153,6 @@ void MediaControls::onPlayClicked()
 
 void MediaControls::onPauseClicked()
 {
-    qDebug() << "MEDIA CONTROLS: pause clicked";
     emit pauseRequest();
     m_pauseButton->setEnabled(false);
     m_playButton->setEnabled(true);
@@ -168,13 +161,11 @@ void MediaControls::onPauseClicked()
 
 void MediaControls::onMuteClicked()
 {
-    qDebug() << "MEDIA CONTROLS: mute clicked";
     emit muteRequest(!m_isMuted);
 }
 
 void MediaControls::onStopClicked()
 {
-    qDebug() << "MEDIA CONTROLS: stop clicked";
     emit stopRequest();
 
 }
