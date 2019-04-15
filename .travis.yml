@@ -11,6 +11,7 @@ install:
 
 script: 
   - cd Software/
+  - sed -i 's/#define RPI 1/\/\/#define RPI 1/g' ./MainApp/inc/config.h
   - ./BuildAll.sh
   - ./Tests/OBD2_test/Offline/bin/OBD2OfflineTest
   - ./Tests/Sensors_test/Board_test/Offline/bin/SensorBoardOfflineTest
