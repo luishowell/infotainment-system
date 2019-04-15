@@ -35,17 +35,15 @@
 
 using namespace std;
 
-#define RPI 1
+//#define RPI 1
 
 int main(int argc, char** argv)
 {
     cout << "/***************LET ME INFOTAIN YOU!/***************" << endl;
     QApplication app (argc, argv);
-
-    QFile file("./MainApp/src/default.qss");
-    file.open(QFile::ReadOnly);
-    QString styleSheet = QLatin1String(file.readAll());
-    qApp->setStyleSheet(styleSheet);
+#ifdef RPI
+    QApplication::setOverrideCursor(Qt::BlankCursor); //removes cursor on touchscreen
+#endif
 
     obd2* myObd = new obd2("/dev/rfcomm0");
     MMA8652FCR1* guiAccel;
@@ -88,7 +86,7 @@ int main(int argc, char** argv)
 
 #ifdef RPI
     stateMachine.showFullScreen();
-    QApplication::setOverrideCursor(Qt::BlankCursor); //removes cursor on touchscreen
+    
 #else
     stateMachine.show();
 #endif

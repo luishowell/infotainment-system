@@ -283,7 +283,10 @@ private:
     QPointer<QLabel> m_CANWarning;
     QPointer<QTimer> m_warningTimer;
     bool m_timedout;
-    bool m_fancyMode;
+    bool m_fancyEnabled;
+    bool m_firstShow = true;
+    QGridLayout* boxLayout;
+    QGroupBox* titleBox;
     bool m_enableGauge;
     QPointer<QTimer> m_gaugeDelay;
 };
