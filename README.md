@@ -13,10 +13,15 @@ Let Me Infotain You is a project developed at the University of Glasgow which br
 * Display of fault codes and their descriptions
 * Media player 
 
+Check out our promo video on YouTube!
+
+[![promo video](https://img.youtube.com/vi/IjcHbDSLNJg/sddefault.jpg)](https://www.youtube.com/watch?v=IjcHbDSLNJg)
+
 ## Screenshots
 
-
 ![home screen](https://github.com/luishowell/infotainment-system/blob/master/Media/Screenshots/home_screen.PNG?raw=true)
+
+![parking screen](https://github.com/luishowell/infotainment-system/blob/master/Media/Screenshots/parking_screen.png?raw=true)
 
 ![diagnostics screen](https://github.com/luishowell/infotainment-system/blob/master/Media/Screenshots/diagnostics_screen.PNG?raw=true)
 
@@ -29,3 +34,8 @@ Complete guides on how to build and use the infotaiment system can be found on o
 - [Instagram](https://www.instagram.com/infotainyou/)
 - [Twitter](https://twitter.com/InfotainYou)
 - [Youtube](https://www.youtube.com/channel/UCcqjJ8Hy_WSgq_QDlyoAUrA)
+
+## Authors 
+- [Jamie Brown](https://github.com/jamieb133)
+- [Luis Howell](https://github.com/luishowell)
+- [Joe Walker](https://github.com/joew2410)
